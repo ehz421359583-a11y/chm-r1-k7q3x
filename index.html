@@ -576,26 +576,17 @@ function renderOverview(){
   h += '<p class="lede">请逐条评价 '+N+' 条候选中药扩展报告要求的重要性。本函询关注中药动物实验应当报告哪些信息，以提高透明度、可重复性和可解释性，不评价具体实验的质量、结果或疗效。如认为有遗漏，可在任一 ARRIVE 分项下（含未设扩展的分项）建议扩展条目；如有 ARRIVE 框架之外的内容需要报告，可建议新增条目。预计 30–45 分钟，可分次完成。</p>';
   h += '<div class="progress"><span>已评分 <b>'+done+'</b> / '+N+'</span><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+N+'" aria-valuenow="'+done+'"><i style="width:'+pct+'%"></i></div><span class="savenote" data-savenote></span></div>'+resumeHTML()+'</div>';
 
+  h += '<details class="fold panel" id="pfbox"'+(profileDone()?'':' open')+'><summary><span>专家信息 <span id="pfstate" class="pfstate"></span></span></summary><div class="fold-body">'+profileHTML()+'</div></details>';
+
   h += '<details class="fold panel"><summary>填表说明</summary><div class="fold-body"><ul class="notes">'
     + '<li><b>评价范围</b><span>CHM-01 至 CHM-'+N+' 均为候选中药扩展报告要求，每个编号独立评价；ARRIVE 2.0 原要求与分类标题不作为候选条目，不评分。</span></li>'
     + '<li><b>编号</b><span>本版按条目在表中的呈现顺序连续编号，故 CHM 编号顺序与 ARRIVE 条目顺序一致。</span></li>'
-    + '<li><b>条件性条目</b><span>含“当”“如”或“若”等限定的条目，请基于该情形实际发生时是否应当报告来判断，不因其不适用于所有研究而低估其重要性。</span></li>'
-    + '<li><b>定位与文字</b><span>表1 按 ARRIVE 顺序列出全部 '+REAL_ROWS.length+' 个分项：'+EXT_N+' 个设有中药扩展，其余 '+PLAIN_N+' 个标注“未扩展”；表2 为 ARRIVE 9a 实验程序项下的中药扩展，按三段组织，段标题仅为索引，以各条具体报告要求为准。</span></li>'
     + '<li><b>扩展与新增</b><span>认为 ARRIVE 某个分项（含标注“未扩展”的分项）下还应有中药扩展要求时，请在表1 该分项下点“建议扩展条目”；认为某项中药报告要求不属于任何 ARRIVE 分项时，请在页面下方“ARRIVE 框架之外”处建议新增。这些建议本轮不评分；研究组将汇总、去重并核查依据，合适的将作为新条目进入下一轮评价。</span></li>'
     + '<li><b>修改建议</b><span>如认为需要调整，请在对应条目的“修改建议”栏直接填写最终建议，包括建议调整至哪个 ARRIVE 编号或主题、建议采用的文字，以及合并、拆分或移入解释文件的具体方案。</span></li>'
-    + '<li><b>保存与提交</b><span>答案自动保存在本设备的浏览器中，关闭页面后用同一浏览器再打开即可继续。全部完成后，请在页面底部点“提交答卷”，并按提示把答卷文件以邮件发到研究团队邮箱；分次填写时，也可先提交当前进度，之后再次提交的新文件会替换此前的版本。换手机、电脑或浏览器继续填写时，请先在原设备提交（或在“提交遇到问题？”中下载答卷文件），再到新设备页面顶部展开“换了手机、电脑或浏览器”，导入该文件。</span></li></ul>'
+    + '<li><b>保存与提交</b><span>答案自动保存在本设备的浏览器中，关闭页面后用同一浏览器再打开即可继续。全部完成后，请在页面底部点“提交答卷”，并按提示把答卷文件以邮件发到研究团队邮箱。换手机、电脑或浏览器继续填写时，请先在原设备提交（或在“提交遇到问题？”中下载答卷文件），再到新设备页面顶部展开“换了手机、电脑或浏览器”，导入该文件。</span></li></ul>'
     + '<div class="scoreguide"><div><b>1–3 分</b>不重要</div><div><b>4–6 分</b>重要但非关键，或尚不确定</div><div><b>7–9 分</b>关键，应纳入</div></div>'
     + '<p class="q" style="margin:6px 0 0;font-size:13px;color:var(--muted)">重要性采用 1–9 分整数量表；无法判断时请选“无法判断”。</p></div></details>';
 
-  h += panoHTML();
-
-  h += '<section class="panel"><h2>候选条目地图　<span style="font-weight:500;letter-spacing:0">评分入口与进度</span></h2><p class="stats">共 <b>'+N+'</b> 条候选扩展要求：表1 <b>'+t1n+'</b> 条，表2（ARRIVE 9a 详表）<b>'+t2n+'</b> 条。按 ARRIVE 分类：核心十项 <b>'+cnt.E10+'</b> 条，推荐条目 <b>'+cnt.REC+'</b> 条，框架外候选 <b>'+cnt.EXT+'</b> 条。</p><div class="map">';
-  segments().forEach(function(s){
-    h += '<div class="seg"><div class="seg-label" style="--c:var(--set-'+(s.set==='E10'?'e':s.set==='REC'?'r':'x')+')"><i></i>'+esc(segLabel(s))+'</div><div class="seg-tiles">'+s.items.map(tileHTML).join('')+'</div></div>';
-  });
-  h += '</div><p class="mapnote">点击方块进入对应条目；方块下方的数字为您的评分，右下角圆点表示已填写修改建议。</p></section>';
-
-  h += '<details class="fold panel" id="pfbox"'+(profileDone()?'':' open')+'><summary><span>专家信息 <span id="pfstate" class="pfstate"></span></span></summary><div class="fold-body">'+profileHTML()+'</div></details>';
 
   /* table 1 */
   h += '<section class="tbl'+(viewExt?' view-ext':'')+(showEn?' show-en':'')+'" id="table1"><header><h2>表1　ARRIVE 2.0 全部分项与中药扩展</h2><p>按 ARRIVE 条目顺序列出全部 '+REAL_ROWS.length+' 个分项：已设扩展的列出候选条目；标注“未扩展”的分项没有候选条目，可在其下建议扩展。</p></header>';
@@ -622,7 +613,7 @@ function renderOverview(){
   h += '<section class="tbl" id="outside"><header><h2>ARRIVE 框架之外的新增建议</h2><p>如认为有中药报告要求无法归入上述任何 ARRIVE 分项，请在此建议新增；能归入某个 ARRIVE 分项的，请在表1 对应分项下建议扩展。</p></header><div style="margin-top:14px">'+zone('outside')+'<p class="addnote">扩展与新增建议均仅作为意见提交，本轮不评分。研究组将汇总、去重并核查依据，合适的将作为新条目进入下一轮评价。</p></div></section>';
 
   /* export */
-  h += '<section class="tbl" id="export"><header><h2>提交答卷</h2><p>全部完成后，点下方“提交答卷”，按提示把答卷文件以邮件发到研究团队邮箱。评分尚未全部完成时，也可先提交当前进度；之后再次提交，新文件会替换此前的版本。</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
+  h += '<section class="tbl" id="export"><header><h2>提交答卷</h2><p>全部完成后，点下方“提交答卷”，按提示把答卷文件以邮件发到研究团队邮箱。</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
     + (RETURN_EMAIL ? '<div class="mailline">答卷发送至：<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">复制邮箱</button></div>' : '')
     + '<div class="btnrow"><button class="btn primary big" type="button" data-exp="submit">提交答卷</button></div>'
     + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expfallback" hidden></div>'
@@ -932,7 +923,7 @@ async function doExport(kind){
   var nm = p.profile.name.replace(/[\\\/:*?"<>|\s]+/g,'_');
   var base = 'ARRIVE-CHM-R1_'+nm+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
   var json = JSON.stringify(p, null, 2);
-  var note = (p.ratedCount < N ? '（尚有 '+(N-p.ratedCount)+' 条未评分；可先发送当前进度，之后再发新文件即可替换）' : '') + (p.suggestionsCount ? '（含 '+p.suggestionsCount+' 条建议）' : '');
+  var note = (p.ratedCount < N ? '（尚有 '+(N-p.ratedCount)+' 条未评分）' : '') + (p.suggestionsCount ? '（含 '+p.suggestionsCount+' 条建议）' : '');
   if(kind === 'copy'){
     var txt = toText(p) + '\n\n' + DATA_BEGIN + '\n' + b64(JSON.stringify(p)) + '\n' + DATA_END + '\n（上面的数据块供研究组导入答卷，请勿修改或删除）', ok = false;
     try{ await navigator.clipboard.writeText(txt); ok = true; }catch(e){}
