@@ -1,0 +1,983 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow,noarchive"><title>ARRIVE-CHM 函询表</title><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}</style>
+
+<style>
+/* Layout concept: a calm reading desk. Overview = map of the 32 items + the two source tables;
+   item page = ARRIVE context -> highlighted TCM requirement -> small supporting notes,
+   with the scoring panel pinned beside it (desktop) or below it (phone). Jade ink on cool paper. */
+:root{
+  --bg:#F1F5F3; --surface:#FFFFFF; --surface-2:#E8EFEB; --ink:#14211C; --muted:#4F5F58; --faint:#7A8A83;
+  --line:#D5DFD9; --line-strong:#B4C4BB;
+  --accent:#1A6853; --accent-hover:#124F3F; --accent-soft:#DAECE3; --on-accent:#FFFFFF;
+  --set-e:#1A6853; --set-r:#37579A; --set-x:#8F6118;
+  --set-e-soft:#DAECE3; --set-r-soft:#E0E8F6; --set-x-soft:#F4E6CE;
+  --focus:#2A8C74; --danger:#A33A2A;
+  --sans:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Georgia,"Songti SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1613; --surface:#16211D; --surface-2:#1D2B26; --ink:#E5EEEA; --muted:#A3B3AC; --faint:#7F918A;
+    --line:#26362F; --line-strong:#3B4F46;
+    --accent:#58C0A1; --accent-hover:#7AD2B7; --accent-soft:#18372E; --on-accent:#08201A;
+    --set-e:#58C0A1; --set-r:#8FA9E2; --set-x:#DDAE55;
+    --set-e-soft:#18372E; --set-r-soft:#1C2A47; --set-x-soft:#3A2D14;
+    --focus:#7AD2B7; --danger:#E58A78; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1613; --surface:#16211D; --surface-2:#1D2B26; --ink:#E5EEEA; --muted:#A3B3AC; --faint:#7F918A;
+  --line:#26362F; --line-strong:#3B4F46;
+  --accent:#58C0A1; --accent-hover:#7AD2B7; --accent-soft:#18372E; --on-accent:#08201A;
+  --set-e:#58C0A1; --set-r:#8FA9E2; --set-x:#DDAE55;
+  --set-e-soft:#18372E; --set-r-soft:#1C2A47; --set-x-soft:#3A2D14;
+  --focus:#7AD2B7; --danger:#E58A78; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+[hidden]{display:none!important}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer;font-weight:600;font-size:15px;text-decoration:none}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);font-weight:500}
+.btn.quiet:hover{color:var(--accent)}
+.btn.small{min-height:36px;padding:0 12px;font-size:14px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- overview ---------- */
+.masthead{padding-block:28px 8px}
+.eyebrow{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 8px}
+h1.title{font:700 clamp(24px,5.2vw,34px)/1.3 var(--serif);margin:0 0 10px;text-wrap:balance;letter-spacing:.01em}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.progress{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:18px}
+.meter{flex:1 1 220px;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;min-width:120px}
+.meter>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .25s}
+.progress b{font-variant-numeric:tabular-nums}
+.savenote{font-size:13px;color:var(--faint)}
+.savenote.warn{color:var(--danger)}
+
+.panel{margin-top:22px}
+.panel>h2,.section-title{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 10px}
+details.fold{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:2px 0}
+details.fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;font-weight:600}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"+";font-size:20px;color:var(--faint);line-height:1}
+details.fold[open]>summary::after{content:"−"}
+.fold-body{padding:4px 0 14px}
+.notes{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.notes li{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.notes b{color:var(--accent);min-width:5.2em}
+.scoreguide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 4px}
+.scoreguide div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);font-size:13.5px;line-height:1.5}
+.scoreguide b{display:block;font-size:15px}
+
+/* map of 32 items */
+.map{display:flex;flex-wrap:wrap;gap:16px 22px}
+.seg{display:flex;flex-direction:column;gap:6px;min-width:0}
+.seg-label{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.seg-label i{width:9px;height:9px;border-radius:3px;background:var(--c)}
+.seg-tiles{display:flex;flex-wrap:wrap;gap:6px}
+.tile{--c:var(--set-e);--cs:var(--set-e-soft);width:40px;height:48px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;position:relative;font-variant-numeric:tabular-nums}
+.tile.set-REC{--c:var(--set-r);--cs:var(--set-r-soft)}
+.tile.set-EXT{--c:var(--set-x);--cs:var(--set-x-soft)}
+.tile::before{content:"";position:absolute;left:6px;right:6px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--c)}
+.tile b{font-size:14px}
+.tile small{font-size:12px;color:var(--faint);margin-top:2px}
+.tile.done{background:var(--cs);border-color:var(--c)}
+.tile.done small{color:var(--ink);font-weight:700}
+.tile:hover{border-color:var(--c)}
+.tile.noted::after{content:"";position:absolute;right:4px;bottom:4px;width:5px;height:5px;border-radius:50%;background:var(--c)}
+.mapnote{margin:12px 0 0;font-size:13px;color:var(--muted)}
+.stats{margin:0 0 14px;color:var(--ink)}
+.stats b{font-variant-numeric:tabular-nums}
+
+/* tables */
+.tbl{margin-top:30px}
+.tbl>header{display:flex;flex-direction:column;gap:2px;margin-bottom:6px;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.tbl>header h2{font:700 19px/1.4 var(--serif);margin:0}
+.tbl>header p{margin:0;color:var(--muted);font-size:14px}
+.grp{margin:22px 0 4px;font-size:13px;font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px;color:var(--c)}
+.grp::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--c)}
+.grp.set-E10{--c:var(--set-e)} .grp.set-REC{--c:var(--set-r)} .grp.set-EXT{--c:var(--set-x)}
+.arow{padding:14px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.arow-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.aid{font:700 15px var(--sans);color:var(--accent);min-width:2.2em;font-variant-numeric:tabular-nums}
+.aname{font-weight:700}
+.azh{margin:2px 0 0;color:var(--muted);font-size:13.5px;line-height:1.6}
+.items{display:grid;gap:8px}
+@media (min-width:760px){.arow{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:6px 28px}}
+.item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 12px;align-items:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-height:56px}
+.item:hover{border-color:var(--accent)}
+.item-id{font:700 13px var(--sans);color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 7px;margin-top:2px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.item-title{display:block;font-weight:700;line-height:1.45}
+.item-req{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted);font-size:13.5px;line-height:1.55;margin-top:2px}
+.item-state{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:3.4em}
+.badge{font-size:13px;font-weight:700;border-radius:99px;padding:1px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge.sc{background:var(--accent);color:var(--on-accent)}
+.badge.cj{background:var(--surface-2);color:var(--muted)}
+.badge.none{color:var(--faint);font-weight:500;padding-right:0}
+.tag-note{font-size:12px;color:var(--accent)}
+.callout{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--accent-soft);border-radius:12px;padding:12px 14px;font-size:14px}
+.plain{margin-top:6px}
+.plain summary{cursor:pointer;color:var(--muted);font-size:13.5px;min-height:40px;display:flex;align-items:center}
+.plain-tags{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 10px}
+.plain-tags span{font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 8px;background:var(--surface)}
+.plain-tags b{color:var(--faint);margin-right:4px;font-weight:600}
+.sec-sub{margin:20px 0 6px;font-weight:700;font-size:15px;display:flex;gap:8px;align-items:baseline}
+.sec-sub small{font-weight:500;color:var(--faint);font-size:13px}
+.t2-list{display:grid;gap:8px;padding-top:6px}
+.t2-zh{margin:10px 0 0;color:var(--muted);font-size:14px}
+
+/* full ARRIVE panorama */
+.pano{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.pcell{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:8px 10px 10px;min-width:0}
+.pcell h3{margin:0 0 7px;font-size:13px;font-weight:700;line-height:1.35;display:flex;gap:6px;align-items:baseline}
+.pcell h3 b{color:var(--faint);font-variant-numeric:tabular-nums;min-width:1.2em}
+.pchips{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{--c:var(--set-e);--cs:var(--set-e-soft);position:relative;min-width:44px;min-height:38px;padding:0 9px;border-radius:9px;border:1.5px dashed var(--line-strong);background:transparent;color:var(--faint);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.pchip.set-REC{--c:var(--set-r);--cs:var(--set-r-soft)} .pchip.set-EXT{--c:var(--set-x);--cs:var(--set-x-soft)}
+.pchip.ext{border:1.5px solid var(--c);background:var(--cs);color:var(--c)}
+.pchip small{font-size:11.5px;font-weight:700;background:var(--c);color:var(--surface);border-radius:99px;min-width:1.5em;padding:0 5px;line-height:1.5;text-align:center}
+.pchip:hover{border-color:var(--c);color:var(--c)}
+.pchip.add{border-style:solid;border-color:var(--accent);color:var(--accent);--c:var(--accent)}
+.pchip.has-add::after{content:"";position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--ink);border:2px solid var(--bg)}
+.pchip.sample{min-width:34px;min-height:22px;padding:0;cursor:default;vertical-align:middle;margin-right:6px}
+.pchip.sample.has-add::after{width:8px;height:8px;top:-3px;right:-3px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 4px;font-size:13px;color:var(--muted);align-items:center}
+.legend>span{display:inline-flex;align-items:center}
+
+/* table 1 toolbar, un-extended rows */
+.tbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:12px 0 0}
+.toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;background:var(--surface)}
+.toggle button{min-height:40px;padding:0 14px;border:0;background:transparent;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted)}
+.toggle button+button{border-left:1px solid var(--line-strong)}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);min-height:40px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--accent);margin:0}
+.arow{scroll-margin-top:14px}
+.arow.noext{padding:10px 0;border-bottom:1px dashed var(--line);align-content:start}
+.arow.noext .aname{color:var(--muted)}
+.arow.noext .aid{color:var(--faint)}
+.noext-tag{font-size:12px;font-weight:600;color:var(--faint);border:1px dashed var(--line-strong);border-radius:99px;padding:0 9px;white-space:nowrap;line-height:1.7}
+.aen{display:none;margin:5px 0 0;font:13px/1.6 var(--serif);color:var(--faint)}
+.show-en .aen{display:block}
+.aen .lab{font:700 11px var(--sans);letter-spacing:.08em;margin-right:6px}
+.view-ext .arow.noext:not(.has-adds){display:none}
+.flash{animation:flash 1.8s ease-out}
+@keyframes flash{0%{background:var(--accent-soft)}100%{background:transparent}}
+
+/* expert-added suggestions */
+.addzone{display:grid;gap:10px;min-width:0;align-content:start}
+.addzone:empty{display:none}
+.adds-act{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.addcard{border:1px solid var(--line-strong);border-left:4px solid var(--accent);border-radius:12px;background:var(--surface);padding:12px 14px 14px;display:grid;gap:6px;scroll-margin-top:14px}
+.addcard-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.addcard-h b{font-size:14px;color:var(--accent)}
+.addcard label.t{font-weight:700;font-size:13.5px;margin-top:4px}
+.addcard .opt-note{font-weight:500;color:var(--faint)}
+.addcard textarea{width:100%;min-height:96px;resize:vertical;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;background:var(--bg);line-height:1.6;font-size:15px}
+.addcard textarea.short{min-height:66px}
+.addcard textarea:focus,.addcard select:focus{background:var(--surface)}
+.addcard select{min-height:44px;border:1px solid var(--line-strong);border-radius:10px;padding:0 10px;background:var(--bg);width:100%;min-width:0}
+.addnote{margin:8px 0 0;font-size:13px;color:var(--muted);line-height:1.65}
+.t2-add{margin-top:24px;padding-top:14px;border-top:1px dashed var(--line-strong);display:grid;gap:10px}
+.t2-add p{margin:0;font-size:14px;color:var(--muted)}
+.chips button{font-size:12.5px;font-weight:600;border:1px solid var(--line-strong);border-radius:99px;padding:1px 9px;color:var(--muted);background:var(--surface);cursor:pointer}
+.chips button:hover{border-color:var(--accent);color:var(--accent)}
+@media (min-width:760px){.arow.noext{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
+
+/* profile form */
+.pf{display:grid;gap:16px;padding-top:8px}
+.pf-row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.field{display:grid;gap:4px;min-width:0}
+.field>label,.field>.lbl{font-size:13.5px;font-weight:600;color:var(--muted)}
+.field input[type=text],.field input[type=number],.field input[type=email]{min-height:44px;border:1px solid var(--line-strong);border-radius:10px;padding:0 12px;background:var(--surface);width:100%;min-width:0}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt span{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line-strong);border-radius:99px;background:var(--surface);font-size:14px}
+.opt input:checked+span{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+.opt input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
+.basis{display:grid;gap:8px}
+.basis .brow{display:grid;grid-template-columns:minmax(7em,10em) 1fr;gap:10px;align-items:center}
+@media (max-width:520px){.basis .brow{grid-template-columns:1fr}}
+.pfstate{font-size:13px;font-weight:500;color:var(--faint)}
+.pf-note{margin:0;font-size:13px;color:var(--muted)}
+.pfstate.ok{color:var(--accent)}
+
+/* export */
+.export-box{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:16px;display:grid;gap:12px}
+.export-box h3{margin:0;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips a{font-size:12.5px;font-weight:600;text-decoration:none;border:1px solid var(--line-strong);border-radius:99px;padding:1px 9px;color:var(--muted);background:var(--surface)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+.resume{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px;font-size:13.5px;color:var(--muted)}
+.resume input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
+.resume-msg{color:var(--accent);font-weight:600}
+.resume-msg.warn{color:var(--warn,#955A0C)}
+.mailline{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:14px}
+.mailline b{user-select:all;word-break:break-all}
+.status{min-height:1.5em;font-size:14px;color:var(--accent)}
+.status.err{color:var(--danger)}
+.fallback{width:100%;min-height:140px;border:1px solid var(--line-strong);border-radius:10px;padding:10px;background:var(--surface);font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.foot{margin:34px 0 0;padding-block:18px 36px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
+
+/* ---------- item page ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:10px;min-height:54px}
+.bar .where{flex:1;min-width:0;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .where small{color:var(--faint);font-weight:500;margin-left:6px}
+.bar .prog{height:3px;background:var(--surface-2)}
+.bar .prog i{display:block;height:100%;background:var(--accent)}
+.detail{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"c1" "side" "c2";gap:22px;padding-block:20px 120px}
+.c1{grid-area:c1;min-width:0}.c2{grid-area:c2;min-width:0;margin-top:-22px}.side{grid-area:side}
+@media (min-width:960px){.detail{grid-template-columns:minmax(0,1fr) 370px;grid-template-areas:"c1 side" "c2 side";grid-template-rows:auto 1fr;column-gap:40px;row-gap:0;padding-bottom:60px;align-items:start}.c2{margin-top:0}}
+.crumb{margin:0 0 6px;font-size:13px;line-height:1.6;color:var(--muted)}
+.crumb .dot{display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--c);margin-right:8px;vertical-align:baseline}
+.crumb.set-E10{--c:var(--set-e)} .crumb.set-REC{--c:var(--set-r)} .crumb.set-EXT{--c:var(--set-x)}
+h1.item-h{font:700 clamp(22px,4.6vw,28px)/1.35 var(--serif);margin:0 0 18px;text-wrap:balance}
+h1.item-h:focus{outline:none}
+h1.item-h .id{display:block;font:700 14px var(--sans);letter-spacing:.06em;color:var(--accent);margin-bottom:4px;font-variant-numeric:tabular-nums}
+.blk{margin-top:22px}
+.blk>h2{font-size:12.5px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.blk>h2 .sub{font-weight:500;letter-spacing:0;color:var(--faint)}
+.arrive-tag{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.arrive-tag b{font-size:15px}
+.pill{font-size:12px;font-weight:700;border-radius:99px;padding:1px 9px;background:var(--cs);color:var(--c)}
+.pill.set-E10{--c:var(--set-e);--cs:var(--set-e-soft)} .pill.set-REC{--c:var(--set-r);--cs:var(--set-r-soft)} .pill.set-EXT{--c:var(--set-x);--cs:var(--set-x-soft)}
+.quote{margin:0;padding:0;display:grid;gap:8px}
+.quote .en{font:15.5px/1.65 var(--serif);color:var(--ink)}
+.quote .zh{font-size:14.5px;color:var(--muted);line-height:1.7}
+.quote .lab{font-size:11.5px;letter-spacing:.08em;color:var(--faint);font-weight:700;margin-right:6px}
+.noarrive{margin:0;color:var(--muted);font-size:14.5px}
+.req{background:var(--accent-soft);border-radius:14px;padding:18px 18px 16px;margin-top:22px}
+.req>h2{font-size:12.5px;letter-spacing:.08em;color:var(--accent);font-weight:700;margin:0 0 8px}
+.req p{margin:0 0 8px;font-size:17px;line-height:1.85;font-weight:500}
+.req p:last-child{margin-bottom:0}
+.why{margin:10px 2px 0;font-size:12.5px;line-height:1.7;color:var(--faint)}
+.why b{font-weight:600;color:var(--faint);margin-right:6px}
+.prev{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
+.prev .pnote{margin:0 0 8px;font-size:13px;color:var(--muted)}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:8px 0;border-top:1px solid var(--line);align-items:baseline}
+.prow:first-of-type{border-top:0}
+.prow .pl{font-size:14px;min-width:0}
+.prow .pv{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.prow .pv small{font-weight:500;color:var(--muted);margin-left:4px}
+.prow .bar2{grid-column:1/-1;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prow .bar2 i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.prow .pl small{display:inline-block;margin-left:8px;font-size:12px;color:var(--faint)}
+.pfoot{margin:8px 0 0;font-size:12px;color:var(--faint);line-height:1.6}
+.example{margin:0;border:1px dashed var(--line-strong);border-radius:12px;padding:14px 16px;background:var(--surface);font-size:15px;line-height:1.85}
+.exnote{margin:6px 2px 0;font-size:12px;color:var(--faint)}
+
+.side{border:1px solid var(--line-strong);border-radius:16px;background:var(--surface);padding:18px 16px;display:grid;gap:16px}
+@media (min-width:960px){.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 74px)}}
+.side h2{margin:0;font-size:16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.side h2 small{font-size:12px;font-weight:600;color:var(--danger)}
+.q{margin:4px 0 0;font-size:13.5px;color:var(--muted);line-height:1.6}
+.scale{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;margin-top:8px}
+.scale button{min-height:50px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);cursor:pointer;font-weight:700;font-size:17px;padding:0;font-variant-numeric:tabular-nums}
+.scale button:hover{border-color:var(--accent);color:var(--accent)}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.bands{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px}
+.bands span{font-size:11.5px;line-height:1.35;text-align:center;color:var(--muted);border-top:2px solid var(--line-strong);padding-top:4px}
+.cjbtn{margin-top:10px;width:100%}
+.cjbtn[aria-pressed="true"]{background:var(--surface-2);border-color:var(--ink);color:var(--ink)}
+.side textarea{width:100%;min-height:128px;resize:vertical;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;background:var(--bg);line-height:1.6;font-size:15px}
+.side textarea:focus{background:var(--surface)}
+.side label.t{font-weight:700;font-size:14px;display:block;margin-bottom:2px}
+.side .hint{font-size:12.5px;color:var(--faint);margin:0 0 6px;line-height:1.55}
+.saved{font-size:12.5px;color:var(--faint);min-height:1.4em}
+.saved.ok::before{content:"✓ ";color:var(--accent)}
+.navrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.navrow .next{grid-column:1/-1}
+@media (max-width:959px){.side .navrow{display:none}}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
+.dock .mid{text-align:center;font-size:13px;color:var(--muted);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock .mid b{color:var(--ink);font-variant-numeric:tabular-nums}
+@media (min-width:960px){.dock{display:none}}
+@media (max-width:420px){.btn{padding:0 12px}.tile{width:36px}.scoreguide{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head><body>
+<div id="app"></div>
+<script id="app-data" type="application/json">{"version":"v20261030","scale":{"min":1,"max":9},"arriveRows":[{"id":"1a","name":"研究设计","set":"E10","itemIds":[],"zh":"对每项实验简述研究设计，包括比较的组别及对照组；未设置对照组时说明理由。","ext":false,"main":"1","nameEn":"Study design","en":"For each experiment, provide brief details of study design including: (a) The groups being compared, including control groups. If no control group has been used, the rationale should be stated."},{"id":"1b","name":"研究设计","set":"E10","itemIds":[],"zh":"对每项实验说明实验单位，例如单只动物、一窝动物或一笼动物。","ext":false,"main":"1","nameEn":"Study design","en":"For each experiment, provide brief details of study design including: (b) The experimental unit (e.g. a single animal, litter, or cage of animals)."},{"id":"2a","name":"样本量","set":"E10","itemIds":[],"zh":"明确各组分配的实验单位数、每项实验的实验单位总数，以及所用动物总数。","ext":false,"main":"2","nameEn":"Sample size","en":"Specify the exact number of experimental units allocated to each group, and the total number in each experiment. Also indicate the total number of animals used."},{"id":"2b","name":"样本量","set":"E10","itemIds":[],"zh":"解释样本量如何确定；如开展了事前样本量计算，提供计算细节。","ext":false,"main":"2","nameEn":"Sample size","en":"Explain how the sample size was decided. Provide details of any a priori sample size calculation, if done."},{"id":"3a","name":"纳入和排除标准","set":"E10","itemIds":["CHM-01"],"zh":"描述实验期间动物或实验单位、分析期间数据点的纳入和排除标准，说明是否预先设定；未设定时明确说明。","ext":true,"main":"3","nameEn":"Inclusion and exclusion criteria","en":"Describe any criteria used for including and excluding animals (or experimental units) during the experiment, and data points during the analysis. Specify if these criteria were established a priori. If no criteria were set, state this explicitly."},{"id":"3b","name":"纳入和排除标准","set":"E10","itemIds":[],"zh":"逐组报告未纳入分析的动物、实验单位或数据点及其原因；无排除时明确说明。","ext":false,"main":"3","nameEn":"Inclusion and exclusion criteria","en":"For each experimental group, report any animals, experimental units or data points not included in the analysis and explain why. If there were no exclusions, state so."},{"id":"3c","name":"纳入和排除标准","set":"E10","itemIds":[],"zh":"对每项分析报告各组准确的样本量n。","ext":false,"main":"3","nameEn":"Inclusion and exclusion criteria","en":"For each analysis, report the exact value of n in each experimental group."},{"id":"4a","name":"随机化","set":"E10","itemIds":[],"zh":"说明是否随机分配实验单位至对照组和干预组；如采用，提供随机序列的生成方法。","ext":false,"main":"4","nameEn":"Randomisation","en":"State whether randomisation was used to allocate experimental units to control and treatment groups. If done, provide the method used to generate the randomisation sequence."},{"id":"4b","name":"随机化","set":"E10","itemIds":["CHM-02"],"zh":"描述减少潜在混杂因素的策略，例如处理和测量顺序、动物或笼位；未控制混杂因素时明确说明。","ext":true,"main":"4","nameEn":"Randomisation","en":"Describe the strategy used to minimise potential confounders such as the order of treatments and measurements, or animal/cage location. If confounders were not controlled, state this explicitly."},{"id":"5","name":"盲法","set":"E10","itemIds":[],"zh":"描述在分组、实验实施、结局评估及数据分析各阶段，哪些人员知晓组别分配。","ext":false,"main":"5","nameEn":"Blinding","en":"Describe who was aware of the group allocation at the different stages of the experiment (during the allocation, the conduct of the experiment, the outcome assessment, and the data analysis)."},{"id":"6a","name":"结局指标","set":"E10","itemIds":["CHM-03"],"zh":"清楚定义所有评估的结局指标，例如细胞死亡、分子标志物或行为变化。","ext":true,"main":"6","nameEn":"Outcome measures","en":"Clearly define all outcome measures assessed (e.g. cell death, molecular markers, or behavioural changes)."},{"id":"6b","name":"结局指标","set":"E10","itemIds":[],"zh":"对假设检验研究，明确主要结局指标，即用于确定样本量的结局指标。","ext":false,"main":"6","nameEn":"Outcome measures","en":"For hypothesis-testing studies, specify the primary outcome measure, i.e. the outcome measure that was used to determine the sample size."},{"id":"7a","name":"统计方法","set":"E10","itemIds":[],"zh":"提供每项分析的统计方法细节，包括所用软件。","ext":false,"main":"7","nameEn":"Statistical methods","en":"Provide details of the statistical methods used for each analysis, including software used."},{"id":"7b","name":"统计方法","set":"E10","itemIds":[],"zh":"描述评估数据是否满足统计方法假设的方法，以及假设不满足时的处理。","ext":false,"main":"7","nameEn":"Statistical methods","en":"Describe any methods used to assess whether the data met the assumptions of the statistical approach, and what was done if the assumptions were not met."},{"id":"8a","name":"实验动物","set":"E10","itemIds":[],"zh":"提供适合该物种的动物信息，包括物种、品系及亚系、性别、年龄或发育阶段，以及相关时的体质量（体重）。","ext":false,"main":"8","nameEn":"Experimental animals","en":"Provide species-appropriate details of the animals used, including species, strain and substrain, sex, age or developmental stage, and, if relevant, weight."},{"id":"8b","name":"实验动物","set":"E10","itemIds":[],"zh":"提供动物来源、健康或免疫状态、遗传修饰状态、基因型和既往操作等其他相关信息。","ext":false,"main":"8","nameEn":"Experimental animals","en":"Provide further relevant information on the provenance of animals, health/immune status, genetic modification status, genotype, and any previous procedures."},{"id":"9a","name":"实验程序","set":"E10","itemIds":[],"zh":"对每个实验组（包括对照组），详细描述做了什么、如何实施以及使用了什么，使他人能够重复实验。","ext":true,"main":"9","nameEn":"Experimental procedures","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (a) What was done, how it was done and what was used."},{"id":"9b","name":"实验程序","set":"E10","itemIds":[],"zh":"对每个实验组（包括对照组），详细报告程序实施的时间和频次，使他人能够重复实验。","ext":false,"main":"9","nameEn":"Experimental procedures","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (b) When and how often."},{"id":"9c","name":"实验程序","set":"E10","itemIds":[],"zh":"对每个实验组（包括对照组），详细报告程序实施地点，包括适应期细节，使他人能够重复实验。","ext":false,"main":"9","nameEn":"Experimental procedures","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (c) Where (including detail of any acclimatisation periods)."},{"id":"9d","name":"实验程序","set":"E10","itemIds":["CHM-22","CHM-23","CHM-24"],"zh":"对每个实验组（包括对照组），说明采用相关程序的理由和依据。","ext":true,"main":"9","nameEn":"Experimental procedures","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (d) Why (provide rationale for procedures)."},{"id":"10a","name":"结果","set":"E10","itemIds":[],"zh":"对开展的每项实验（包括独立重复实验），报告各组的汇总或描述性统计量，并在适用时提供变异性指标，例如均值与标准差或中位数与范围。","ext":false,"main":"10","nameEn":"Results","en":"For each experiment conducted, including independent replications, report: (a) Summary/descriptive statistics for each experimental group, with a measure of variability where applicable (e.g. mean and SD, or median and range)."},{"id":"10b","name":"结果","set":"E10","itemIds":[],"zh":"对开展的每项实验（包括独立重复实验），在适用时报告效应量及其置信区间。","ext":false,"main":"10","nameEn":"Results","en":"For each experiment conducted, including independent replications, report: (b) If applicable, the effect size with a confidence interval."},{"id":"11","name":"摘要","set":"REC","itemIds":[],"zh":"准确概述研究目的、动物物种、品系和性别、关键方法、主要发现及研究结论。","ext":false,"main":"11","nameEn":"Abstract","en":"Provide an accurate summary of the research objectives, animal species, strain and sex, key methods, principal findings, and study conclusions."},{"id":"12a","name":"背景","set":"REC","itemIds":["CHM-25"],"zh":"提供充分的科学背景，说明研究的依据和背景，并解释实验研究方法。","ext":true,"main":"12","nameEn":"Background","en":"Include sufficient scientific background to understand the rationale and context for the study, and explain the experimental approach."},{"id":"12b","name":"背景","set":"REC","itemIds":[],"zh":"解释所用动物物种和模型如何回应科学目标，并在适当情况下说明其与人类生物学的关联。","ext":false,"main":"12","nameEn":"Background","en":"Explain how the animal species and model used address the scientific objectives and, where appropriate, the relevance to human biology."},{"id":"13","name":"研究目的","set":"REC","itemIds":[],"zh":"清楚描述研究问题、研究目的，以及适用时所检验的具体假设。","ext":false,"main":"13","nameEn":"Objectives","en":"Clearly describe the research question, research objectives and, where appropriate, specific hypotheses being tested."},{"id":"14","name":"伦理声明","set":"REC","itemIds":[],"zh":"提供批准动物使用的伦理审查委员会或同等机构名称，以及相关许可或方案编号（如适用）。未申请或未获伦理批准时说明理由。","ext":false,"main":"14","nameEn":"Ethical statement","en":"Provide the name of the ethical review committee or equivalent that has approved the use of animals in this study, and any relevant licence or protocol numbers (if applicable). If ethical approval was not sought or granted, provide a justification."},{"id":"15","name":"饲养与管理","set":"REC","itemIds":["CHM-26"],"zh":"提供饲养和管理条件的细节，包括环境丰富化措施。","ext":true,"main":"15","nameEn":"Housing and husbandry","en":"Provide details of housing and husbandry conditions, including any environmental enrichment."},{"id":"16a","name":"动物照护与监测","set":"REC","itemIds":[],"zh":"描述实验方案中为减少疼痛、痛苦和应激所采取的干预或措施。","ext":false,"main":"16","nameEn":"Animal care and monitoring","en":"Describe any interventions or steps taken in the experimental protocols to reduce pain, suffering and distress."},{"id":"16b","name":"动物照护与监测","set":"REC","itemIds":[],"zh":"报告预期或非预期的不良事件。","ext":false,"main":"16","nameEn":"Animal care and monitoring","en":"Report any expected or unexpected adverse events."},{"id":"16c","name":"动物照护与监测","set":"REC","itemIds":["CHM-27"],"zh":"描述研究设定的人道终点、监测的体征及监测频率；未设定人道终点时明确说明。","ext":true,"main":"16","nameEn":"Animal care and monitoring","en":"Describe the humane endpoints established for the study, the signs that were monitored and the frequency of monitoring. If the study did not have humane endpoints, state this."},{"id":"17a","name":"结果解释与科学意义","set":"REC","itemIds":["CHM-28","CHM-29"],"zh":"结合研究目的和假设、现有理论及相关文献研究解释结果。","ext":true,"main":"17","nameEn":"Interpretation/scientific implications","en":"Interpret the results, taking into account the study objectives and hypotheses, current theory and other relevant studies in the literature."},{"id":"17b","name":"结果解释与科学意义","set":"REC","itemIds":["CHM-30"],"zh":"讨论研究局限，包括潜在偏倚来源、动物模型局限及结果的不精确性。","ext":true,"main":"17","nameEn":"Interpretation/scientific implications","en":"Comment on the study limitations including potential sources of bias, limitations of the animal model, and imprecision associated with the results."},{"id":"18","name":"可推广性与转化","set":"REC","itemIds":[],"zh":"讨论研究结果是否以及如何推广至其他物种或实验条件，并在适当情况下说明与人类生物学的关联。","ext":false,"main":"18","nameEn":"Generalisability/translation","en":"Comment on whether, and how, the findings of this study are likely to generalise to other species or experimental conditions, including any relevance to human biology (where appropriate)."},{"id":"19","name":"方案注册","set":"REC","itemIds":[],"zh":"声明是否在研究开始前制定方案，包括研究问题、关键设计特征和分析计划，以及是否注册和注册位置。","ext":false,"main":"19","nameEn":"Protocol registration","en":"Provide a statement indicating whether a protocol (including the research question, key design features, and analysis plan) was prepared before the study, and if and where this protocol was registered."},{"id":"20","name":"数据获取","set":"REC","itemIds":[],"zh":"声明研究数据是否可获取及获取位置。","ext":false,"main":"20","nameEn":"Data access","en":"Provide a statement describing if and where study data are available."},{"id":"21a","name":"利益声明","set":"REC","itemIds":[],"zh":"声明潜在的财务及非财务利益冲突；无利益冲突时明确说明。","ext":false,"main":"21","nameEn":"Declaration of interests","en":"Declare any potential conflicts of interest, including financial and non-financial. If none exist, this should be stated."},{"id":"21b","name":"利益声明","set":"REC","itemIds":[],"zh":"列出全部资助来源，包括项目标识，并说明资助方在设计、分析和报告中的作用。","ext":false,"main":"21","nameEn":"Declaration of interests","en":"List all funding sources (including grant identifier) and the role of the funder(s) in the design, analysis and reporting of the study."},{"id":"title","name":"标题候选","set":"EXT","itemIds":["CHM-31","CHM-32"],"zh":"ARRIVE 2.0 无独立标题条目；条目11 为摘要，以下候选不直接归属于11。","ext":true}],"arriveMap":{"3a":{"id":"3a","set":"E10","nameZh":"纳入和排除标准","nameEn":"Inclusion and exclusion criteria","zh":"描述实验期间动物或实验单位、分析期间数据点的纳入和排除标准，说明是否预先设定；未设定时明确说明。","en":"Describe any criteria used for including and excluding animals (or experimental units) during the experiment, and data points during the analysis. Specify if these criteria were established a priori. If no criteria were set, state this explicitly."},"4b":{"id":"4b","set":"E10","nameZh":"随机化","nameEn":"Randomisation","zh":"描述减少潜在混杂因素的策略，例如处理和测量顺序、动物或笼位；未控制混杂因素时明确说明。","en":"Describe the strategy used to minimise potential confounders such as the order of treatments and measurements, or animal/cage location. If confounders were not controlled, state this explicitly."},"6a":{"id":"6a","set":"E10","nameZh":"结局指标","nameEn":"Outcome measures","zh":"清楚定义所有评估的结局指标，例如细胞死亡、分子标志物或行为变化。","en":"Clearly define all outcome measures assessed (e.g. cell death, molecular markers, or behavioural changes)."},"9a":{"id":"9a","set":"E10","nameZh":"实验程序","nameEn":"Experimental procedures","zh":"对每个实验组（包括对照组），详细描述做了什么、如何实施以及使用了什么，使他人能够重复实验。","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (a) What was done, how it was done and what was used."},"9d":{"id":"9d","set":"E10","nameZh":"实验程序","nameEn":"Experimental procedures","zh":"对每个实验组（包括对照组），说明采用相关程序的理由和依据。","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (d) Why (provide rationale for procedures)."},"12a":{"id":"12a","set":"REC","nameZh":"背景","nameEn":"Background","zh":"提供充分的科学背景，说明研究的依据和背景，并解释实验研究方法。","en":"Include sufficient scientific background to understand the rationale and context for the study, and explain the experimental approach."},"15":{"id":"15","set":"REC","nameZh":"饲养与管理","nameEn":"Housing and husbandry","zh":"提供饲养和管理条件的细节，包括环境丰富化措施。","en":"Provide details of housing and husbandry conditions, including any environmental enrichment."},"16c":{"id":"16c","set":"REC","nameZh":"动物照护与监测","nameEn":"Animal care and monitoring","zh":"描述研究设定的人道终点、监测的体征及监测频率；未设定人道终点时明确说明。","en":"Describe the humane endpoints established for the study, the signs that were monitored and the frequency of monitoring. If the study did not have humane endpoints, state this."},"17a":{"id":"17a","set":"REC","nameZh":"结果解释与科学意义","nameEn":"Interpretation/scientific implications","zh":"结合研究目的和假设、现有理论及相关文献研究解释结果。","en":"Interpret the results, taking into account the study objectives and hypotheses, current theory and other relevant studies in the literature."},"17b":{"id":"17b","set":"REC","nameZh":"结果解释与科学意义","nameEn":"Interpretation/scientific implications","zh":"讨论研究局限，包括潜在偏倚来源、动物模型局限及结果的不精确性。","en":"Comment on the study limitations including potential sources of bias, limitations of the animal model, and imprecision associated with the results."}},"table2Sections":["一、中药干预——物料与制备链","二、动物模型","三、干预实施"],"items":[{"id":"CHM-01","title":"模型动物的纳入与排除标准","req":"若研究使用疾病、证候或病证结合动物模型，应报告模型动物进入分析前的纳入与排除标准，包括造模成功的判定阈值（如证候评分、生化/病理指标门槛）、未达阈值动物的处理方式。","table":1,"set":"E10","arrive":"3a","n":1,"why":"造模成功的判定阈值决定哪些动物进入分析，属样本筛选，故归入 3a；模型验证所用的指标或方法另见 CHM-19。","example":"造模第14天进行脾虚证评分（摄食量、体重变化、大便性状、活动度、毛色，每项0–3分，满分15分）；总分≥8分且体重较空白组降低≥10%者判定造模成功，纳入后续给药实验。未达标准的动物（n＝4）予以剔除，不进入分组及分析。","arriveRef":"3a","prev":null},{"id":"CHM-02","title":"受试物批次的混杂控制","req":"若研究所用的中药原料、自制中间产物或给药制剂涉及多个批次（如实验分批进行、长疗程中途换批），应说明为避免批次混杂所采取的措施，如全程使用同一批号、各组动物在各批次间均衡分配等；未采取控制措施时明确说明。","table":1,"set":"E10","arrive":"4b","n":2,"why":"中药原料受产地、采收期、炮制与提取工艺影响，批间成分差异大，且多为研究者自制。与 CHM-06 的分工：CHM-06 问用的是哪一批（可追溯），本条问有多批时批次与组别如何对应（设计控制）。","example":"全部实验使用同一批号（20250312）的黄芪饮片，由同一人一次性煎煮、浓缩并冻干，分装后−20℃保存，各组均使用该批冻干粉。实验分两个批次进行，每批均含全部各组动物，且各组动物数相等。","arriveRef":"4b","prev":null},{"id":"CHM-03","title":"中医证候相关结局的评估方法","req":"若研究将体征、行为表现或中医证候量表评分作为评价干预后中医证候改善的结局指标，如舌象（如适用）、摄食、大便性状、毛色、活动度等，应说明具体评估方法，如评分标准、量表来源、判定依据等。","table":1,"set":"E10","arrive":"6a","n":3,"why":"仅限于把相关指标用作评价证候改善的情形；要求落在判定方法上，所列指标只是开放式举例，不作穷举。","example":"以摄食量、大便性状、毛色和活动度评价脾气虚证的改善。评分标准参照文献[12]制定：每项0–3分，总分越高提示证候越重；由两名不知分组的研究人员独立评分，取均值。","arriveRef":"6a","prev":{"components":[{"code":"CHI-34","label":"证候结局评估方法","N":399,"yes":5,"no":1,"na":393,"unclear":0,"applicable":6,"rate":83.3}],"note":null,"merged":false}},{"id":"CHM-04","title":"名称、基原与组成","req":"应报告中药干预的具体名称（不得仅用“中药”“复方”等泛称）。具有明确剂型时，报告所用剂型。干预为单味药或复方（含其提取物）时，逐味报告：植物、真菌或动物来源的药味，报告基原拉丁学名（含命名人）、药用部位和产地（药材的生长或采集地）；矿物药及无基原的药味，报告所依据标准（如《中国药典》）中的规范名称。复方另报各药味的处方量。直接购买的成品（如中成药）可引用其公开资料代替逐味报告；因保密、专利等原因无法公开或无法获得组成或处方量的，声明并说明原因。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":4,"why":"中药有大量同名异物与同物异名，有基原的药味需以基原拉丁学名（到种、含命名人）加药用部位确定，如桑叶、桑枝、桑白皮同出一物种而为不同药材。复方不公开组成会使实验无法复现，故保留声明并说明原因的出口。","example":"本研究干预为四君子汤（汤剂），由4味药组成：人参（Panax ginseng C.A.Mey.，根及根茎，产地吉林抚松）9 g、白术（Atractylodes macrocephala Koidz.，根茎，产地浙江磐安）9 g、茯苓（Poria cocos (Schw.) Wolf，菌核，产地安徽金寨）9 g、甘草（Glycyrrhiza uralensis Fisch.，根及根茎，产地内蒙古杭锦旗）6 g，每剂生药总重33 g。","arriveRef":"9a","prev":{"components":[{"code":"CHI-03","label":"剂型","N":399,"yes":193,"no":14,"na":192,"unclear":0,"applicable":207,"rate":93.2},{"code":"CHI-09","label":"全文中药名称","N":399,"yes":399,"no":0,"na":0,"unclear":0,"applicable":399,"rate":100.0},{"code":"CHI-10","label":"干预名称语言呈现","N":399,"yes":142,"no":207,"na":50,"unclear":0,"applicable":349,"rate":40.7},{"code":"CHI-11","label":"药味名称及剂量","N":399,"yes":131,"no":63,"na":199,"unclear":6,"applicable":194,"rate":67.5},{"code":"CHI-12","label":"药味语言呈现","N":399,"yes":120,"no":74,"na":202,"unclear":3,"applicable":194,"rate":61.9},{"code":"CHI-13","label":"药用部位","N":399,"yes":198,"no":76,"na":124,"unclear":1,"applicable":274,"rate":72.3},{"code":"CHI-14","label":"产地","N":399,"yes":60,"no":214,"na":124,"unclear":1,"applicable":274,"rate":21.9},{"code":"CHI-25","label":"天然药材拉丁名","N":399,"yes":105,"no":158,"na":135,"unclear":1,"applicable":263,"rate":39.9}],"note":null,"merged":true}},{"id":"CHM-05","title":"原料形态或加工类型","req":"当干预并非现成中成药时，应报告所用物料的类型（如鲜/干药材、饮片等）及制备形式（如水煎液、总提取物、分离组分、单体化合物等）。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":5,"why":"同一味药做成鲜品、饮片、水煎液、总提取物或单体，成分与药效可能完全不同。“剂型”指成品的药剂学形式，本条指进入实验的物料处于制备链的哪一步。","example":"所用物料为购入的干燥饮片；制备形式为饮片水煎液经浓缩、冷冻干燥所得的总提取物冻干粉，临用前以蒸馏水复溶。","arriveRef":"9a","prev":{"components":[{"code":"CHI-21","label":"产品原料形态","N":399,"yes":332,"no":22,"na":45,"unclear":0,"applicable":354,"rate":93.8}],"note":null,"merged":false}},{"id":"CHM-06","title":"来源与批号","req":"应报告中药原料或产品的供应来源，经正规渠道获得时，报告生产企业、供应商或医院药房，以及产品批号；自行采集时，报告采集来源。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":6,"why":"中药质量随产地、采收年份和批次波动，批号是把研究用药对应到具体一批原料的标识。","example":"饮片购自××药业有限公司，批号：人参2305016、白术2306112、茯苓2304087、甘草2305203。","arriveRef":"9a","prev":{"components":[{"code":"CHI-17","label":"供应来源","N":399,"yes":352,"no":47,"na":0,"unclear":0,"applicable":399,"rate":88.2},{"code":"CHI-18","label":"产品批号","N":399,"yes":134,"no":243,"na":21,"unclear":1,"applicable":377,"rate":35.5}],"note":null,"merged":true}},{"id":"CHM-07","title":"商品化成品信息","req":"使用商品化成品时，应报告其规格（单位包装的量或含量及单位）及生产日期和／或有效期。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":7,"why":"规格决定由成品折算到实际给药量能否核对，生产日期和有效期反映给药时药物所处的状态。","example":"阳性药××颗粒为商品化成品（××药业有限公司），规格：每袋10 g，相当于饮片30 g；生产日期2025年3月12日，有效期至2027年3月11日。","arriveRef":"9a","prev":{"components":[{"code":"CHI-19","label":"产品规格","N":399,"yes":17,"no":279,"na":102,"unclear":1,"applicable":296,"rate":5.7},{"code":"CHI-20","label":"生产日期／有效期","N":399,"yes":1,"no":298,"na":99,"unclear":1,"applicable":299,"rate":0.3}],"note":null,"merged":true}},{"id":"CHM-08","title":"鉴定与留样","req":"使用中药材或饮片原料（含研究者自行炮制所得饮片）时，应报告鉴定人、鉴定机构、鉴定方法或所依据标准的鉴别项中的至少一项，以及凭证标本或留样的保存情况（保存机构及编号）；研究者自行制得可保存形态的最终产品时，报告产品留样情况。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":8,"why":"伪品与混用品在药材流通中常见，身份未经确认则干预对象不确定；只报“已留存”而无保存机构与编号，仍无法追溯。炮制品按饮片处理，不要求重新作基原鉴定。","example":"药材经××大学药学院×××教授鉴定为真品，鉴定依据为性状及显微鉴别，所用标准为《中国药典》（2020年版）该药味项下的鉴别项。凭证标本保存于××大学标本馆，登记号：LZU-TCM-2025-0138。","arriveRef":"9a","prev":{"components":[{"code":"CHI-23","label":"原料鉴定方法","N":399,"yes":97,"no":156,"na":146,"unclear":0,"applicable":253,"rate":38.3},{"code":"CHI-24","label":"凭证标本／留样","N":399,"yes":34,"no":231,"na":134,"unclear":0,"applicable":265,"rate":12.8}],"note":null,"merged":true}},{"id":"CHM-09","title":"炮制","req":"若炮制步骤由研究者自行完成，应报告炮制方法（如炒、炙、煅、蒸、制炭等）、所依据的炮制标准（如《中国药典》炮制通则、地方炮制规范等）；涉及辅料时，报告辅料种类及用量比例；说明炮制程度（如炒黄、炒焦、炒炭等）或具体加热温度与时长。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":9,"why":"炮制改变成分与药性（如生地与熟地、生半夏与姜半夏功效不同），方法、依据、辅料、程度缺一则无法复现。以“由研究者自行完成”限定，购入的炮制品由 CHM-06、CHM-08 覆盖。","example":"熟地黄由研究者自行炮制：取生地黄，加黄酒（每100 kg生地黄用黄酒30 kg）拌匀，密闭，隔水炖至酒液被吸尽、药材内外乌黑发亮（约24 h），取出，晒至外皮黏液稍干，切厚片，干燥。炮制方法依据《中国药典》（2020年版）熟地黄项下的酒炖法。","arriveRef":"9a","prev":{"components":[{"code":"CHI-46","label":"炮制方法名称","N":399,"yes":11,"no":0,"na":387,"unclear":1,"applicable":11,"rate":100.0},{"code":"CHI-47","label":"辅料及用量比例","N":399,"yes":3,"no":3,"na":392,"unclear":1,"applicable":6,"rate":50.0},{"code":"CHI-48","label":"炮制程度／火候","N":399,"yes":5,"no":6,"na":387,"unclear":1,"applicable":11,"rate":45.5},{"code":"CHI-49","label":"炮制依据／标准","N":399,"yes":4,"no":7,"na":387,"unclear":1,"applicable":11,"rate":36.4}],"note":null,"merged":true}},{"id":"CHM-10","title":"提取","req":"若提取步骤由研究者自行完成，应报告提取溶剂的种类及浓度、料液比（注明单位）、提取方式（如回流、超声、煎煮等）及温度、提取次数及每次时长。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":10,"why":"溶剂、料液比、次数、时长与温度共同决定提取物的成分谱，只报其中一两项不足以复现同一提取物。","example":"取四君子汤饮片1 kg，加10倍量蒸馏水（料液比1:10，kg/L）浸泡30 min，100℃煎煮提取2次，每次1 h，合并两次滤液。","arriveRef":"9a","prev":{"components":[{"code":"CHI-38","label":"提取溶剂种类及浓度","N":399,"yes":185,"no":32,"na":181,"unclear":1,"applicable":217,"rate":85.3},{"code":"CHI-39","label":"药材-溶剂比例","N":399,"yes":135,"no":82,"na":181,"unclear":1,"applicable":217,"rate":62.2},{"code":"CHI-40","label":"提取次数","N":399,"yes":148,"no":68,"na":181,"unclear":2,"applicable":216,"rate":68.5},{"code":"CHI-41","label":"单次提取时长","N":399,"yes":148,"no":69,"na":181,"unclear":1,"applicable":217,"rate":68.2},{"code":"CHI-42","label":"提取温度／方式","N":399,"yes":181,"no":36,"na":181,"unclear":1,"applicable":217,"rate":83.4}],"note":null,"merged":true}},{"id":"CHM-11","title":"浓缩与干燥","req":"若浓缩或干燥步骤由研究者自行完成，应报告具体方式（如减压浓缩、常压浓缩、喷雾干燥、冷冻干燥等）及终点指标（如生药当量、干膏得率、终体积等）。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":11,"why":"浓缩与干燥方式影响热不稳定成分的存留；终点指标（生药当量、得率等）是把提取物的量换算回原药材量的依据。","example":"合并滤液经旋转蒸发仪减压浓缩（50℃，−0.09 MPa）至每毫升相当于生药2 g，再冷冻干燥48 h得冻干粉，干膏得率12.4%（干膏重/生药重）。","arriveRef":"9a","prev":{"components":[{"code":"CHI-43","label":"浓缩方式","N":399,"yes":133,"no":69,"na":193,"unclear":4,"applicable":202,"rate":65.8},{"code":"CHI-44","label":"浓缩终点","N":399,"yes":124,"no":79,"na":193,"unclear":3,"applicable":203,"rate":61.1}],"note":null,"merged":true}},{"id":"CHM-12","title":"最终给药制剂配制","req":"若最终给药制剂由研究者自行配制，溶液、混悬液等液体制剂应报告溶媒种类和终给药浓度；颗粒剂、片剂等固体制剂报告具体制备工艺。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":12,"why":null,"example":"给药前将冻干粉用蒸馏水溶解，配制成含生药0.35 g/mL的药液，现用现配，灌胃体积10 mL/kg。","arriveRef":"9a","prev":{"components":[{"code":"CHI-45","label":"复溶／混悬配制方式","N":399,"yes":196,"no":184,"na":19,"unclear":0,"applicable":380,"rate":51.6}],"note":null,"merged":false}},{"id":"CHM-13","title":"指标或活性成分含量","req":"使用标准化产品时，应报告指标性或活性成分的含量及单位；使用单体化合物时，报告其纯度。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":13,"why":null,"example":"HPLC法测得所用黄芪提取物中黄芪甲苷含量为0.62 mg/g；所用单体化合物黄芩苷（××公司）纯度≥98%（HPLC法，面积归一化法）。","arriveRef":"9a","prev":{"components":[{"code":"CHI-27","label":"指标成分含量","N":399,"yes":124,"no":101,"na":169,"unclear":5,"applicable":225,"rate":55.1}],"note":null,"merged":false}},{"id":"CHM-14","title":"化学表征方法与对照品来源","req":"开展化学表征或定量分析时，应报告所用分析方法及仪器；使用化学对照品、对照药材或对照提取物等时，报告其来源。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":14,"why":"含量与图谱是否可信取决于方法、仪器和对照品来源，只给结果不给这些信息，数据无法评价也无法重复。","example":"采用HPLC-DAD法测定（Agilent 1260；C18柱，250 mm×4.6 mm，5 μm；流动相：乙腈—0.1%磷酸水溶液梯度洗脱；检测波长254 nm）。对照品黄芩苷购自中国食品药品检定研究院（批号：××）。","arriveRef":"9a","prev":{"components":[{"code":"CHI-28","label":"化学表征方法","N":399,"yes":210,"no":6,"na":182,"unclear":1,"applicable":216,"rate":97.2},{"code":"CHI-29","label":"化学对照品来源","N":399,"yes":68,"no":144,"na":182,"unclear":5,"applicable":212,"rate":32.1}],"note":null,"merged":true}},{"id":"CHM-15","title":"质量控制检测项目","req":"如报告质量控制检测，应说明除成分含量或单体纯度外的具体检测项目，如重金属及有害元素、农药残留、微生物限度、残留溶剂、有关物质等，并注明所采用的检验方法。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":15,"why":"本条问查了哪些项、用什么方法查（限于成分含量和纯度之外的项目）；与 CHM-16 的适用范围不同，故分列。","example":"对所用药材另行检测了重金属及有害元素（铅、镉、砷、汞，ICP-MS法）、农药残留（GC-MS/MS法）和微生物限度（平板计数法），检验方法依据《中国药典》（2020年版）相关通则。","arriveRef":"9a","prev":{"components":[{"code":"CHI-30","label":"质控检测类型","N":399,"yes":13,"no":41,"na":345,"unclear":0,"applicable":54,"rate":24.1}],"note":null,"merged":false}},{"id":"CHM-16","title":"质量控制结果判定","req":"如报告质量控制检测，应说明各项检测结果的验收标准及是否合格；存在不合格材料时，报告处理方式。","table":2,"set":"E10","arrive":"9a","section":"一、中药干预——物料与制备链","n":16,"why":"做了检测不等于合格，没有验收标准和判定结论，检测数据无法解读。","example":"上述检测结果均符合《中国药典》（2020年版）对该药材的限度规定，判定为合格；其中1个批次（批号：××）微生物限度不合格，已弃用并更换新批次。","arriveRef":"9a","prev":{"components":[{"code":"CHI-31","label":"质控结果判定","N":399,"yes":21,"no":34,"na":342,"unclear":2,"applicable":55,"rate":38.2}],"note":null,"merged":false}},{"id":"CHM-17","title":"证候名称","req":"若研究涉及中医证候或病证结合模型，应报告所研究中医证候的具体名称。","table":2,"set":"E10","arrive":"9a","section":"二、动物模型","n":17,"why":"证候名称属于本研究所建动物模型的内容，不同于 ARRIVE 8b 所指“动物进入本研究前”的背景信息，故归入 9a。","example":"本研究建立的是脾气虚证大鼠模型；中医证候名称：脾气虚证。","arriveRef":"9a","prev":{"components":[{"code":"CHI-05","label":"证候具体名称","N":399,"yes":12,"no":0,"na":387,"unclear":0,"applicable":12,"rate":100.0}],"note":null,"merged":false}},{"id":"CHM-18","title":"造模方法","req":"若疾病、证候或病证结合造模由研究者实施，应报告具体造模方法，包括诱导手段、流程及关键操作步骤。","table":2,"set":"E10","arrive":"9a","section":"二、动物模型","n":18,"why":"证候模型尚无公认统一的制备规范，同一证候可由多种方法诱导；不报告具体流程，模型就无法复现。","example":"脾气虚证模型采用“劳倦过度＋饮食失节”复合法：大鼠每日游泳至力竭（水温25±1℃，尾部负重为体重的5%），同时隔日禁食、次日自由进食，连续14 d。空白对照组不作处理，正常饲养。","arriveRef":"9a","prev":{"components":[{"code":"CHI-06","label":"造模方法","N":399,"yes":357,"no":7,"na":35,"unclear":0,"applicable":364,"rate":98.1}],"note":null,"merged":false}},{"id":"CHM-19","title":"模型验证","req":"若研究使用疾病、证候或病证结合的动物模型，应报告验证模型所用的指标或方法。","table":2,"set":"E10","arrive":"9a","section":"二、动物模型","n":19,"why":"造模成功的判定阈值归 3a（CHM-01），验证模型所用的指标或方法归 9a 动物模型，两者切面不同。","example":"造模第15天，通过摄食量、体重、大便性状、活动度和毛色的综合评分，并检测血清D-木糖排泄率验证模型；模型组与空白组相比差异有统计学意义（P<0.05）。","arriveRef":"9a","prev":{"components":[{"code":"CHI-08","label":"造模成功判定","N":399,"yes":266,"no":99,"na":34,"unclear":0,"applicable":365,"rate":72.9}],"note":"原条目为“判定造模成功或验证模型”的合并表述，现已拆分并收窄，数据仅作参考。","merged":false}},{"id":"CHM-20","title":"对照物组成与用量","req":"若设置涉及药物或其他物质干预的对照组，应报告对照物的名称、组成及剂量；安慰剂报告各辅料成分名称及用量，阳性药或其他药物对照报告具体药物名称、生产厂家（或供应商）、批号及剂量。","table":2,"set":"E10","arrive":"9a","section":"三、干预实施","n":20,"why":"对照物的组成是效应的参照系；阳性药多为上市制剂，其厂家和批号同样影响可比性。","example":"模型对照组按与受试药相同体积灌胃给予蒸馏水；安慰剂组给予含淀粉3%、糊精1%、焦糖色素0.1%（w/v）的混悬液；阳性药组给予××颗粒（××药业有限公司，批号：××，规格：每袋10 g），剂量3.5 g/kg（按生药折算）。","arriveRef":"9a","prev":{"components":[{"code":"CHI-32","label":"对照物组成","N":399,"yes":234,"no":12,"na":153,"unclear":0,"applicable":246,"rate":95.1}],"note":null,"merged":false}},{"id":"CHM-21","title":"安慰剂匹配","req":"如使用安慰剂，应说明其与受试药在外观、气味、口感、剂型和给药途径等特征上的匹配情况。","table":2,"set":"E10","arrive":"9a","section":"三、干预实施","n":21,"why":"动物实验中，安慰剂不匹配影响的主要是摄食与应激（气味、口感不同会直接改变摄入量），而不只是盲法。","example":"安慰剂以淀粉、糊精、焦糖色素及少量中药气味剂配制，色泽（棕褐色）、浑浊度和气味与受试药一致；剂型（混悬液）与给药途径（灌胃）相同。口感未作匹配，已在局限性中说明。","arriveRef":"9a","prev":{"components":[{"code":"CHI-33","label":"安慰剂物理匹配","N":399,"yes":0,"no":2,"na":397,"unclear":0,"applicable":2,"rate":0.0}],"note":null,"merged":false}},{"id":"CHM-22","title":"造模方法的选择依据","req":"若疾病、证候或病证结合造模由研究者实施，应说明选择该造模方法（如有改进，含改进部分）的依据，如引用文献、既往方法、机制解释等。","table":1,"set":"E10","arrive":"9d","n":22,"why":"中医模型常在既有方法上自行改良，不说明依据，读者无法判断模型是否成立。括号用于同时覆盖沿用既有方法和有所改进两种情形。","example":"脾气虚证模型采用文献[15]报道的大黄灌胃联合力竭游泳法。与原方法相比，本研究将大黄水煎液灌胃剂量由10 g/kg调整为7 g/kg，依据为预实验中原剂量组动物死亡率偏高（3/10）。","arriveRef":"9d","prev":{"components":[{"code":"CHI-07","label":"造模依据","N":399,"yes":207,"no":157,"na":35,"unclear":0,"applicable":364,"rate":56.9}],"note":null,"merged":false}},{"id":"CHM-23","title":"干预方案的来源与加减依据","req":"应报告中药干预方案的理论、文献或传承出处；若为自拟方案，应明确说明；当采用个体化加减方或随证加减时，报告药味加减或药味用量调整的依据或标准。","table":1,"set":"E10","arrive":"9d","n":23,"why":"方案的依据来自经典、文献或师承，随证加减会使同名方剂实际组成不同；两者同属“这个方子凭什么这么开”，故合并。“剂量”一词留给 CHM-24，本条用“药味用量调整”。","example":"四君子汤出自《太平惠民和剂局方》，按原方药味组成。针对模型动物便溏、湿盛的表现，将茯苓用量由9 g调整为12 g，依据为“湿盛便溏者重用茯苓健脾渗湿”的用药原则（文献[9]）。","arriveRef":"9d","prev":{"components":[{"code":"CHI-15","label":"出处／来源","N":399,"yes":328,"no":71,"na":0,"unclear":0,"applicable":399,"rate":82.2},{"code":"CHI-16","label":"加减依据","N":399,"yes":4,"no":0,"na":395,"unclear":0,"applicable":4,"rate":100.0}],"note":null,"merged":true}},{"id":"CHM-24","title":"给药剂量与疗程的依据","req":"应报告确定给药剂量及疗程的依据，如人体等效剂量换算、既往文献、预实验结果、经验性设定等。","table":1,"set":"E10","arrive":"9d","n":24,"why":null,"example":"大鼠给药剂量按人体等效剂量换算：成人临床日用量33 g生药/60 kg，按体表面积折算系数6.3换算，约3.47 g生药/(kg·d)，取整为3.5 g/kg。疗程14 d，依据预实验结果及文献[12]确定。","arriveRef":"9d","prev":{"components":[{"code":"CHI-26","label":"剂量疗程依据","N":399,"yes":215,"no":184,"na":0,"unclear":0,"applicable":399,"rate":53.9}],"note":null,"merged":false}},{"id":"CHM-25","title":"背景中的中医理论依据","req":"对于单味中药、复方、中成药等干预，应在背景/引言中说明选择该干预的中医理论依据，如证候、治法、功效、药性、归经、方剂配伍原则等。","table":1,"set":"REC","arrive":"12a","n":25,"why":"与 CHM-28 共同构成“理论依据—干预—结果解释”的链条。","example":"四君子汤为补气健脾的基础方，主治脾气虚证。方中人参大补元气，白术健脾燥湿，茯苓渗湿健脾，甘草调和诸药，诸药合用以益气健脾。本研究拟观察其对脾气虚证模型大鼠肠道菌群的影响。","arriveRef":"12a","prev":{"components":[{"code":"CHI-04","label":"中医理论阐释","N":399,"yes":302,"no":97,"na":0,"unclear":0,"applicable":399,"rate":75.7}],"note":null,"merged":false}},{"id":"CHM-26","title":"造模相关的饲养环境或饮食","req":"若疾病、证候或病证结合动物模型的诱导依赖特定饲养环境或饮食（如寒冷、高脂饮食），应报告各组所处环境或饮食的关键参数，如温度、湿度、光照周期、饲养密度及持续时间等。","table":1,"set":"REC","arrive":"15","n":26,"why":"部分证候模型的诱导依赖特定饲养环境或饮食，这些参数既是造模条件也是潜在混杂因素。昼夜颠倒、单笼孤养是常见诱导手段，因此举例包含光照周期和饲养密度。","example":"寒证模型大鼠每日2 h置于4±1℃人工气候箱，其余时间与对照组同处22±2℃、相对湿度50±10%的饲养室。各组均为12 h/12 h光照周期（07:00开灯）、每笼3只，持续14 d。","arriveRef":"15","prev":null},{"id":"CHM-27","title":"证候评分用作人道终点","req":"若将中医证候评分（或其中的体征条目）用作人道终点，应说明评分的构成、预先设定的终止阈值及其依据。","table":1,"set":"REC","arrive":"16c","n":27,"why":"证候评分用作终点而无预设阈值，动物实际观察期会因观察者而异，既影响福利判断，也影响结局可比性。","example":"采用大鼠脾气虚证评分（摄食量、体重、大便性状、活动度、毛色，每项0–3分，满分15分）每日监测。预设终止阈值为评分≥12分，或体重较基线下降超过20%，达到阈值即实施安乐死；阈值依据文献[20]及本机构动物福利指南设定。","arriveRef":"16c","prev":null},{"id":"CHM-28","title":"讨论中的中医理论","req":"对于单味中药、复方、中成药等干预，应在讨论中运用中医理论，如中药功效、证候改善、药性、归经等，对研究结果进行解释，并可结合药效物质、现代药理机制等进行说明。","table":1,"set":"REC","arrive":"17a","n":28,"why":"结果若不回到中医理论，中药研究就只剩药理学叙述。结合现代药理为可选补充，不要求必须报告现代机制。","example":"四君子汤使脾气虚证大鼠的摄食量和体重得到恢复，与其“益气健脾”的功效相符：人参、白术补气健脾，茯苓渗湿健脾，共同改善脾失健运所致的食少、便溏。此外，该作用可能与方中人参皂苷Rb1等成分调节肠道菌群有关。","arriveRef":"17a","prev":{"components":[{"code":"CHI-35","label":"中医理论解读结果","N":399,"yes":64,"no":335,"na":0,"unclear":0,"applicable":399,"rate":16.0}],"note":null,"merged":false}},{"id":"CHM-29","title":"不良反应的机制解释","req":"若研究报告动物的不良反应或毒副作用，应对其进行机制层面的解释。","table":1,"set":"REC","arrive":"17a","n":29,"why":null,"example":"高剂量组3/10只大鼠出现足趾轻度肿胀。中医理论认为甘草味甘，量大则易壅滞助湿；现代药理研究提示，这可能与甘草次酸抑制11β-羟类固醇脱氢酶、导致钠水潴留有关。","arriveRef":"17a","prev":{"components":[{"code":"CHI-36","label":"不良反应机制解读","N":399,"yes":10,"no":15,"na":374,"unclear":0,"applicable":25,"rate":40.0}],"note":null,"merged":false}},{"id":"CHM-30","title":"中药研究特有的局限性","req":"应在讨论中说明与中药研究特点相关的局限性，如证候动物模型向人类证候转化的局限、复方多成分机制尚未完全阐明、药材质量控制、批次差异等。","table":1,"set":"REC","arrive":"17b","n":30,"why":null,"example":"本研究的局限性包括：（1）脾气虚证大鼠模型与临床脾气虚证患者的证候特征存在差距，结果向人群转化需谨慎；（2）四君子汤含多种成分，发挥作用的物质基础及机制尚未完全阐明；（3）药材来自单一批次，未评价批间差异对结果的影响。","arriveRef":"17b","prev":{"components":[{"code":"CHI-37","label":"中药特有局限性","N":399,"yes":114,"no":284,"na":0,"unclear":1,"applicable":398,"rate":28.6}],"note":null,"merged":false}},{"id":"CHM-31","title":"标题中的疾病与证候","req":"应在标题中明确报告研究对象所涉及的疾病和／或具体中医证候；涉及病证结合模型时，同时报告疾病名称与具体证候名称，避免两者混用。","table":1,"set":"EXT","arrive":"title","n":31,"why":null,"example":"题名示例：“四君子汤对脾气虚证大鼠肠道菌群的影响”（证候）；“参苓白术散对溃疡性结肠炎脾虚湿盛证模型大鼠的影响”（疾病＋证候，病证结合模型，病名与证名分别写出）。","arriveRef":null,"prev":{"components":[{"code":"CHI-01","label":"研究对象类型","N":399,"yes":357,"no":13,"na":29,"unclear":0,"applicable":370,"rate":96.5}],"note":null,"merged":false}},{"id":"CHM-32","title":"标题中的干预名称","req":"应在标题中报告具体的中药干预名称，避免仅使用“中药”“中草药”“植物药”等泛称。","table":1,"set":"EXT","arrive":"title","n":32,"why":null,"example":"较好：“四君子汤对脾气虚证大鼠……的影响”（写出具体方名）。不够具体：“一种中药复方对……的影响”“中草药对……的影响”。","arriveRef":null,"prev":{"components":[{"code":"CHI-02","label":"标题中药名称","N":399,"yes":395,"no":4,"na":0,"unclear":0,"applicable":399,"rate":99.0}],"note":null,"merged":false}}]}</script>
+<script>
+(function(){
+'use strict';
+var D = JSON.parse(document.getElementById('app-data').textContent);
+var ITEMS = D.items, N = ITEMS.length;
+var BY = {}; ITEMS.forEach(function(i){ BY[i.id] = i; });
+var SET_NAME = {E10:'核心十项', REC:'推荐条目', EXT:'框架外候选'};
+var SET_FULL = {E10:'Essential 10　核心十项（1–10）', REC:'Recommended Set　推荐条目（11–21）', EXT:'框架外候选（保留原条目供审议）'};
+/* Display switches: set to false to hide a block without touching anything else. */
+var SHOW_PREVALENCE = true, SHOW_EXAMPLES = true;
+
+var KEY = 'arrive-chm-delphi-r1-' + D.version;
+var store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+var canStore = true;
+var ROWS = D.arriveRows, ROW_BY = {};
+ROWS.forEach(function(r){ ROW_BY[r.id] = r; });
+var REAL_ROWS = ROWS.filter(function(r){ return r.id !== 'title'; });
+var EXT_N = REAL_ROWS.filter(function(r){ return r.ext; }).length, PLAIN_N = REAL_ROWS.length - EXT_N;
+var viewExt = false, showEn = false;      /* table-1 display options (kept while the page is open) */
+var RESET_LABEL = '清空我的答案与建议';
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function paras(t){ return String(t||'').split('\n').filter(Boolean).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join(''); }
+function pad(n){ return (n<10?'0':'')+n; }
+function idToHash(id){ return 'chm-'+id.slice(4); }
+
+function load(){
+  try{
+    var t = '__t'; localStorage.setItem(t,'1'); localStorage.removeItem(t);
+    var raw = localStorage.getItem(KEY);
+    if(raw){ var o = JSON.parse(raw); if(o && typeof o==='object'){
+      store.profile=o.profile||{}; store.answers=o.answers||{}; store.updatedAt=o.updatedAt||null;
+      store.additions = Array.isArray(o.additions) ? o.additions.filter(function(a){ return a && a.id; }) : [];
+      store.addSeq = Math.max(Number(o.addSeq)||0, store.additions.length);
+    } }
+  }catch(e){ canStore = false; }
+}
+var saveTimer = null;
+function persist(){
+  store.updatedAt = new Date().toISOString();
+  try{ localStorage.setItem(KEY, JSON.stringify(store)); canStore = true; }catch(e){ canStore = false; }
+  updateSaveNote();
+}
+function persistSoon(){ clearTimeout(saveTimer); saveTimer = setTimeout(persist, 350); }
+function ans(id){ if(!store.answers[id]) store.answers[id] = {score:null, cj:false, note:''}; return store.answers[id]; }
+function isDone(id){ var a = store.answers[id]; return !!(a && (a.score != null || a.cj)); }
+function doneCount(){ return ITEMS.filter(function(i){ return isDone(i.id); }).length; }
+function hasNote(id){ var a = store.answers[id]; return !!(a && a.note && a.note.trim()); }
+function hhmm(iso){ if(!iso) return ''; var d = new Date(iso); return pad(d.getHours())+':'+pad(d.getMinutes()); }
+function saveNoteText(){
+  if(!canStore) return {t:'此环境无法自动保存，请完成后及时下载答卷文件', w:true};
+  if(!store.updatedAt) return {t:'答案会自动保存在本设备的浏览器中', w:false};
+  return {t:'已自动保存 '+hhmm(store.updatedAt)+'（仅保存在本设备）', w:false};
+}
+function updateSaveNote(){
+  var s = saveNoteText();
+  document.querySelectorAll('[data-savenote]').forEach(function(el){ el.textContent = s.t; el.classList.toggle('warn', s.w); });
+  var sv = document.getElementById('saved'); if(sv){ sv.textContent = !canStore ? '此环境无法自动保存，请及时下载答卷文件' : (store.updatedAt ? '已自动保存 '+hhmm(store.updatedAt) : ''); sv.classList.toggle('ok', canStore && !!store.updatedAt); }
+}
+
+/* ---------------- expert-added suggestions ----------------
+   Suggestions are not rated in this round: they are free-text proposals anchored either to an
+   ARRIVE sub-item (extended or not) or to "outside ARRIVE". They are autosaved and exported. */
+function anchorLabel(a){
+  if(a === 'outside') return 'ARRIVE 框架之外';
+  if(a === 'title') return '标题（ARRIVE 无独立标题条目）';
+  var r = ROW_BY[a]; return r ? 'ARRIVE '+r.id+' '+r.name : a;
+}
+function anchorOptions(sel){
+  var h = '<option value="outside"'+(sel==='outside'?' selected':'')+'>ARRIVE 框架之外（属于新增条目）</option>';
+  [['E10','Essential 10　核心十项'],['REC','Recommended Set　推荐条目']].forEach(function(g){
+    h += '<optgroup label="'+esc(g[1])+'">'+REAL_ROWS.filter(function(r){ return r.set === g[0]; }).map(function(r){
+      return '<option value="'+r.id+'"'+(sel===r.id?' selected':'')+'>'+esc(r.id+'　'+r.name+(r.ext?'（已设扩展）':'（未扩展）'))+'</option>';
+    }).join('')+'</optgroup>';
+  });
+  h += '<optgroup label="其他"><option value="title"'+(sel==='title'?' selected':'')+'>标题（ARRIVE 无独立标题条目）</option></optgroup>';
+  return h;
+}
+function isFilled(a){ return !!(((a.text||'')+'').trim() || ((a.reason||'')+'').trim()); }
+function addCount(){ return store.additions.filter(isFilled).length; }
+function addById(id){ return store.additions.filter(function(x){ return x.id === id; })[0]; }
+function addCardHTML(a){
+  var k = a.id, isNew = a.anchor === 'outside', verb = isNew ? '新增' : '扩展';
+  return '<div class="addcard" id="card-'+k+'" data-addcard="'+k+'">'
+    + '<div class="addcard-h"><b>'+(isNew ? '建议新增的条目（ARRIVE 框架之外）' : '建议扩展的条目')+'</b><button class="btn quiet small" type="button" data-add-del="'+k+'">删除</button></div>'
+    + '<label class="t" for="ad'+k+'t">建议'+verb+'的报告要求</label>'
+    + '<textarea id="ad'+k+'t" data-add-f="text" data-add-id="'+k+'" placeholder="请写出建议'+verb+'的报告要求，尽量用“论文中应当报告……”的表述。">'+esc(a.text||'')+'</textarea>'
+    + '<label class="t" for="ad'+k+'r">理由或依据 <span class="opt-note">（选填）</span></label>'
+    + '<textarea class="short" id="ad'+k+'r" data-add-f="reason" data-add-id="'+k+'" placeholder="为什么需要这一条；如有文献、指南或实践依据，也请写明。">'+esc(a.reason||'')+'</textarea>'
+    + '<label class="t" for="ad'+k+'a">归属位置 <span class="opt-note">（放错了可在此调整）</span></label>'
+    + '<select id="ad'+k+'a" data-add-f="anchor" data-add-id="'+k+'">'+anchorOptions(a.anchor)+'</select></div>';
+}
+function zoneHTML(anchor){
+  var list = store.additions.filter(function(a){ return a.anchor === anchor; });
+  var r = ROW_BY[anchor], plain = anchor === 'outside' || (r && !r.ext && anchor !== 'title');
+  var label = anchor === 'outside' ? (list.length ? '＋ 再新增一条' : '＋ 建议新增条目')
+            : list.length ? '＋ 再建议一条扩展' : (plain ? '＋ 建议扩展条目' : '＋ 在此项下另建议扩展');
+  return list.map(addCardHTML).join('')
+    + '<div class="adds-act"><button class="btn small'+(plain?'':' quiet')+'" type="button" data-add="'+anchor+'">'+label+'</button></div>';
+}
+function zone(anchor){ return '<div class="addzone" id="zone-'+anchor+'" data-zone="'+anchor+'">'+zoneHTML(anchor)+'</div>'; }
+function refreshAddMarks(){
+  var any = {}, filled = {};
+  store.additions.forEach(function(a){ any[a.anchor] = true; if(isFilled(a)) filled[a.anchor] = (filled[a.anchor]||0)+1; });
+  document.querySelectorAll('[data-row]').forEach(function(el){ el.classList.toggle('has-adds', !!any[el.getAttribute('data-row')]); });
+  document.querySelectorAll('[data-chip]').forEach(function(el){ el.classList.toggle('has-add', !!filled[el.getAttribute('data-chip')]); });
+  var on = document.querySelector('[data-outside-n]'); if(on){ var n = filled.outside || 0; on.textContent = n; on.hidden = !n; }
+  updateExportSummary();
+}
+function renderZones(){
+  document.querySelectorAll('[data-zone]').forEach(function(z){ z.innerHTML = zoneHTML(z.getAttribute('data-zone')); });
+  refreshAddMarks();
+}
+function addSuggestion(anchor){
+  var seq = store.addSeq || 0, id;
+  do { seq++; id = 'a'+seq; } while(addById(id));
+  store.addSeq = seq;
+  store.additions.push({id:id, anchor:anchor, text:'', reason:''});
+  persist(); renderZones();
+  var ta = document.getElementById('ad'+id+'t');
+  if(ta){ ta.focus({preventScroll:true}); ta.scrollIntoView({block:'center', behavior:'auto'}); }
+}
+var delArmed = null, delTimer = null;
+function delAddition(btn, id){
+  var a = addById(id); if(!a) return;
+  if(isFilled(a) && delArmed !== id){
+    delArmed = id; btn.textContent = '再点一次确认删除'; btn.style.color = 'var(--danger)';
+    clearTimeout(delTimer); delTimer = setTimeout(function(){ delArmed = null; btn.textContent = '删除'; btn.style.color = ''; }, 4000);
+    return;
+  }
+  delArmed = null; clearTimeout(delTimer);
+  store.additions = store.additions.filter(function(x){ return x.id !== id; });
+  persist(); renderZones();
+}
+function moveAddition(id, anchor){
+  var a = addById(id); if(!a || a.anchor === anchor) return;
+  a.anchor = anchor; persist(); renderZones();
+  var card = document.getElementById('card-'+id);
+  if(card){ card.scrollIntoView({block:'center', behavior:'auto'}); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash'); }
+}
+
+/* ---------------- map segments ---------------- */
+function segments(){
+  var segs = [], cur = null;
+  ITEMS.forEach(function(it){
+    var key = it.set+'|'+it.table;
+    if(!cur || cur.key !== key){ cur = {key:key, set:it.set, table:it.table, items:[], arrive:[]}; segs.push(cur); }
+    cur.items.push(it); if(it.arrive && cur.arrive.indexOf(it.arrive) < 0) cur.arrive.push(it.arrive);
+  });
+  return segs;
+}
+function segLabel(s){
+  if(s.table === 2) return SET_NAME[s.set]+' · 9a 实验程序（表2）';
+  var a = s.arrive.map(function(x){ return x==='title' ? '标题' : x; }).join(' ');
+  return SET_NAME[s.set]+' · '+a;
+}
+function tileHTML(it){
+  var a = store.answers[it.id] || {};
+  var small = a.cj ? '?' : (a.score != null ? a.score : '·');
+  return '<a class="tile set-'+it.set+(isDone(it.id)?' done':'')+(hasNote(it.id)?' noted':'')+'" href="#'+idToHash(it.id)+'" title="'+esc(it.id+' '+it.title)+'" aria-label="'+esc(it.id+' '+it.title)+'"><b>'+pad(it.n)+'</b><small>'+small+'</small></a>';
+}
+function itemCard(it){
+  var a = store.answers[it.id] || {};
+  var st = a.cj ? '<span class="badge cj">无法判断</span>' : (a.score != null ? '<span class="badge sc">'+a.score+'</span>' : '<span class="badge none">待评分</span>');
+  return '<a class="item" id="row-'+it.id+'" href="#'+idToHash(it.id)+'"><span class="item-id">'+it.id+'</span><span><span class="item-title">'+esc(it.title)+'</span><span class="item-req">'+esc(it.req.replace(/\n/g,' '))+'</span></span><span class="item-state">'+st+(hasNote(it.id)?'<span class="tag-note">有建议</span>':'')+'</span></a>';
+}
+
+/* ---------------- profile form ---------------- */
+var GROUPS = ['中药领域','动物实验领域','研究方法学与报告指南领域','期刊编辑领域'];
+var FAM = ['非常熟悉','比较熟悉','一般熟悉','不太熟悉','很不熟悉'];
+var BASIS = [['practice','实践经验'],['theory','理论及专业知识'],['literature','文献、指南或同行认识'],['intuition','直觉']];
+function radios(name, opts, val, extra){
+  return '<div class="opts" role="radiogroup">'+opts.map(function(o){
+    var v = Array.isArray(o)?o[0]:o, l = Array.isArray(o)?o[1]:o;
+    return '<label class="opt"><input type="radio" name="'+name+'" value="'+esc(v)+'" data-pf="'+esc(extra||name)+'"'+(val===v?' checked':'')+'><span>'+esc(l)+'</span></label>';
+  }).join('')+'</div>';
+}
+function validEmail(s){ return /^[^\s@，,;；]+@[^\s@，,;；]+\.[^\s@，,;；]+$/.test(String(s||'').trim()); }
+function profileDone(){ var p = store.profile; return !!((p.name||'').trim() && validEmail(p.email) && p.group && p.familiarity); }
+function profileHTML(){
+  var p = store.profile, b = p.basis || {}, sec = p.secondary || [];
+  var h = '<div class="pf">';
+  h += '<p class="pf-note">姓名和邮箱仅用于研究团队识别您的答卷、后续与您联系，不会向其他专家披露。</p>';
+  h += '<div class="pf-row"><div class="field"><label for="pf-name">专家姓名</label><input id="pf-name" type="text" data-pf="name" value="'+esc(p.name||'')+'" autocomplete="name"></div>';
+  h += '<div class="field"><label for="pf-email">联系邮箱</label><input id="pf-email" type="email" inputmode="email" data-pf="email" value="'+esc(p.email||'')+'" autocomplete="email" autocapitalize="off" spellcheck="false"></div>';
+  h += '<div class="field"><label for="pf-title">职称</label><input id="pf-title" type="text" data-pf="title" value="'+esc(p.title||'')+'" autocomplete="off"></div>';
+  h += '<div class="field"><label for="pf-years">工作年限（年）</label><input id="pf-years" type="number" inputmode="numeric" min="0" max="80" data-pf="years" value="'+esc(p.years||'')+'"></div>';
+  h += '<div class="field"><label for="pf-org">机构／地区</label><input id="pf-org" type="text" data-pf="org" value="'+esc(p.org||'')+'" autocomplete="off"></div></div>';
+  h += '<div class="field"><span class="lbl">主要专家组（选一）</span>'+radios('group', GROUPS, p.group)+'</div>';
+  h += '<div class="field"><span class="lbl">次要专长（可多选）</span><div class="opts">'+GROUPS.map(function(g){ return '<label class="opt"><input type="checkbox" value="'+esc(g)+'" data-pf="secondary"'+(sec.indexOf(g)>=0?' checked':'')+'><span>'+esc(g)+'</span></label>'; }).join('')+'</div></div>';
+  h += '<div class="field"><span class="lbl">对本主题的熟悉程度（选一）</span>'+radios('familiarity', FAM, p.familiarity)+'</div>';
+  h += '<div class="field"><span class="lbl">判断依据对您的影响程度（各选一项；仅用于专家权威系数的描述性分析，不参与条目加权）</span><div class="basis">'+BASIS.map(function(bk){
+    return '<div class="brow"><span>'+bk[1]+'</span>'+radios('basis-'+bk[0], [['大','大'],['中','中'],['小','小']], b[bk[0]], 'basis:'+bk[0])+'</div>';
+  }).join('')+'</div></div></div>';
+  return h;
+}
+function updateProfileState(){
+  var el = document.getElementById('pfstate'); if(!el) return;
+  var ok = profileDone(); el.textContent = ok ? '已填写' : '待填写'; el.classList.toggle('ok', ok);
+}
+
+/* ---------------- overview ---------------- */
+var lastItem = null;
+function rowCount(r){ return r.id === '9a' ? ITEMS.filter(function(i){ return i.table === 2; }).length : r.itemIds.length; }
+function chipHTML(r){
+  var n = rowCount(r), label = r.id === 'title' ? '标题' : r.id;
+  var tip = (r.id === 'title' ? '标题候选' : r.id+' '+r.name)+(r.ext ? '：已设中药扩展，'+n+' 条候选' : '：未设中药扩展');
+  return '<button type="button" class="pchip set-'+r.set+(r.ext?' ext':'')+'" data-scroll="arow-'+r.id+'" data-chip="'+r.id+'" title="'+esc(tip)+'" aria-label="'+esc(tip)+'"><span>'+esc(label)+'</span>'+(n?'<small>'+n+'</small>':'')+'</button>';
+}
+function panoHTML(){
+  var inArrive = ITEMS.filter(function(i){ return i.arrive !== 'title'; }), outside = ITEMS.filter(function(i){ return i.arrive === 'title'; });
+  var mainN = {}; REAL_ROWS.forEach(function(r){ mainN[r.main] = 1; });
+  var h = '<section class="panel" id="pano"><h2>ARRIVE 2.0 全景</h2>';
+  h += '<p class="stats">ARRIVE 2.0 共 <b>'+Object.keys(mainN).length+'</b> 个条目、<b>'+REAL_ROWS.length+'</b> 个分项。其中 <b>'+EXT_N+'</b> 个分项设有中药扩展（共 '+inArrive.length+' 条候选，'+inArrive[0].id+' 至 '+inArrive[inArrive.length-1].id+'），其余 <b>'+PLAIN_N+'</b> 个分项<b>未设中药扩展</b>；另有框架外的标题候选 '+outside.length+' 条。</p>';
+  [['E10','Essential 10　核心十项（条目 1–10）'],['REC','Recommended Set　推荐条目（条目 11–21）']].forEach(function(g){
+    var mains = [];
+    REAL_ROWS.forEach(function(r){ if(r.set === g[0] && mains.indexOf(r.main) < 0) mains.push(r.main); });
+    h += '<div class="grp set-'+g[0]+'">'+esc(g[1])+'</div><div class="pano">';
+    mains.forEach(function(m){
+      var rs = REAL_ROWS.filter(function(r){ return r.main === m; });
+      h += '<div class="pcell"><h3><b>'+m+'</b><span>'+esc(rs[0].name)+'</span></h3><div class="pchips">'+rs.map(chipHTML).join('')+'</div></div>';
+    });
+    h += '</div>';
+  });
+  h += '<div class="grp set-EXT">框架外</div><div class="pano"><div class="pcell"><h3><b>—</b><span>不属于 ARRIVE 分项</span></h3><div class="pchips">'+chipHTML(ROW_BY.title)
+     + '<button type="button" class="pchip add" data-scroll="outside" title="在 ARRIVE 框架之外新增建议" aria-label="在 ARRIVE 框架之外新增建议"><span>＋ 新增</span><small data-outside-n hidden></small></button></div></div></div>';
+  h += '<div class="legend"><span><i class="pchip ext sample set-E10"></i>已设中药扩展（数字为候选条目数）</span><span><i class="pchip sample"></i>未扩展</span><span><i class="pchip sample has-add"></i>您在此处已有建议</span></div>';
+  h += '<p class="mapnote">点击任一分项，可跳到表1 中对应位置；未扩展的分项下同样可以建议扩展条目。</p></section>';
+  return h;
+}
+function rowHTML(r, t2n){
+  var cls = 'arow'+(r.ext ? '' : ' noext');
+  var tag = r.ext ? '' : '<span class="noext-tag">未扩展</span>';
+  var h = '<div class="'+cls+'" id="arow-'+r.id+'" data-row="'+r.id+'"><div><div class="arow-head"><span class="aid">'+esc(r.id==='title'?'—':r.id)+'</span><span class="aname">'+esc(r.name)+'</span>'+tag+'</div><p class="azh">'+esc(r.zh)+'</p>'
+    + (r.en ? '<p class="aen"><span class="lab">EN</span>'+esc(r.en)+'</p>' : '')+'</div>';
+  if(r.id === '9a'){
+    h += '<div class="callout"><span>本分项的中药扩展共 '+t2n+' 条（CHM-04 至 CHM-21），见下方表2；需在 9a 下另建议扩展，请至表2末尾。</span><button class="btn small" type="button" data-scroll="table2">前往表2</button></div>';
+  } else if(r.itemIds.length){
+    h += '<div class="items">'+r.itemIds.map(function(id){ return itemCard(BY[id]); }).join('')+zone(r.id)+'</div>';
+  } else {
+    h += zone(r.id);
+  }
+  return h+'</div>';
+}
+function renderOverview(){
+  var app = document.getElementById('app');
+  var done = doneCount(), pct = Math.round(done / N * 100);
+  var t1n = ITEMS.filter(function(i){ return i.table === 1; }).length, t2n = N - t1n;
+  var cnt = {E10:0, REC:0, EXT:0}; ITEMS.forEach(function(i){ cnt[i.set]++; });
+  var h = '';
+  h += '<div class="wrap"><div class="masthead"><p class="eyebrow">第一轮 Delphi 专家函询 · 条目稿 '+esc(D.version)+'</p>';
+  h += '<h1 class="title">ARRIVE-CHM 中药动物实验扩展报告指南</h1>';
+  h += '<p class="lede">请逐条评价 '+N+' 条候选中药扩展报告要求的重要性。本函询关注中药动物实验应当报告哪些信息，以提高透明度、可重复性和可解释性，不评价具体实验的质量、结果或疗效。如认为有遗漏，可在任一 ARRIVE 分项下（含未设扩展的分项）建议扩展条目；如有 ARRIVE 框架之外的内容需要报告，可建议新增条目。预计 30–45 分钟，可分次完成。</p>';
+  h += '<div class="progress"><span>已评分 <b>'+done+'</b> / '+N+'</span><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+N+'" aria-valuenow="'+done+'"><i style="width:'+pct+'%"></i></div><span class="savenote" data-savenote></span></div>'+resumeHTML()+'</div>';
+
+  h += '<details class="fold panel"><summary>填表说明</summary><div class="fold-body"><ul class="notes">'
+    + '<li><b>评价范围</b><span>CHM-01 至 CHM-'+N+' 均为候选中药扩展报告要求，每个编号独立评价；ARRIVE 2.0 原要求与分类标题不作为候选条目，不评分。</span></li>'
+    + '<li><b>编号</b><span>本版按条目在表中的呈现顺序连续编号，故 CHM 编号顺序与 ARRIVE 条目顺序一致。</span></li>'
+    + '<li><b>条件性条目</b><span>含“当”“如”或“若”等限定的条目，请基于该情形实际发生时是否应当报告来判断，不因其不适用于所有研究而低估其重要性。</span></li>'
+    + '<li><b>定位与文字</b><span>表1 按 ARRIVE 顺序列出全部 '+REAL_ROWS.length+' 个分项：'+EXT_N+' 个设有中药扩展，其余 '+PLAIN_N+' 个标注“未扩展”；表2 为 ARRIVE 9a 实验程序项下的中药扩展，按三段组织，段标题仅为索引，以各条具体报告要求为准。</span></li>'
+    + '<li><b>扩展与新增</b><span>认为 ARRIVE 某个分项（含标注“未扩展”的分项）下还应有中药扩展要求时，请在表1 该分项下点“建议扩展条目”；认为某项中药报告要求不属于任何 ARRIVE 分项时，请在页面下方“ARRIVE 框架之外”处建议新增。这些建议本轮不评分；研究组将汇总、去重并核查依据，合适的将作为新条目进入下一轮评价。</span></li>'
+    + '<li><b>修改建议</b><span>如认为需要调整，请在对应条目的“修改建议”栏直接填写最终建议，包括建议调整至哪个 ARRIVE 编号或主题、建议采用的文字，以及合并、拆分或移入解释文件的具体方案。</span></li>'
+    + '<li><b>保存与提交</b><span>答案自动保存在本设备的浏览器中。换手机、电脑或浏览器继续填写时，请先在原设备下载答卷文件，再到新设备页面顶部点“导入之前下载的答卷文件”。全部完成后，请在页面底部点击“下载并写邮件发回”或“下载答卷文件”，把文件发到研究团队邮箱（邮件或微信均可）；分次填写时，也可先发送当前进度。</span></li></ul>'
+    + '<div class="scoreguide"><div><b>1–3 分</b>不重要</div><div><b>4–6 分</b>重要但非关键，或尚不确定</div><div><b>7–9 分</b>关键，应纳入</div></div>'
+    + '<p class="q" style="margin:6px 0 0;font-size:13px;color:var(--muted)">重要性采用 1–9 分整数量表；无法判断时请选“无法判断”。</p></div></details>';
+
+  h += panoHTML();
+
+  h += '<section class="panel"><h2>候选条目地图　<span style="font-weight:500;letter-spacing:0">评分入口与进度</span></h2><p class="stats">共 <b>'+N+'</b> 条候选扩展要求：表1 <b>'+t1n+'</b> 条，表2（ARRIVE 9a 详表）<b>'+t2n+'</b> 条。按 ARRIVE 分类：核心十项 <b>'+cnt.E10+'</b> 条，推荐条目 <b>'+cnt.REC+'</b> 条，框架外候选 <b>'+cnt.EXT+'</b> 条。</p><div class="map">';
+  segments().forEach(function(s){
+    h += '<div class="seg"><div class="seg-label" style="--c:var(--set-'+(s.set==='E10'?'e':s.set==='REC'?'r':'x')+')"><i></i>'+esc(segLabel(s))+'</div><div class="seg-tiles">'+s.items.map(tileHTML).join('')+'</div></div>';
+  });
+  h += '</div><p class="mapnote">点击方块进入对应条目；方块下方的数字为您的评分，右下角圆点表示已填写修改建议。</p></section>';
+
+  h += '<details class="fold panel" id="pfbox"'+(profileDone()?'':' open')+'><summary><span>专家信息 <span id="pfstate" class="pfstate"></span></span></summary><div class="fold-body">'+profileHTML()+'</div></details>';
+
+  /* table 1 */
+  h += '<section class="tbl'+(viewExt?' view-ext':'')+(showEn?' show-en':'')+'" id="table1"><header><h2>表1　ARRIVE 2.0 全部分项与中药扩展</h2><p>按 ARRIVE 条目顺序列出全部 '+REAL_ROWS.length+' 个分项：已设扩展的列出候选条目；标注“未扩展”的分项没有候选条目，可在其下建议扩展。</p></header>';
+  h += '<div class="tbar"><div class="toggle" role="group" aria-label="表1 显示范围"><button type="button" data-view="all" aria-pressed="'+(!viewExt)+'">全部 '+REAL_ROWS.length+' 个分项</button><button type="button" data-view="ext" aria-pressed="'+viewExt+'">仅看已扩展的 '+EXT_N+' 项</button></div>'
+     + '<label class="chk"><input type="checkbox" data-en'+(showEn?' checked':'')+'> 显示 ARRIVE 英文原文</label></div>';
+  ['E10','REC','EXT'].forEach(function(setKey){
+    h += '<div class="grp set-'+setKey+'">'+esc(SET_FULL[setKey])+'</div>';
+    ROWS.filter(function(r){ return r.set === setKey; }).forEach(function(r){ h += rowHTML(r, t2n); });
+  });
+  h += '</section>';
+
+  /* table 2 */
+  h += '<section class="tbl" id="table2"><header><h2>表2　ARRIVE 9a 实验程序　中药扩展详表（CHM-04 至 CHM-21，共 '+t2n+' 条）</h2><p>按实际工作流程分三段组织，段标题仅为索引，以各条具体报告要求为准。</p></header>';
+  var a9 = D.arriveMap['9a'];
+  h += '<p class="t2-zh"><b>9a 原要求：</b>'+esc(a9.zh)+'</p>';
+  D.table2Sections.forEach(function(sec){
+    var list = ITEMS.filter(function(i){ return i.table === 2 && i.section === sec; });
+    h += '<div class="sec-sub">'+esc(sec)+'<small>'+list[0].id+' – '+list[list.length-1].id+' · '+list.length+' 条</small></div><div class="t2-list">'+list.map(itemCard).join('')+'</div>';
+  });
+  h += '<div class="t2-add" data-row="9a"><p>如认为 ARRIVE 9a（实验程序：做了什么、如何实施、使用了什么）下还缺少中药扩展条目，请在此建议扩展：</p>'+zone('9a')+'</div>';
+  h += '</section>';
+
+  /* outside ARRIVE */
+  h += '<section class="tbl" id="outside"><header><h2>ARRIVE 框架之外的新增建议</h2><p>如认为有中药报告要求无法归入上述任何 ARRIVE 分项，请在此建议新增；能归入某个 ARRIVE 分项的，请在表1 对应分项下建议扩展。</p></header><div style="margin-top:14px">'+zone('outside')+'<p class="addnote">扩展与新增建议均仅作为意见提交，本轮不评分。研究组将汇总、去重并核查依据，合适的将作为新条目进入下一轮评价。</p></div></section>';
+
+  /* export */
+  h += '<section class="tbl" id="export"><header><h2>提交答卷</h2><p>完成后请下载答卷文件，并发回研究团队邮箱（也可通过微信发送）。评分尚未全部完成时，也可先发送当前进度；之后再发新的文件，会替换此前的版本。</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
+    + (RETURN_EMAIL ? '<div class="mailline">发回邮箱：<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">复制邮箱</button></div>' : '')
+    + '<div class="btnrow"><button class="btn primary" type="button" data-exp="json">下载答卷文件</button>'
+    + (canShareFiles() ? '<button class="btn" type="button" data-exp="share">分享答卷文件</button>' : '')
+    + (RETURN_EMAIL ? '<button class="btn" type="button" data-exp="mail">下载并写邮件发回</button>' : '')
+    + '<button class="btn" type="button" data-exp="copy">复制答卷文本</button></div>'
+    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expfallback" hidden></div>'
+    + '<div class="btnrow"><button class="btn quiet small" type="button" id="resetbtn" data-reset>'+RESET_LABEL+'</button></div></div></section>';
+  h += '<p class="foot">ARRIVE 来源：Percie du Sert N, et al. The ARRIVE guidelines 2.0. PLOS Biology, 2020. <a href="https://doi.org/10.1371/journal.pbio.3000410" target="_blank" rel="noopener">doi:10.1371/journal.pbio.3000410</a>。中文工作译文以官方英文清单为准。</p></div>';
+
+  app.innerHTML = h;
+  updateSaveNote(); updateProfileState(); refreshAddMarks();
+}
+function updateExportSummary(){
+  var el = document.getElementById('expsum'); if(!el) return;
+  var left = ITEMS.filter(function(i){ return !isDone(i.id); });
+  var h = '<div>已评分 <b>'+(N-left.length)+'</b> / '+N+'。'+(profileDone()?'':'专家信息尚未填写完整。')+'</div>';
+  if(left.length){ h += '<div class="chips" aria-label="未评分的条目">'+left.map(function(i){ return '<a href="#'+idToHash(i.id)+'">'+i.id+'</a>'; }).join('')+'</div>'; }
+  else { h += '<div style="color:var(--accent);font-weight:600">所有条目均已评分。</div>'; }
+  var filled = store.additions.filter(isFilled);
+  var nNew = filled.filter(function(a){ return a.anchor === 'outside'; }).length, nExt = filled.length - nNew;
+  h += '<div>建议扩展的条目 <b>'+nExt+'</b> 条，建议新增的条目（框架外）<b>'+nNew+'</b> 条'+(filled.length ? '（仅作建议，不评分）' : '（均为选填）')+'。</div>';
+  if(filled.length){
+    var seen = {}, keys = [];
+    filled.forEach(function(a){ if(!seen[a.anchor]){ seen[a.anchor] = 0; keys.push(a.anchor); } seen[a.anchor]++; });
+    h += '<div class="chips" aria-label="建议所在位置">'+keys.map(function(k){
+      var target = k === '9a' ? 'zone-9a' : 'zone-'+k;
+      return '<button type="button" data-scroll="'+target+'">'+esc(k === 'outside' ? '框架外' : k === 'title' ? '标题' : k)+(seen[k] > 1 ? ' ×'+seen[k] : '')+'</button>';
+    }).join('')+'</div>';
+  }
+  el.innerHTML = h;
+}
+
+/* ---------------- item page ---------------- */
+function crumbOf(it){
+  if(it.table === 2) return '表2 · ARRIVE 9a 实验程序 · '+it.section;
+  if(it.arrive === 'title') return '表1 · 框架外候选（保留原条目供审议）· 标题候选';
+  var r = D.arriveRows.filter(function(x){ return x.id === it.arrive; })[0];
+  return '表1 · ARRIVE '+it.arrive+' '+(r?r.name:'');
+}
+function prevHTML(it){
+  if(!SHOW_PREVALENCE || !it.prev) return '';
+  var p = it.prev, h = '<section class="blk"><h2>前期报告质量 <span class="sub">399 篇中药动物实验文献</span></h2><div class="prev">';
+  if(p.merged) h += '<p class="pnote">本条由 '+p.components.length+' 个原条目合并而成，下列为各原条目的前期提取结果。</p>';
+  if(p.note) h += '<p class="pnote">'+esc(p.note)+'</p>';
+  p.components.forEach(function(c){
+    var meta = 'NA '+c.na; if(c.unclear) meta += ' · 不清楚 '+c.unclear;
+    h += '<div class="prow"><span class="pl">'+esc(c.label)+'<small>'+esc(meta)+'</small></span><span class="pv">'+(c.applicable? c.rate.toFixed(1)+'%' : '—')+'<small>'+c.yes+' / '+c.applicable+' 篇</small></span><span class="bar2" aria-hidden="true"><i style="width:'+(c.applicable? c.rate : 0)+'%"></i></span></div>';
+  });
+  h += '<p class="pfoot">比例 = 已报告篇数 ÷ 适用篇数（不含 NA 与不清楚）。数据按原条目表述评价，与现表述可能不完全一致；仅供参考，不作为条目取舍的依据。</p></div></section>';
+  return h;
+}
+function arriveHTML(it){
+  var a = it.arriveRef ? D.arriveMap[it.arriveRef] : null;
+  var h = '<section class="blk"><h2>ARRIVE 2.0 映射条目</h2>';
+  if(!a){
+    h += '<p class="noarrive">ARRIVE 2.0 没有独立的标题条目；条目 11 针对摘要，本条不直接归属于条目 11。</p></section>';
+    return h;
+  }
+  h += '<div class="arrive-tag"><b>条目 '+esc(a.id)+'</b><span>'+esc(a.nameEn)+'（'+esc(a.nameZh)+'）</span><span class="pill set-'+a.set+'">'+(a.set==='E10'?'Essential 10':'Recommended Set')+'</span></div>';
+  h += '<div class="quote"><div class="en"><span class="lab">EN</span>'+esc(a.en)+'</div><div class="zh"><span class="lab">中文</span>'+esc(a.zh)+'</div></div></section>';
+  return h;
+}
+function ratingHTML(it){
+  var a = ans(it.id), i, btns = '';
+  for(i=1;i<=9;i++) btns += '<button type="button" data-score="'+i+'" aria-pressed="'+(a.score===i)+'" aria-label="'+i+' 分">'+i+'</button>';
+  return '<aside class="side" aria-label="评分与建议">'
+    + '<div><h2>重要性评分 <small>必答</small></h2><p class="q">该条报告要求对中药动物实验的透明报告、可重复性和可解释性有多重要？</p>'
+    + '<div class="scale" role="group" aria-label="重要性评分 1 至 9 分">'+btns+'</div>'
+    + '<div class="bands"><span>1–3<br>不重要</span><span>4–6<br>重要但非关键，或尚不确定</span><span>7–9<br>关键，应纳入</span></div>'
+    + '<button class="btn cjbtn" type="button" data-cj aria-pressed="'+(!!a.cj)+'">无法判断</button></div>'
+    + '<div><label class="t" for="note">修改建议 <span style="font-weight:500;color:var(--faint)">（选填）</span></label><p class="hint">如认为需要调整，请直接写出最终建议：调整至哪个 ARRIVE 编号或主题、建议采用的文字，或合并、拆分、移入解释文件的方案。</p>'
+    + '<textarea id="note" data-note placeholder="例如：建议将“……”改为“……”">'+esc(a.note||'')+'</textarea><div class="saved" id="saved" aria-live="polite"></div></div>'
+    + navButtons(it)
+    + '</aside>';
+}
+function navButtons(it){
+  var last = it.n === N;
+  return '<div class="navrow"><button class="btn" type="button" data-nav="prev"'+(it.n===1?' disabled':'')+'>‹ 上一条</button>'
+    + '<button class="btn" type="button" data-nav="home">总览</button>'
+    + '<button class="btn primary next" type="button" data-nav="next">'+(last?'完成，返回总览':'下一条 ›')+'</button></div>';
+}
+function renderItem(id){
+  var it = BY[id], app = document.getElementById('app');
+  lastItem = id;
+  var done = doneCount();
+  var h = '<div class="bar"><div class="wrap"><button class="btn quiet small" type="button" data-nav="home">‹ 总览</button><div class="where">'+it.id+'<small>'+it.n+' / '+N+'</small></div><span style="font-size:13px;color:var(--muted);white-space:nowrap">已评 <b id="donecnt">'+done+'</b></span></div><div class="prog"><i style="width:'+(it.n/N*100)+'%"></i></div></div>';
+  h += '<div class="wrap detail"><main class="c1">';
+  h += '<p class="crumb set-'+it.set+'"><i class="dot"></i>'+esc(crumbOf(it))+'</p>';
+  h += '<h1 class="item-h" tabindex="-1"><span class="id">'+it.id+'</span>'+esc(it.title)+'</h1>';
+  h += arriveHTML(it);
+  h += '<section class="req"><h2>拟议的 TCM 扩展报告要求</h2>'+paras(it.req)+'</section>';
+  if(it.why) h += '<p class="why"><b>设置原因</b>'+esc(it.why)+'</p>';
+  h += '</main>'+ratingHTML(it);
+  h += '<div class="c2">'+prevHTML(it);
+  if(SHOW_EXAMPLES) h += '<section class="blk"><h2>报告示例 <span class="sub">文章中通常如何报告</span></h2><p class="example">'+esc(it.example)+'</p><p class="exnote">示例由研究组拟写，仅用于说明报告方式，不引自具体文献，其中的药名、数值与单位均为虚构。</p></section>';
+  h += '</div></div>';
+  var last = it.n === N, a = ans(it.id);
+  h += '<nav class="dock" aria-label="条目导航"><button class="btn small" type="button" data-nav="prev"'+(it.n===1?' disabled':'')+'>‹ 上一条</button><span class="mid" id="dockmid">'+dockText(it)+'</span><button class="btn primary small" type="button" data-nav="next">'+(last?'完成':'下一条 ›')+'</button></nav>';
+  app.innerHTML = h;
+  updateSaveNote();
+  window.scrollTo(0,0);
+  var hh = app.querySelector('h1.item-h'); if(hh) hh.focus({preventScroll:true});
+}
+function dockText(it){ var a = store.answers[it.id] || {}; return '<b>'+it.id+'</b> · '+(a.cj?'无法判断':(a.score!=null?a.score+' 分':'待评分')); }
+
+/* ---------------- interactions ---------------- */
+function currentId(){ var m = /^chm-(\d{2})$/i.exec(location.hash.replace(/^#/,'')); return m ? 'CHM-'+m[1] : null; }
+function go(id){ location.hash = id ? idToHash(id) : 'overview'; }
+function applyScore(v){
+  var id = currentId(); if(!id) return; var a = ans(id);
+  if(v === 'cj'){ a.cj = !a.cj; if(a.cj) a.score = null; }
+  else { a.score = (a.score === v) ? null : v; if(a.score != null) a.cj = false; }
+  persist();
+  document.querySelectorAll('[data-score]').forEach(function(b){ b.setAttribute('aria-pressed', String(a.score === Number(b.getAttribute('data-score')))); });
+  var c = document.querySelector('[data-cj]'); if(c) c.setAttribute('aria-pressed', String(!!a.cj));
+  var d = document.getElementById('donecnt'); if(d) d.textContent = doneCount();
+  var m = document.getElementById('dockmid'); if(m) m.innerHTML = dockText(BY[id]);
+}
+function navTo(kind){
+  var id = currentId(); if(!id){ return; }
+  var it = BY[id];
+  if(kind === 'home') return go(null);
+  if(kind === 'prev' && it.n > 1) return go(ITEMS[it.n-2].id);
+  if(kind === 'next') return it.n < N ? go(ITEMS[it.n].id) : go(null);
+}
+function reduceMotion(){ try{ return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } }
+function setView(ext){
+  viewExt = !!ext;
+  var t1 = document.getElementById('table1'); if(t1) t1.classList.toggle('view-ext', viewExt);
+  document.querySelectorAll('[data-view]').forEach(function(b){ b.setAttribute('aria-pressed', String((b.getAttribute('data-view') === 'ext') === viewExt)); });
+}
+function scrollToEl(id){
+  var el = document.getElementById(id); if(!el) return;
+  if(viewExt && el.offsetParent === null) setView(false);      /* target row was filtered out of table 1 */
+  el.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
+  var f = el.classList.contains('arow') || el.classList.contains('addcard') ? el : null;
+  if(f){ f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }
+}
+
+document.addEventListener('click', function(e){
+  var t = e.target.closest('[data-score],[data-cj],[data-nav],[data-scroll],[data-exp],[data-reset],[data-add],[data-add-del],[data-view],[data-resume]');
+  if(!t) return;
+  if(t.hasAttribute('data-add')) return addSuggestion(t.getAttribute('data-add'));
+  if(t.hasAttribute('data-add-del')) return delAddition(t, t.getAttribute('data-add-del'));
+  if(t.hasAttribute('data-view')) return setView(t.getAttribute('data-view') === 'ext');
+  if(t.hasAttribute('data-score')) return applyScore(Number(t.getAttribute('data-score')));
+  if(t.hasAttribute('data-cj')) return applyScore('cj');
+  if(t.hasAttribute('data-nav')) return navTo(t.getAttribute('data-nav'));
+  if(t.hasAttribute('data-scroll')) return scrollToEl(t.getAttribute('data-scroll'));
+  if(t.hasAttribute('data-exp')) return doExport(t.getAttribute('data-exp'));
+  if(t.hasAttribute('data-reset')) return doReset(t);
+  if(t.hasAttribute('data-resume')){
+    if(t.getAttribute('data-resume') === 'yes' && resumePending) return applyResume(resumePending);
+    resumePending = null; resumeMsg = '已取消导入。'; renderOverview(); return;
+  }
+});
+document.addEventListener('input', function(e){
+  var t = e.target;
+  if(t.hasAttribute('data-add-f') && t.tagName === 'TEXTAREA'){
+    var ad = addById(t.getAttribute('data-add-id'));
+    if(ad){ ad[t.getAttribute('data-add-f')] = t.value; persistSoon(); refreshAddMarks(); }
+    return;
+  }
+  if(t.hasAttribute('data-note')){ var id = currentId(); if(id){ ans(id).note = t.value; var sv = document.getElementById('saved'); if(sv){ sv.textContent = '正在保存…'; sv.classList.remove('ok'); } persistSoon(); } return; }
+  if(t.hasAttribute('data-pf') && (t.type === 'text' || t.type === 'number' || t.type === 'email')){ store.profile[t.getAttribute('data-pf')] = t.value; persistSoon(); updateProfileState(); }
+});
+document.addEventListener('change', function(e){
+  var t = e.target;
+  if(t.id === 'resumefile'){ var rf = t.files && t.files[0]; t.value = ''; if(rf) readResume(rf); return; }
+  if(t.hasAttribute && t.hasAttribute('data-add-f') && t.tagName === 'SELECT'){ moveAddition(t.getAttribute('data-add-id'), t.value); return; }
+  if(t.hasAttribute && t.hasAttribute('data-en')){ showEn = t.checked; var t1 = document.getElementById('table1'); if(t1) t1.classList.toggle('show-en', showEn); return; }
+  var k = t.getAttribute && t.getAttribute('data-pf'); if(!k) return;
+  var p = store.profile;
+  if(k === 'secondary'){ p.secondary = p.secondary || []; var i = p.secondary.indexOf(t.value); if(t.checked && i < 0) p.secondary.push(t.value); if(!t.checked && i >= 0) p.secondary.splice(i,1); }
+  else if(k.indexOf('basis:') === 0){ p.basis = p.basis || {}; p.basis[k.slice(6)] = t.value; }
+  else if(t.type === 'radio'){ p[k] = t.value; }
+  persist(); updateProfileState();
+});
+document.addEventListener('keydown', function(e){
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  var tag = (e.target.tagName || '').toLowerCase();
+  if(tag === 'textarea' || tag === 'input' || tag === 'select') return;
+  var id = currentId(); if(!id) return;
+  if(/^[1-9]$/.test(e.key)){ applyScore(Number(e.key)); e.preventDefault(); }
+  else if(e.key === 'ArrowRight'){ navTo('next'); }
+  else if(e.key === 'ArrowLeft'){ navTo('prev'); }
+  else if(e.key === 'Escape'){ navTo('home'); }
+});
+
+/* ---------------- resume from a downloaded answer file (other device / browser) ---------------- */
+var resumeMsg = '', resumePending = null;
+function resumeHTML(){
+  var h = '<div class="resume"><span>换了设备或浏览器？</span><label class="btn small" for="resumefile">导入之前下载的答卷文件，继续填写</label><input type="file" id="resumefile" accept=".json,application/json">';
+  if(resumePending){
+    h += '<span class="resume-msg warn" id="resumemsg" role="status" aria-live="polite">'+esc(resumeMsg)+'</span><button class="btn small primary" type="button" data-resume="yes">确认导入并替换</button><button class="btn small" type="button" data-resume="no">取消</button>';
+  } else {
+    h += '<span class="resume-msg" id="resumemsg" role="status" aria-live="polite">'+esc(resumeMsg)+'</span>';
+  }
+  return h + '</div>';
+}
+function resumeFail(m){ resumePending = null; resumeMsg = m; var el = document.getElementById('resumemsg'); if(el){ el.textContent = m; el.classList.add('warn'); } }
+function readResume(f){
+  var fr = new FileReader();
+  fr.onerror = function(){ resumeFail('无法读取这个文件，请重试。'); };
+  fr.onload = function(){
+    var o; try{ o = JSON.parse(String(fr.result).replace(/^﻿/, '')); }catch(e){ return resumeFail('无法读取这个文件，请选择之前下载的 .json 答卷文件。'); }
+    if(!o || o.schema !== 'arrive-chm-delphi-round1' || !Array.isArray(o.answers)) return resumeFail('这不是本函询的答卷文件。');
+    var nAns = doneCount(), nSug = store.additions.filter(isFilled).length;
+    if(nAns + nSug > 0){
+      resumePending = o; resumeMsg = '此设备上已有 '+nAns+' 条评分、'+nSug+' 条建议，导入后会被文件内容替换。';
+      renderOverview(); return;
+    }
+    applyResume(o);
+  };
+  fr.readAsText(f);
+}
+function applyResume(o){
+  var ns = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+  var pr = o.profile || {}; Object.keys(pr).forEach(function(k){ ns.profile[k] = pr[k]; });
+  (o.answers || []).forEach(function(a){
+    if(!a || !BY[a.id]) return;
+    var sc = (typeof a.importance === 'number' && a.importance >= 1 && a.importance <= 9) ? Math.round(a.importance) : null;
+    var cj = !!a.cannotJudge && sc == null, note = String(a.note || '');
+    if(sc != null || cj || note) ns.answers[a.id] = {score:sc, cj:cj, note:note};
+  });
+  (o.suggestions || o.additions || []).forEach(function(s){
+    if(!s) return;
+    var anchor = s.anchor; if(anchor !== 'outside' && !ROW_BY[anchor]) anchor = 'outside';
+    ns.addSeq++; ns.additions.push({id:'a'+ns.addSeq, anchor:anchor, text:String(s.requirement != null ? s.requirement : (s.text || '')), reason:String(s.reason || '')});
+  });
+  store = ns; persist();
+  resumePending = null;
+  resumeMsg = '已导入答卷：已评分 '+doneCount()+' / '+N+'，建议 '+ns.additions.length+' 条，可继续填写。'
+    + ((o.itemsVersion && o.itemsVersion !== D.version) ? '注意：该文件的条目稿版本（'+o.itemsVersion+'）与本页（'+D.version+'）不同，只导入了编号相同的条目。' : '');
+  renderOverview(); window.scrollTo(0, 0);
+}
+
+/* ---------------- export ---------------- */
+var RETURN_EMAIL = 'wangzhe19980611@163.com';   /* research-team address for the "write email" button and the address line; leave empty to hide both */
+var DATA_BEGIN = '-----BEGIN ARRIVE-CHM DATA-----', DATA_END = '-----END ARRIVE-CHM DATA-----';
+function b64(s){ var bytes = new TextEncoder().encode(s), bin = ''; for(var i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(bin).replace(/(.{76})/g, '$1\n'); }
+function canShareFiles(){ try{ return !!(navigator.share && navigator.canShare && navigator.canShare({files:[new File(['{}'],'a.json',{type:'application/json'})]})); }catch(e){ return false; } }
+function payload(){
+  var answers = ITEMS.map(function(it){ var a = store.answers[it.id] || {}; return {id:it.id, importance:(a.score!=null?a.score:null), cannotJudge:!!a.cj, note:(a.note||'').trim()}; });
+  var rated = answers.filter(function(x){ return x.importance != null || x.cannotJudge; }).length;
+  var suggestions = store.additions.filter(isFilled).map(function(a, i){
+    return {no:i+1, kind:(a.anchor === 'outside' ? 'new' : 'extend'), anchor:a.anchor, anchorLabel:anchorLabel(a.anchor), requirement:(a.text||'').trim(), reason:(a.reason||'').trim()};
+  });
+  var profile = {}; Object.keys(store.profile).forEach(function(k){ profile[k] = store.profile[k]; });
+  profile.name = (profile.name||'').trim(); profile.email = (profile.email||'').trim();
+  return {schema:'arrive-chm-delphi-round1', schemaVersion:2, itemsVersion:D.version, scale:'1-9', exportedAt:new Date().toISOString(), totalItems:N, ratedCount:rated, complete:rated===N, profile:profile, answers:answers, suggestionsCount:suggestions.length, suggestions:suggestions};
+}
+function toText(p){
+  var pr = p.profile || {}, L = [];
+  L.push('ARRIVE-CHM 第一轮 Delphi 答卷（条目稿 '+p.itemsVersion+'）');
+  L.push('专家姓名：'+(pr.name||'（未填）')+'　联系邮箱：'+(pr.email||'（未填）'));
+  L.push('主要专家组：'+(pr.group||'（未填）')+'　熟悉程度：'+(pr.familiarity||'（未填）')+'　职称：'+(pr.title||'')+'　工作年限：'+(pr.years||'')+'　机构／地区：'+(pr.org||''));
+  L.push('次要专长：'+((pr.secondary||[]).join('、')||'无')+'　判断依据：'+BASIS.map(function(b){ return b[1]+'＝'+((pr.basis||{})[b[0]]||'—'); }).join('，'));
+  L.push('已评分 '+p.ratedCount+' / '+p.totalItems+'　导出时间：'+p.exportedAt);
+  L.push('------');
+  p.answers.forEach(function(a){ L.push(a.id+'｜'+(a.cannotJudge?'无法判断':(a.importance!=null?a.importance+' 分':'未评分'))+(a.note?'｜修改建议：'+a.note.replace(/\s*\n\s*/g,' '):'')); });
+  [['extend','建议扩展的条目（仅作建议，本轮不评分）','建议扩展的报告要求'],['new','建议新增的条目（ARRIVE 框架之外；仅作建议，本轮不评分）','建议新增的报告要求']].forEach(function(g){
+    var list = (p.suggestions||[]).filter(function(x){ return x.kind === g[0]; });
+    L.push('------'); L.push(g[1]+'：共 '+list.length+' 条');
+    list.forEach(function(x, i){
+      L.push('['+(i+1)+'] 归属：'+x.anchorLabel);
+      L.push('    '+g[2]+'：'+(x.requirement||'（未填）').replace(/\s*\n\s*/g,' '));
+      if(x.reason) L.push('    理由或依据：'+x.reason.replace(/\s*\n\s*/g,' '));
+    });
+  });
+  return L.join('\n');
+}
+function ymd(){ var d = new Date(); return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()); }
+function setStatus(msg, err){ var s = document.getElementById('expstatus'); if(s){ s.textContent = msg; s.classList.toggle('err', !!err); } }
+function showFallback(text){
+  var f = document.getElementById('expfallback'); if(!f) return;
+  f.hidden = false; f.innerHTML = '<textarea class="fallback" id="fbta" readonly></textarea>';
+  var ta = document.getElementById('fbta'); ta.value = text; ta.focus(); ta.select();
+}
+async function saveFile(name, text, mime){
+  var framed = !!(window.claude && window.claude.use);
+  if(framed){
+    try{ var dl = await window.claude.use('downloads'); if(dl){ await dl.save({filename:name, data:text}); return 'saved'; } }
+    catch(e){ if(e && e.code === 'declined') return 'declined'; }
+    return 'unsupported';
+  }
+  try{
+    var blob = new Blob([text], {type:mime}), url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 3000); return 'saved';
+  }catch(e){ return 'failed'; }
+}
+function needProfile(){
+  var p = store.profile;
+  if((p.name||'').trim() && validEmail(p.email)) return false;
+  setStatus('请先在页面上方“专家信息”中填写专家姓名和有效的联系邮箱，研究团队据此识别您的答卷。', true);
+  var box = document.getElementById('pfbox'); if(box){ box.open = true; scrollToEl('pfbox'); }
+  return true;
+}
+async function doExport(kind){
+  if(kind === 'copyaddr'){
+    var ok0 = false; try{ await navigator.clipboard.writeText(RETURN_EMAIL); ok0 = true; }catch(e){}
+    setStatus(ok0 ? '已复制邮箱 '+RETURN_EMAIL+'。' : '无法自动复制，请手动选取上方邮箱地址。', !ok0); return;
+  }
+  if(needProfile()) return;
+  var p = payload(), d = new Date();
+  var nm = p.profile.name.replace(/[\\\/:*?"<>|\s]+/g,'_');
+  var base = 'ARRIVE-CHM-R1_'+nm+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
+  var json = JSON.stringify(p, null, 2);
+  var note = (p.ratedCount < N ? '（尚有 '+(N-p.ratedCount)+' 条未评分；可先发送当前进度，之后再发新文件即可替换）' : '') + (p.suggestionsCount ? '（含 '+p.suggestionsCount+' 条建议）' : '');
+  if(kind === 'copy'){
+    var txt = toText(p) + '\n\n' + DATA_BEGIN + '\n' + b64(JSON.stringify(p)) + '\n' + DATA_END + '\n（上面的数据块供研究组导入答卷，请勿修改或删除）', ok = false;
+    try{ await navigator.clipboard.writeText(txt); ok = true; }catch(e){}
+    if(ok){ setStatus('已复制答卷文本（末尾含供研究组导入的数据块，请勿删改），可粘贴到邮件正文中发给研究团队。'+note); document.getElementById('expfallback').hidden = true; }
+    else { setStatus('无法自动复制，请在下方文本框中全选并复制。'+note); showFallback(txt); }
+    return;
+  }
+  if(kind === 'share'){
+    try{
+      await navigator.share({files:[new File([json], base+'.json', {type:'application/json'})], title:'ARRIVE-CHM 第一轮德尔菲答卷', text:'答卷文件（'+p.profile.name+'）'});
+      setStatus('已打开分享面板，请选择邮件或微信发给研究团队。'+note);
+    }catch(e){
+      if(e && e.name === 'AbortError') setStatus('已取消分享。');
+      else setStatus('此设备无法直接分享，请改用“下载答卷文件”。', true);
+    }
+    return;
+  }
+  if(kind === 'mail'){
+    var rm = await saveFile(base+'.json', json, 'application/json');
+    if(rm !== 'saved'){ setStatus(rm === 'declined' ? '已取消保存。' : '未能自动下载答卷文件，请先点“下载答卷文件”，再写邮件。', true); return; }
+    var a = document.createElement('a');
+    a.href = 'mailto:'+RETURN_EMAIL+'?subject='+encodeURIComponent('ARRIVE-CHM 第一轮德尔菲答卷（'+p.profile.name+'）')+'&body='+encodeURIComponent('老师好：\n\n请见附件答卷文件（'+base+'.json，已下载到您的设备；请在邮件中添加为附件）。\n\n'+p.profile.name);
+    document.body.appendChild(a); a.click(); a.remove();
+    setStatus('答卷文件 '+base+'.json 已下载，并已尝试打开写给 '+RETURN_EMAIL+' 的邮件草稿；请把刚下载的文件添加为附件后发送。若没有弹出邮件软件，请点“复制邮箱”，在自己的邮箱里新建邮件发送。'+note);
+    return;
+  }
+  var r = await saveFile(base+'.json', json, 'application/json');
+  if(r === 'saved') setStatus('已生成文件 '+base+'.json，请将它发回研究团队（邮件或微信均可）。'+note+' 若没有反应，请改用“复制答卷文本”。');
+  else if(r === 'declined') setStatus('已取消保存。');
+  else { setStatus('此环境不支持直接下载，请改用“复制答卷文本”。', true); }
+}
+var resetArmed = false, resetTimer = null;
+function doReset(btn){
+  if(!resetArmed){ resetArmed = true; btn.textContent = '再点一次确认清空（不可恢复）'; btn.style.color = 'var(--danger)'; resetTimer = setTimeout(function(){ resetArmed = false; btn.textContent = RESET_LABEL; btn.style.color = ''; }, 4000); return; }
+  clearTimeout(resetTimer); resetArmed = false;
+  store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  renderOverview(); window.scrollTo(0,0);
+}
+
+/* ---------------- router ---------------- */
+function route(){
+  var id = currentId();
+  if(id && BY[id]){ renderItem(id); return; }
+  var from = lastItem; lastItem = null;
+  renderOverview();
+  if(from){ var row = document.getElementById('row-'+from); var tile = document.querySelector('.tile[href="#'+idToHash(from)+'"]'); (row || tile) && (row || tile).scrollIntoView({block:'center'}); }
+  else window.scrollTo(0,0);
+}
+load();
+window.addEventListener('hashchange', route);
+route();
+})();
+</script>
+</body></html>
