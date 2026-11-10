@@ -1,0 +1,1144 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow,noarchive"><title>ARRIVE-CHM Delphi Questionnaire</title><style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}.quote .en .lab{display:none}</style>
+
+<style>
+/* Layout concept: a calm reading desk. Overview = map of the 32 items + the two source tables;
+   item page = ARRIVE context -> highlighted TCM requirement -> small supporting notes,
+   with the scoring panel pinned beside it (desktop) or below it (phone). Jade ink on cool paper. */
+:root{
+  --bg:#F1F5F3; --surface:#FFFFFF; --surface-2:#E8EFEB; --ink:#14211C; --muted:#4F5F58; --faint:#7A8A83;
+  --line:#D5DFD9; --line-strong:#B4C4BB;
+  --accent:#1A6853; --accent-hover:#124F3F; --accent-soft:#DAECE3; --on-accent:#FFFFFF;
+  --set-e:#1A6853; --set-r:#37579A; --set-x:#8F6118;
+  --set-e-soft:#DAECE3; --set-r-soft:#E0E8F6; --set-x-soft:#F4E6CE;
+  --focus:#2A8C74; --danger:#A33A2A;
+  --sans:system-ui,-apple-system,"PingFang SC","Hiragino Sans GB","Microsoft YaHei UI","Microsoft YaHei","Noto Sans CJK SC","Source Han Sans SC",sans-serif;
+  --serif:"Iowan Old Style","Palatino Linotype",Georgia,"Songti SC","Noto Serif CJK SC","Source Han Serif SC","SimSun",serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E1613; --surface:#16211D; --surface-2:#1D2B26; --ink:#E5EEEA; --muted:#A3B3AC; --faint:#7F918A;
+    --line:#26362F; --line-strong:#3B4F46;
+    --accent:#58C0A1; --accent-hover:#7AD2B7; --accent-soft:#18372E; --on-accent:#08201A;
+    --set-e:#58C0A1; --set-r:#8FA9E2; --set-x:#DDAE55;
+    --set-e-soft:#18372E; --set-r-soft:#1C2A47; --set-x-soft:#3A2D14;
+    --focus:#7AD2B7; --danger:#E58A78; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E1613; --surface:#16211D; --surface-2:#1D2B26; --ink:#E5EEEA; --muted:#A3B3AC; --faint:#7F918A;
+  --line:#26362F; --line-strong:#3B4F46;
+  --accent:#58C0A1; --accent-hover:#7AD2B7; --accent-soft:#18372E; --on-accent:#08201A;
+  --set-e:#58C0A1; --set-r:#8FA9E2; --set-x:#DDAE55;
+  --set-e-soft:#18372E; --set-r-soft:#1C2A47; --set-x-soft:#3A2D14;
+  --focus:#7AD2B7; --danger:#E58A78; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.7 var(--sans);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:40;background:var(--bg)}
+[hidden]{display:none!important}
+button,input,textarea,select{font:inherit;color:inherit}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--focus);outline-offset:2px;border-radius:4px}
+.wrap{max-width:1080px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+/* ---------- buttons ---------- */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:44px;padding:0 16px;border-radius:10px;border:1px solid var(--line-strong);background:var(--surface);color:var(--ink);cursor:pointer;font-weight:600;font-size:15px;text-decoration:none}
+.btn:hover{border-color:var(--accent);color:var(--accent)}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.btn.primary:hover{background:var(--accent-hover);border-color:var(--accent-hover);color:var(--on-accent)}
+.btn.quiet{border-color:transparent;background:transparent;color:var(--muted);font-weight:500}
+.btn.quiet:hover{color:var(--accent)}
+.btn.small{min-height:36px;padding:0 12px;font-size:14px}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+
+/* ---------- overview ---------- */
+.masthead{padding-block:28px 8px}
+.eyebrow{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 8px}
+h1.title{font:700 clamp(24px,5.2vw,34px)/1.3 var(--serif);margin:0 0 10px;text-wrap:balance;letter-spacing:.01em}
+.lede{margin:0;color:var(--muted);max-width:62ch}
+.progress{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin-top:18px}
+.meter{flex:1 1 220px;height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;min-width:120px}
+.meter>i{display:block;height:100%;background:var(--accent);border-radius:99px;transition:width .25s}
+.progress b{font-variant-numeric:tabular-nums}
+.savenote{font-size:13px;color:var(--faint)}
+.savenote.warn{color:var(--danger)}
+
+.panel{margin-top:22px}
+.panel>h2,.section-title{font-size:13px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 10px}
+details.fold{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:2px 0}
+details.fold>summary{cursor:pointer;list-style:none;display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:46px;font-weight:600}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"+";font-size:20px;color:var(--faint);line-height:1}
+details.fold[open]>summary::after{content:"−"}
+.fold-body{padding:4px 0 14px}
+.notes{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.notes li{display:grid;grid-template-columns:auto 1fr;gap:10px}
+.notes b{color:var(--accent);min-width:5.2em}
+.scoreguide{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin:12px 0 4px}
+.scoreguide div{border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:var(--surface);font-size:13.5px;line-height:1.5}
+.scoreguide b{display:block;font-size:15px}
+
+/* map of 32 items */
+.map{display:flex;flex-wrap:wrap;gap:16px 22px}
+.seg{display:flex;flex-direction:column;gap:6px;min-width:0}
+.seg-label{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:6px}
+.seg-label i{width:9px;height:9px;border-radius:3px;background:var(--c)}
+.seg-tiles{display:flex;flex-wrap:wrap;gap:6px}
+.tile{--c:var(--set-e);--cs:var(--set-e-soft);width:40px;height:48px;border-radius:9px;border:1px solid var(--line-strong);background:var(--surface);text-decoration:none;color:var(--ink);display:flex;flex-direction:column;align-items:center;justify-content:center;line-height:1.1;position:relative;font-variant-numeric:tabular-nums}
+.tile.set-REC{--c:var(--set-r);--cs:var(--set-r-soft)}
+.tile.set-EXT{--c:var(--set-x);--cs:var(--set-x-soft)}
+.tile::before{content:"";position:absolute;left:6px;right:6px;top:0;height:3px;border-radius:0 0 3px 3px;background:var(--c)}
+.tile b{font-size:14px}
+.tile small{font-size:12px;color:var(--faint);margin-top:2px}
+.tile.done{background:var(--cs);border-color:var(--c)}
+.tile.done small{color:var(--ink);font-weight:700}
+.tile:hover{border-color:var(--c)}
+.tile.noted::after{content:"";position:absolute;right:4px;bottom:4px;width:5px;height:5px;border-radius:50%;background:var(--c)}
+.mapnote{margin:12px 0 0;font-size:13px;color:var(--muted)}
+.stats{margin:0 0 14px;color:var(--ink)}
+.stats b{font-variant-numeric:tabular-nums}
+
+/* tables */
+.tbl{margin-top:30px}
+.tbl>header{display:flex;flex-direction:column;gap:2px;margin-bottom:6px;padding-bottom:10px;border-bottom:2px solid var(--ink)}
+.tbl>header h2{font:700 19px/1.4 var(--serif);margin:0}
+.tbl>header p{margin:0;color:var(--muted);font-size:14px}
+.grp{margin:22px 0 4px;font-size:13px;font-weight:700;letter-spacing:.04em;display:flex;align-items:center;gap:8px;color:var(--c)}
+.grp::before{content:"";width:9px;height:9px;border-radius:3px;background:var(--c)}
+.grp.set-E10{--c:var(--set-e)} .grp.set-REC{--c:var(--set-r)} .grp.set-EXT{--c:var(--set-x)}
+.arow{padding:14px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:minmax(0,1fr);gap:10px}
+.arow-head{display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+.aid{font:700 15px var(--sans);color:var(--accent);min-width:2.2em;font-variant-numeric:tabular-nums}
+.aname{font-weight:700}
+.azh{margin:2px 0 0;color:var(--muted);font-size:13.5px;line-height:1.6}
+.items{display:grid;gap:8px}
+@media (min-width:760px){.arow{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:6px 28px}}
+.item{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:6px 12px;align-items:start;text-decoration:none;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-height:56px}
+.item:hover{border-color:var(--accent)}
+.item-id{font:700 13px var(--sans);color:var(--accent);background:var(--accent-soft);border-radius:6px;padding:2px 7px;margin-top:2px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.item-title{display:block;font-weight:700;line-height:1.45}
+.item-req{display:-webkit-box;-webkit-line-clamp:2;line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--muted);font-size:13.5px;line-height:1.55;margin-top:2px}
+.item-state{display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:3.4em}
+.badge{font-size:13px;font-weight:700;border-radius:99px;padding:1px 10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge.sc{background:var(--accent);color:var(--on-accent)}
+.badge.cj{background:var(--surface-2);color:var(--muted)}
+.badge.none{color:var(--faint);font-weight:500;padding-right:0}
+.tag-note{font-size:12px;color:var(--accent)}
+.callout{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px;background:var(--accent-soft);border-radius:12px;padding:12px 14px;font-size:14px}
+.plain{margin-top:6px}
+.plain summary{cursor:pointer;color:var(--muted);font-size:13.5px;min-height:40px;display:flex;align-items:center}
+.plain-tags{display:flex;flex-wrap:wrap;gap:6px;padding:4px 0 10px}
+.plain-tags span{font-size:12.5px;color:var(--muted);border:1px solid var(--line);border-radius:6px;padding:1px 8px;background:var(--surface)}
+.plain-tags b{color:var(--faint);margin-right:4px;font-weight:600}
+.sec-sub{margin:20px 0 6px;font-weight:700;font-size:15px;display:flex;gap:8px;align-items:baseline}
+.sec-sub small{font-weight:500;color:var(--faint);font-size:13px}
+.t2-list{display:grid;gap:8px;padding-top:6px}
+.t2-zh{margin:10px 0 0;color:var(--muted);font-size:14px}
+
+/* full ARRIVE panorama */
+.pano{display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:8px}
+.pcell{border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:8px 10px 10px;min-width:0}
+.pcell h3{margin:0 0 7px;font-size:13px;font-weight:700;line-height:1.35;display:flex;gap:6px;align-items:baseline}
+.pcell h3 b{color:var(--faint);font-variant-numeric:tabular-nums;min-width:1.2em}
+.pchips{display:flex;flex-wrap:wrap;gap:6px}
+.pchip{--c:var(--set-e);--cs:var(--set-e-soft);position:relative;min-width:44px;min-height:38px;padding:0 9px;border-radius:9px;border:1.5px dashed var(--line-strong);background:transparent;color:var(--faint);cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:13.5px;font-weight:600;font-variant-numeric:tabular-nums}
+.pchip.set-REC{--c:var(--set-r);--cs:var(--set-r-soft)} .pchip.set-EXT{--c:var(--set-x);--cs:var(--set-x-soft)}
+.pchip.ext{border:1.5px solid var(--c);background:var(--cs);color:var(--c)}
+.pchip small{font-size:11.5px;font-weight:700;background:var(--c);color:var(--surface);border-radius:99px;min-width:1.5em;padding:0 5px;line-height:1.5;text-align:center}
+.pchip:hover{border-color:var(--c);color:var(--c)}
+.pchip.add{border-style:solid;border-color:var(--accent);color:var(--accent);--c:var(--accent)}
+.pchip.has-add::after{content:"";position:absolute;top:-4px;right:-4px;width:10px;height:10px;border-radius:50%;background:var(--ink);border:2px solid var(--bg)}
+.pchip.sample{min-width:34px;min-height:22px;padding:0;cursor:default;vertical-align:middle;margin-right:6px}
+.pchip.sample.has-add::after{width:8px;height:8px;top:-3px;right:-3px}
+.legend{display:flex;flex-wrap:wrap;gap:6px 18px;margin:12px 0 4px;font-size:13px;color:var(--muted);align-items:center}
+.legend>span{display:inline-flex;align-items:center}
+
+/* table 1 toolbar, un-extended rows */
+.tbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:12px 0 0}
+.toggle{display:inline-flex;border:1px solid var(--line-strong);border-radius:10px;overflow:hidden;background:var(--surface)}
+.toggle button{min-height:40px;padding:0 14px;border:0;background:transparent;cursor:pointer;font-size:14px;font-weight:600;color:var(--muted)}
+.toggle button+button{border-left:1px solid var(--line-strong)}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:var(--on-accent)}
+.chk{display:inline-flex;align-items:center;gap:8px;font-size:14px;color:var(--muted);min-height:40px;cursor:pointer}
+.chk input{width:18px;height:18px;accent-color:var(--accent);margin:0}
+.arow{scroll-margin-top:14px}
+.arow.noext{padding:10px 0;border-bottom:1px dashed var(--line);align-content:start}
+.arow.noext .aname{color:var(--muted)}
+.arow.noext .aid{color:var(--faint)}
+.noext-tag{font-size:12px;font-weight:600;color:var(--faint);border:1px dashed var(--line-strong);border-radius:99px;padding:0 9px;white-space:nowrap;line-height:1.7}
+.aen{display:none;margin:5px 0 0;font:13px/1.6 var(--serif);color:var(--faint)}
+.show-en .aen{display:block}
+.aen .lab{font:700 11px var(--sans);letter-spacing:.08em;margin-right:6px}
+.view-ext .arow.noext:not(.has-adds){display:none}
+.flash{animation:flash 1.8s ease-out}
+@keyframes flash{0%{background:var(--accent-soft)}100%{background:transparent}}
+
+/* expert-added suggestions */
+.addzone{display:grid;gap:10px;min-width:0;align-content:start}
+.addzone:empty{display:none}
+.adds-act{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start}
+.addcard{border:1px solid var(--line-strong);border-left:4px solid var(--accent);border-radius:12px;background:var(--surface);padding:12px 14px 14px;display:grid;gap:6px;scroll-margin-top:14px}
+.addcard-h{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.addcard-h b{font-size:14px;color:var(--accent)}
+.addcard label.t{font-weight:700;font-size:13.5px;margin-top:4px}
+.addcard .opt-note{font-weight:500;color:var(--faint)}
+.addcard .addhint{margin:0 0 2px;font-size:12.5px;color:var(--muted)}
+.addcard textarea{width:100%;min-height:96px;resize:vertical;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;background:var(--bg);line-height:1.6;font-size:15px}
+.addcard textarea.short{min-height:66px}
+.addcard textarea:focus,.addcard select:focus{background:var(--surface)}
+.addcard select{min-height:44px;border:1px solid var(--line-strong);border-radius:10px;padding:0 10px;background:var(--bg);width:100%;min-width:0}
+.addnote{margin:8px 0 0;font-size:13px;color:var(--muted);line-height:1.65}
+.t2-add{margin-top:24px;padding-top:14px;border-top:1px dashed var(--line-strong);display:grid;gap:10px}
+.t2-add p{margin:0;font-size:14px;color:var(--muted)}
+.chips button{font-size:12.5px;font-weight:600;border:1px solid var(--line-strong);border-radius:99px;padding:1px 9px;color:var(--muted);background:var(--surface);cursor:pointer}
+.chips button:hover{border-color:var(--accent);color:var(--accent)}
+@media (min-width:760px){.arow.noext{grid-template-columns:minmax(0,5fr) minmax(0,7fr)}}
+
+/* profile form */
+.pf{display:grid;gap:16px;padding-top:8px}
+.pf-row{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+.field{display:grid;gap:4px;min-width:0}
+.field>label,.field>.lbl{font-size:13.5px;font-weight:600;color:var(--muted)}
+.field input[type=text],.field input[type=number],.field input[type=email]{min-height:44px;border:1px solid var(--line-strong);border-radius:10px;padding:0 12px;background:var(--surface);width:100%;min-width:0}
+.opts{display:flex;flex-wrap:wrap;gap:8px}
+.opt{position:relative}
+.opt input{position:absolute;opacity:0;inset:0;width:100%;height:100%;margin:0;cursor:pointer}
+.opt span{display:inline-flex;align-items:center;min-height:40px;padding:0 14px;border:1px solid var(--line-strong);border-radius:99px;background:var(--surface);font-size:14px}
+.opt input:checked+span{background:var(--accent-soft);border-color:var(--accent);color:var(--accent);font-weight:700}
+.opt input:focus-visible+span{outline:2px solid var(--focus);outline-offset:2px}
+.basis{display:grid;gap:8px}
+.basis .brow{display:grid;grid-template-columns:minmax(7em,10em) 1fr;gap:10px;align-items:center}
+@media (max-width:520px){.basis .brow{grid-template-columns:1fr}}
+.pfstate{font-size:13px;font-weight:500;color:var(--faint)}
+.pf-note{margin:0;font-size:13px;color:var(--muted)}
+.pfstate.ok{color:var(--accent)}
+
+/* export */
+.export-box{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:16px;display:grid;gap:12px}
+.export-box h3{margin:0;font-size:16px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips a{font-size:12.5px;font-weight:600;text-decoration:none;border:1px solid var(--line-strong);border-radius:99px;padding:1px 9px;color:var(--muted);background:var(--surface)}
+.chips a:hover{border-color:var(--accent);color:var(--accent)}
+.btnrow{display:flex;flex-wrap:wrap;gap:8px}
+.resume{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px;font-size:13.5px;color:var(--muted)}
+.resume input[type=file]{position:absolute;opacity:0;width:1px;height:1px}
+.resume-msg{color:var(--accent);font-weight:600}
+.resume-msg.warn{color:var(--warn,#955A0C)}
+.mailline{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;font-size:14px}
+.mailline b{user-select:all;word-break:break-all}
+.btn.big{min-height:52px;padding:0 34px;font-size:17px}
+.subfold{margin-top:4px}
+.subfold .q{margin:0 0 10px}
+details.resume-fold{margin-top:10px;font-size:13.5px;color:var(--muted)}
+details.resume-fold>summary{cursor:pointer;padding:4px 0}
+details.resume-fold .resume{margin-top:6px}
+.wxwarn{margin:0 0 14px;padding:10px 14px;border-radius:10px;border:1px solid var(--warn,#955A0C);color:var(--warn,#955A0C);font-size:14px;line-height:1.55}
+.status{min-height:1.5em;font-size:14px;color:var(--accent)}
+.status.err{color:var(--danger)}
+.fallback{width:100%;min-height:140px;border:1px solid var(--line-strong);border-radius:10px;padding:10px;background:var(--surface);font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
+.foot{margin:34px 0 0;padding-block:18px 36px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
+
+/* ---------- item page ---------- */
+.bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar .wrap{display:flex;align-items:center;gap:10px;min-height:54px}
+.bar .where{flex:1;min-width:0;text-align:center;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.bar .where small{color:var(--faint);font-weight:500;margin-left:6px}
+.bar .prog{height:3px;background:var(--surface-2)}
+.bar .prog i{display:block;height:100%;background:var(--accent)}
+.detail{display:grid;grid-template-columns:minmax(0,1fr);grid-template-areas:"c1" "side" "c2";gap:22px;padding-block:20px 120px}
+.c1{grid-area:c1;min-width:0}.c2{grid-area:c2;min-width:0;margin-top:-22px}.side{grid-area:side}
+@media (min-width:960px){.detail{grid-template-columns:minmax(0,1fr) 370px;grid-template-areas:"c1 side" "c2 side";grid-template-rows:auto 1fr;column-gap:40px;row-gap:0;padding-bottom:60px;align-items:start}.c2{margin-top:0}}
+.crumb{margin:0 0 6px;font-size:13px;line-height:1.6;color:var(--muted)}
+.crumb .dot{display:inline-block;width:9px;height:9px;border-radius:3px;background:var(--c);margin-right:8px;vertical-align:baseline}
+.crumb.set-E10{--c:var(--set-e)} .crumb.set-REC{--c:var(--set-r)} .crumb.set-EXT{--c:var(--set-x)}
+h1.item-h{font:700 clamp(22px,4.6vw,28px)/1.35 var(--serif);margin:0 0 18px;text-wrap:balance}
+h1.item-h:focus{outline:none}
+h1.item-h .id{display:block;font:700 14px var(--sans);letter-spacing:.06em;color:var(--accent);margin-bottom:4px;font-variant-numeric:tabular-nums}
+.blk{margin-top:22px}
+.blk>h2{font-size:12.5px;letter-spacing:.08em;color:var(--muted);font-weight:700;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.blk>h2 .sub{font-weight:500;letter-spacing:0;color:var(--faint)}
+.arrive-tag{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
+.arrive-tag b{font-size:15px}
+.pill{font-size:12px;font-weight:700;border-radius:99px;padding:1px 9px;background:var(--cs);color:var(--c)}
+.pill.set-E10{--c:var(--set-e);--cs:var(--set-e-soft)} .pill.set-REC{--c:var(--set-r);--cs:var(--set-r-soft)} .pill.set-EXT{--c:var(--set-x);--cs:var(--set-x-soft)}
+.quote{margin:0;padding:0;display:grid;gap:8px}
+.quote .en{font:15.5px/1.65 var(--serif);color:var(--ink)}
+.quote .zh{font-size:14.5px;color:var(--muted);line-height:1.7}
+.quote .lab{font-size:11.5px;letter-spacing:.08em;color:var(--faint);font-weight:700;margin-right:6px}
+.noarrive{margin:0;color:var(--muted);font-size:14.5px}
+.req{background:var(--accent-soft);border-radius:14px;padding:18px 18px 16px;margin-top:22px}
+.req>h2{font-size:12.5px;letter-spacing:.08em;color:var(--accent);font-weight:700;margin:0 0 8px}
+.req p{margin:0 0 8px;font-size:17px;line-height:1.85;font-weight:500}
+.req p:last-child{margin-bottom:0}
+.why{margin:10px 2px 0;font-size:12.5px;line-height:1.7;color:var(--faint)}
+.why b{font-weight:600;color:var(--faint);margin-right:6px}
+.prev{border:1px solid var(--line);border-radius:12px;padding:12px 14px;background:var(--surface)}
+.prev .pnote{margin:0 0 8px;font-size:13px;color:var(--muted)}
+.prow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:4px 12px;padding:8px 0;border-top:1px solid var(--line);align-items:baseline}
+.prow:first-of-type{border-top:0}
+.prow .pl{font-size:14px;min-width:0}
+.prow .pv{font-size:14px;font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.prow .pv small{font-weight:500;color:var(--muted);margin-left:4px}
+.prow .bar2{grid-column:1/-1;height:6px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prow .bar2 i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.prow .pl small{display:inline-block;margin-left:8px;font-size:12px;color:var(--faint)}
+.pfoot{margin:8px 0 0;font-size:12px;color:var(--faint);line-height:1.6}
+.example{margin:0;border:1px dashed var(--line-strong);border-radius:12px;padding:14px 16px;background:var(--surface);font-size:15px;line-height:1.85}
+.exnote{margin:6px 2px 0;font-size:12px;color:var(--faint)}
+
+.side{border:1px solid var(--line-strong);border-radius:16px;background:var(--surface);padding:18px 16px;display:grid;gap:16px}
+@media (min-width:960px){.side{position:sticky;top:calc(env(safe-area-inset-top,0px) + 74px)}}
+.side h2{margin:0;font-size:16px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.side h2 small{font-size:12px;font-weight:600;color:var(--danger)}
+.q{margin:4px 0 0;font-size:13.5px;color:var(--muted);line-height:1.6}
+.scale{display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:4px;margin-top:8px}
+.scale button{min-height:50px;border:1px solid var(--line-strong);border-radius:9px;background:var(--surface);cursor:pointer;font-weight:700;font-size:17px;padding:0;font-variant-numeric:tabular-nums}
+.scale button:hover{border-color:var(--accent);color:var(--accent)}
+.scale button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
+.bands{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px}
+.bands span{font-size:11.5px;line-height:1.35;text-align:center;color:var(--muted);border-top:2px solid var(--line-strong);padding-top:4px}
+.cjbtn{margin-top:10px;width:100%}
+.cjbtn[aria-pressed="true"]{background:var(--surface-2);border-color:var(--ink);color:var(--ink)}
+.side textarea{width:100%;min-height:128px;resize:vertical;border:1px solid var(--line-strong);border-radius:10px;padding:10px 12px;background:var(--bg);line-height:1.6;font-size:15px}
+.side textarea:focus{background:var(--surface)}
+.side label.t{font-weight:700;font-size:14px;display:block;margin-bottom:2px}
+.side .hint{font-size:12.5px;color:var(--faint);margin:0 0 6px;line-height:1.55}
+.saved{font-size:12.5px;color:var(--faint);min-height:1.4em}
+.saved.ok::before{content:"✓ ";color:var(--accent)}
+.navrow{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.navrow .next{grid-column:1/-1}
+@media (max-width:959px){.side .navrow{display:none}}
+.dock{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding:8px max(12px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(12px,env(safe-area-inset-left,0px));display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:center}
+.dock .mid{text-align:center;font-size:13px;color:var(--muted);min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dock .mid b{color:var(--ink);font-variant-numeric:tabular-nums}
+@media (min-width:960px){.dock{display:none}}
+@media (max-width:420px){.btn{padding:0 12px}.tile{width:36px}.scoreguide{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+</head><body>
+<div id="app"></div>
+<script id="app-data" type="application/json">{"version":"v20261030","scale":{"min":1,"max":9},"arriveRows":[{"id":"1a","name":"Study design","set":"E10","itemIds":[],"zh":"For each experiment, provide brief details of study design including: (a) The groups being compared, including control groups. If no control group has been used, the rationale should be stated.","ext":false,"main":"1","nameEn":"Study design","en":""},{"id":"1b","name":"Study design","set":"E10","itemIds":[],"zh":"For each experiment, provide brief details of study design including: (b) The experimental unit (e.g. a single animal, litter, or cage of animals).","ext":false,"main":"1","nameEn":"Study design","en":""},{"id":"2a","name":"Sample size","set":"E10","itemIds":[],"zh":"Specify the exact number of experimental units allocated to each group, and the total number in each experiment. Also indicate the total number of animals used.","ext":false,"main":"2","nameEn":"Sample size","en":""},{"id":"2b","name":"Sample size","set":"E10","itemIds":[],"zh":"Explain how the sample size was decided. Provide details of any a priori sample size calculation, if done.","ext":false,"main":"2","nameEn":"Sample size","en":""},{"id":"3a","name":"Inclusion and exclusion criteria","set":"E10","itemIds":["Q01"],"zh":"Describe any criteria used for including and excluding animals (or experimental units) during the experiment, and data points during the analysis. Specify if these criteria were established a priori. If no criteria were set, state this explicitly.","ext":true,"main":"3","nameEn":"Inclusion and exclusion criteria","en":""},{"id":"3b","name":"Inclusion and exclusion criteria","set":"E10","itemIds":[],"zh":"For each experimental group, report any animals, experimental units or data points not included in the analysis and explain why. If there were no exclusions, state so.","ext":false,"main":"3","nameEn":"Inclusion and exclusion criteria","en":""},{"id":"3c","name":"Inclusion and exclusion criteria","set":"E10","itemIds":[],"zh":"For each analysis, report the exact value of n in each experimental group.","ext":false,"main":"3","nameEn":"Inclusion and exclusion criteria","en":""},{"id":"4a","name":"Randomisation","set":"E10","itemIds":[],"zh":"State whether randomisation was used to allocate experimental units to control and treatment groups. If done, provide the method used to generate the randomisation sequence.","ext":false,"main":"4","nameEn":"Randomisation","en":""},{"id":"4b","name":"Randomisation","set":"E10","itemIds":["Q02"],"zh":"Describe the strategy used to minimise potential confounders such as the order of treatments and measurements, or animal/cage location. If confounders were not controlled, state this explicitly.","ext":true,"main":"4","nameEn":"Randomisation","en":""},{"id":"5","name":"Blinding","set":"E10","itemIds":[],"zh":"Describe who was aware of the group allocation at the different stages of the experiment (during the allocation, the conduct of the experiment, the outcome assessment, and the data analysis).","ext":false,"main":"5","nameEn":"Blinding","en":""},{"id":"6a","name":"Outcome measures","set":"E10","itemIds":["Q03"],"zh":"Clearly define all outcome measures assessed (e.g. cell death, molecular markers, or behavioural changes).","ext":true,"main":"6","nameEn":"Outcome measures","en":""},{"id":"6b","name":"Outcome measures","set":"E10","itemIds":[],"zh":"For hypothesis-testing studies, specify the primary outcome measure, i.e. the outcome measure that was used to determine the sample size.","ext":false,"main":"6","nameEn":"Outcome measures","en":""},{"id":"7a","name":"Statistical methods","set":"E10","itemIds":[],"zh":"Provide details of the statistical methods used for each analysis, including software used.","ext":false,"main":"7","nameEn":"Statistical methods","en":""},{"id":"7b","name":"Statistical methods","set":"E10","itemIds":[],"zh":"Describe any methods used to assess whether the data met the assumptions of the statistical approach, and what was done if the assumptions were not met.","ext":false,"main":"7","nameEn":"Statistical methods","en":""},{"id":"8a","name":"Experimental animals","set":"E10","itemIds":[],"zh":"Provide species-appropriate details of the animals used, including species, strain and substrain, sex, age or developmental stage, and, if relevant, weight.","ext":false,"main":"8","nameEn":"Experimental animals","en":""},{"id":"8b","name":"Experimental animals","set":"E10","itemIds":[],"zh":"Provide further relevant information on the provenance of animals, health/immune status, genetic modification status, genotype, and any previous procedures.","ext":false,"main":"8","nameEn":"Experimental animals","en":""},{"id":"9a","name":"Experimental procedures","set":"E10","itemIds":[],"zh":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (a) What was done, how it was done and what was used.","ext":true,"main":"9","nameEn":"Experimental procedures","en":""},{"id":"9b","name":"Experimental procedures","set":"E10","itemIds":[],"zh":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (b) When and how often.","ext":false,"main":"9","nameEn":"Experimental procedures","en":""},{"id":"9c","name":"Experimental procedures","set":"E10","itemIds":[],"zh":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (c) Where (including detail of any acclimatisation periods).","ext":false,"main":"9","nameEn":"Experimental procedures","en":""},{"id":"9d","name":"Experimental procedures","set":"E10","itemIds":["Q22","Q23","Q24"],"zh":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (d) Why (provide rationale for procedures).","ext":true,"main":"9","nameEn":"Experimental procedures","en":""},{"id":"10a","name":"Results","set":"E10","itemIds":[],"zh":"For each experiment conducted, including independent replications, report: (a) Summary/descriptive statistics for each experimental group, with a measure of variability where applicable (e.g. mean and SD, or median and range).","ext":false,"main":"10","nameEn":"Results","en":""},{"id":"10b","name":"Results","set":"E10","itemIds":[],"zh":"For each experiment conducted, including independent replications, report: (b) If applicable, the effect size with a confidence interval.","ext":false,"main":"10","nameEn":"Results","en":""},{"id":"11","name":"Abstract","set":"REC","itemIds":[],"zh":"Provide an accurate summary of the research objectives, animal species, strain and sex, key methods, principal findings, and study conclusions.","ext":false,"main":"11","nameEn":"Abstract","en":""},{"id":"12a","name":"Background","set":"REC","itemIds":["Q25"],"zh":"Include sufficient scientific background to understand the rationale and context for the study, and explain the experimental approach.","ext":true,"main":"12","nameEn":"Background","en":""},{"id":"12b","name":"Background","set":"REC","itemIds":[],"zh":"Explain how the animal species and model used address the scientific objectives and, where appropriate, the relevance to human biology.","ext":false,"main":"12","nameEn":"Background","en":""},{"id":"13","name":"Objectives","set":"REC","itemIds":[],"zh":"Clearly describe the research question, research objectives and, where appropriate, specific hypotheses being tested.","ext":false,"main":"13","nameEn":"Objectives","en":""},{"id":"14","name":"Ethical statement","set":"REC","itemIds":[],"zh":"Provide the name of the ethical review committee or equivalent that has approved the use of animals in this study, and any relevant licence or protocol numbers (if applicable). If ethical approval was not sought or granted, provide a justification.","ext":false,"main":"14","nameEn":"Ethical statement","en":""},{"id":"15","name":"Housing and husbandry","set":"REC","itemIds":["Q26"],"zh":"Provide details of housing and husbandry conditions, including any environmental enrichment.","ext":true,"main":"15","nameEn":"Housing and husbandry","en":""},{"id":"16a","name":"Animal care and monitoring","set":"REC","itemIds":[],"zh":"Describe any interventions or steps taken in the experimental protocols to reduce pain, suffering and distress.","ext":false,"main":"16","nameEn":"Animal care and monitoring","en":""},{"id":"16b","name":"Animal care and monitoring","set":"REC","itemIds":[],"zh":"Report any expected or unexpected adverse events.","ext":false,"main":"16","nameEn":"Animal care and monitoring","en":""},{"id":"16c","name":"Animal care and monitoring","set":"REC","itemIds":["Q27"],"zh":"Describe the humane endpoints established for the study, the signs that were monitored and the frequency of monitoring. If the study did not have humane endpoints, state this.","ext":true,"main":"16","nameEn":"Animal care and monitoring","en":""},{"id":"17a","name":"Interpretation/scientific implications","set":"REC","itemIds":["Q28","Q29"],"zh":"Interpret the results, taking into account the study objectives and hypotheses, current theory and other relevant studies in the literature.","ext":true,"main":"17","nameEn":"Interpretation/scientific implications","en":""},{"id":"17b","name":"Interpretation/scientific implications","set":"REC","itemIds":["Q30"],"zh":"Comment on the study limitations including potential sources of bias, limitations of the animal model, and imprecision associated with the results.","ext":true,"main":"17","nameEn":"Interpretation/scientific implications","en":""},{"id":"18","name":"Generalisability/translation","set":"REC","itemIds":[],"zh":"Comment on whether, and how, the findings of this study are likely to generalise to other species or experimental conditions, including any relevance to human biology (where appropriate).","ext":false,"main":"18","nameEn":"Generalisability/translation","en":""},{"id":"19","name":"Protocol registration","set":"REC","itemIds":[],"zh":"Provide a statement indicating whether a protocol (including the research question, key design features, and analysis plan) was prepared before the study, and if and where this protocol was registered.","ext":false,"main":"19","nameEn":"Protocol registration","en":""},{"id":"20","name":"Data access","set":"REC","itemIds":[],"zh":"Provide a statement describing if and where study data are available.","ext":false,"main":"20","nameEn":"Data access","en":""},{"id":"21a","name":"Declaration of interests","set":"REC","itemIds":[],"zh":"Declare any potential conflicts of interest, including financial and non-financial. If none exist, this should be stated.","ext":false,"main":"21","nameEn":"Declaration of interests","en":""},{"id":"21b","name":"Declaration of interests","set":"REC","itemIds":[],"zh":"List all funding sources (including grant identifier) and the role of the funder(s) in the design, analysis and reporting of the study.","ext":false,"main":"21","nameEn":"Declaration of interests","en":""},{"id":"title","name":"Title candidates","set":"EXT","itemIds":["Q31","Q32"],"zh":"ARRIVE 2.0 has no separate title item; ARRIVE item 11 concerns the abstract, so the candidates below do not belong directly under item 11.","ext":true}],"arriveMap":{"3a":{"id":"3a","set":"E10","nameZh":"Inclusion and exclusion criteria","nameEn":"Inclusion and exclusion criteria","zh":"Describe any criteria used for including and excluding animals (or experimental units) during the experiment, and data points during the analysis. Specify if these criteria were established a priori. If no criteria were set, state this explicitly.","en":"Describe any criteria used for including and excluding animals (or experimental units) during the experiment, and data points during the analysis. Specify if these criteria were established a priori. If no criteria were set, state this explicitly."},"4b":{"id":"4b","set":"E10","nameZh":"Randomisation","nameEn":"Randomisation","zh":"Describe the strategy used to minimise potential confounders such as the order of treatments and measurements, or animal/cage location. If confounders were not controlled, state this explicitly.","en":"Describe the strategy used to minimise potential confounders such as the order of treatments and measurements, or animal/cage location. If confounders were not controlled, state this explicitly."},"6a":{"id":"6a","set":"E10","nameZh":"Outcome measures","nameEn":"Outcome measures","zh":"Clearly define all outcome measures assessed (e.g. cell death, molecular markers, or behavioural changes).","en":"Clearly define all outcome measures assessed (e.g. cell death, molecular markers, or behavioural changes)."},"9a":{"id":"9a","set":"E10","nameZh":"Experimental procedures","nameEn":"Experimental procedures","zh":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (a) What was done, how it was done and what was used.","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (a) What was done, how it was done and what was used."},"9d":{"id":"9d","set":"E10","nameZh":"Experimental procedures","nameEn":"Experimental procedures","zh":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (d) Why (provide rationale for procedures).","en":"For each experimental group, including controls, describe the procedures in enough detail to allow others to replicate them, including: (d) Why (provide rationale for procedures)."},"12a":{"id":"12a","set":"REC","nameZh":"Background","nameEn":"Background","zh":"Include sufficient scientific background to understand the rationale and context for the study, and explain the experimental approach.","en":"Include sufficient scientific background to understand the rationale and context for the study, and explain the experimental approach."},"15":{"id":"15","set":"REC","nameZh":"Housing and husbandry","nameEn":"Housing and husbandry","zh":"Provide details of housing and husbandry conditions, including any environmental enrichment.","en":"Provide details of housing and husbandry conditions, including any environmental enrichment."},"16c":{"id":"16c","set":"REC","nameZh":"Animal care and monitoring","nameEn":"Animal care and monitoring","zh":"Describe the humane endpoints established for the study, the signs that were monitored and the frequency of monitoring. If the study did not have humane endpoints, state this.","en":"Describe the humane endpoints established for the study, the signs that were monitored and the frequency of monitoring. If the study did not have humane endpoints, state this."},"17a":{"id":"17a","set":"REC","nameZh":"Interpretation/scientific implications","nameEn":"Interpretation/scientific implications","zh":"Interpret the results, taking into account the study objectives and hypotheses, current theory and other relevant studies in the literature.","en":"Interpret the results, taking into account the study objectives and hypotheses, current theory and other relevant studies in the literature."},"17b":{"id":"17b","set":"REC","nameZh":"Interpretation/scientific implications","nameEn":"Interpretation/scientific implications","zh":"Comment on the study limitations including potential sources of bias, limitations of the animal model, and imprecision associated with the results.","en":"Comment on the study limitations including potential sources of bias, limitations of the animal model, and imprecision associated with the results."}},"table2Sections":["I. Chinese herbal intervention: materials and preparation chain","II. Animal model","III. Intervention delivery"],"items":[{"id":"Q01","title":"Inclusion and exclusion criteria for model animals","req":"If the study uses a disease, syndrome, or disease–syndrome combined animal model, report the criteria for including and excluding model animals before analysis, including the threshold used to judge successful model induction (e.g., a syndrome score, or a biochemical or pathological cut-off) and how animals that did not meet the threshold were handled.","table":1,"set":"E10","arrive":"3a","n":1,"why":"The success threshold determines which animals enter the analysis, so it is a form of sample selection and belongs under ARRIVE 3a. The indicators or methods used to validate the model are covered in Item 19.","example":"On day 14 of induction, Spleen-qi deficiency syndrome was scored (food intake, body-weight change, stool consistency, activity, and fur condition; 0–3 points each; maximum 15). Animals with a total score ≥ 8 and a body weight ≥ 10% lower than the blank group were judged successfully modelled and entered the dosing experiment. Animals not meeting the criteria (n = 4) were excluded and did not enter grouping or analysis.","arriveRef":"3a","prev":null},{"id":"Q02","title":"Control of batch confounding for the test material","req":"If the Chinese herbal materials, self-prepared intermediates, or final dosing preparations used in the study involve more than one batch (e.g., the experiment was run in stages, or the batch was changed during a long treatment course), describe the measures taken to avoid batch confounding, such as using a single batch number throughout or distributing animals of every group evenly across batches. If no such measures were taken, state this explicitly.","table":1,"set":"E10","arrive":"4b","n":2,"why":"Chinese herbal materials vary greatly between batches because of origin, harvest time, processing, and extraction, and are mostly prepared by the researchers themselves. Division of labour with Item 6: Item 6 asks which batch was used (traceability); this item asks, when several batches exist, how batches map onto groups (design control).","example":"All experiments used the same batch of Huangqi (Astragali Radix) prepared slices (batch no. 20250312). One person decocted, concentrated, and freeze-dried them in a single run; the powder was aliquoted and stored at −20 °C, and every group received this batch. The experiment was run in two blocks; each block contained animals from all groups, with equal numbers per group.","arriveRef":"4b","prev":null},{"id":"Q03","title":"Methods for assessing TCM syndrome-related outcomes","req":"If signs, behaviours, or TCM syndrome scale scores are used as outcome measures to evaluate improvement of a TCM syndrome after the intervention — for example tongue appearance (where applicable), food intake, stool consistency, fur condition, or activity — describe the specific assessment method, such as the scoring criteria, the source of the scale, or the basis for judgement.","table":1,"set":"E10","arrive":"6a","n":3,"why":"This applies only when such indicators are used to evaluate syndrome improvement. The requirement concerns how the judgement was made; the indicators listed are open-ended examples, not an exhaustive list.","example":"Improvement of Spleen-qi deficiency syndrome was evaluated by food intake, stool consistency, fur condition, and activity. The scoring criteria were developed with reference to the literature [12]: 0–3 points per item, with a higher total indicating a more severe syndrome. Two researchers blinded to group allocation scored independently, and the mean was used.","arriveRef":"6a","prev":{"components":[{"code":"CHI-33","label":"Method of assessing syndrome-related outcomes","N":385,"yes":5,"no":1,"na":379,"unclear":0,"applicable":6,"rate":83.3}],"note":null,"merged":false}},{"id":"Q04","title":"Name, botanical identity, and composition","req":"Report the specific name of the Chinese herbal intervention (a generic term such as “Chinese medicine” or “compound formula” alone is not acceptable). If the intervention has a defined dosage form, report the dosage form used. For a single herb or a compound formula (including their extracts), report each ingredient in turn: for plant-, fungus-, or animal-derived ingredients, report the Latin binomial of the source species (with authority), the medicinal part, and the place of origin (where the material was grown or collected); for mineral ingredients and ingredients without a biological source, report the standardized name in the standard relied upon (e.g., the Chinese Pharmacopoeia). For a compound formula, also report the prescribed amount of each ingredient. For a purchased finished product (e.g., a proprietary Chinese medicine), publicly available information on the product may be cited instead of listing every ingredient; if the composition or amounts cannot be disclosed or obtained (e.g., for confidentiality or patent reasons), state this and give the reason.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":4,"why":"Chinese medicine has many homonyms and synonyms for materials. An ingredient with a biological source must be fixed by the Latin binomial of the species (with authority) plus the medicinal part — for example, mulberry leaf, twig, and root bark come from the same species but are different medicinal materials. A compound formula whose composition is withheld cannot be replicated, so an exit is kept: declare it and give the reason.","example":"The intervention was Sijunzi Decoction (a decoction) made of four herbs: Renshen (ginseng; Panax ginseng C.A.Mey.; root and rhizome; origin: Fusong, Jilin) 9 g; Baizhu (Atractylodes macrocephala Koidz.; rhizome; origin: Pan’an, Zhejiang) 9 g; Fuling (Poria cocos (Schw.) Wolf; sclerotium; origin: Jinzhai, Anhui) 9 g; and Gancao (licorice; Glycyrrhiza uralensis Fisch.; root and rhizome; origin: Hangjin Banner, Inner Mongolia) 6 g; a total of 33 g crude herbs per dose.","arriveRef":"9a","prev":{"components":[{"code":"CHI-03","label":"Dosage form","N":385,"yes":189,"no":13,"na":183,"unclear":0,"applicable":202,"rate":93.6},{"code":"CHI-09","label":"CHM name in the full text","N":385,"yes":385,"no":0,"na":0,"unclear":0,"applicable":385,"rate":100.0},{"code":"CHI-10","label":"Language forms of the intervention name","N":385,"yes":133,"no":177,"na":75,"unclear":0,"applicable":310,"rate":42.9},{"code":"CHI-11","label":"Names and doses of the component herbs","N":385,"yes":127,"no":62,"na":196,"unclear":0,"applicable":189,"rate":67.2},{"code":"CHI-12","label":"Language forms of the herb names","N":385,"yes":115,"no":74,"na":196,"unclear":0,"applicable":189,"rate":60.8},{"code":"CHI-13","label":"Medicinal part","N":385,"yes":176,"no":66,"na":143,"unclear":0,"applicable":242,"rate":72.7},{"code":"CHI-14","label":"Place of origin","N":385,"yes":56,"no":186,"na":143,"unclear":0,"applicable":242,"rate":23.1},{"code":"CHI-24","label":"Latin name of the natural herbal material","N":385,"yes":94,"no":148,"na":143,"unclear":0,"applicable":242,"rate":38.8}],"note":null,"merged":true}},{"id":"Q05","title":"Raw-material form or type of processing","req":"When the intervention is not a ready-made proprietary Chinese medicine, report the type of material used (e.g., fresh or dried herb, prepared slices) and the preparation form (e.g., aqueous decoction, total extract, isolated fraction, or single compound).","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":5,"why":"The same herb prepared as fresh material, prepared slices, aqueous decoction, total extract, or single compound can differ completely in composition and efficacy. “Dosage form” refers to the pharmaceutical form of the finished product; this item asks at which step of the preparation chain the material that entered the experiment sits.","example":"The material was purchased dried prepared slices (yinpian). The preparation form was a freeze-dried powder of the total extract, obtained by concentrating and freeze-drying the aqueous decoction of the slices; it was reconstituted in distilled water immediately before use.","arriveRef":"9a","prev":{"components":[{"code":"CHI-21","label":"Raw-material form of the product","N":385,"yes":321,"no":20,"na":44,"unclear":0,"applicable":341,"rate":94.1}],"note":null,"merged":false}},{"id":"Q06","title":"Source and batch number","req":"Report the supply source of the Chinese herbal materials or products. If obtained through a formal channel, report the manufacturer, supplier, or hospital pharmacy, together with the product batch number; if collected by the researchers, report the collection source.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":6,"why":"The quality of Chinese herbal materials fluctuates with origin, harvest year, and batch; the batch number is the identifier that links the study material to a specific lot of raw material.","example":"Prepared slices were purchased from XX Pharmaceutical Co., Ltd. Batch numbers: Renshen 2305016, Baizhu 2306112, Fuling 2304087, Gancao 2305203.","arriveRef":"9a","prev":{"components":[{"code":"CHI-17","label":"Supply source","N":385,"yes":341,"no":44,"na":0,"unclear":0,"applicable":385,"rate":88.6},{"code":"CHI-18","label":"Batch number","N":385,"yes":131,"no":234,"na":20,"unclear":0,"applicable":365,"rate":35.9}],"note":null,"merged":true}},{"id":"Q07","title":"Information on commercial finished products","req":"When a commercial finished product is used, report its specification (amount or content per unit package, with units) and its production date and/or expiry date.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":7,"why":"The specification determines whether the conversion from the finished product to the actual administered dose can be checked; the production and expiry dates reflect the condition of the drug at the time of dosing.","example":"The positive-control drug, XX Granules, was a commercial finished product (XX Pharmaceutical Co., Ltd.). Specification: 10 g per sachet, equivalent to 30 g of prepared slices. Production date: 12 March 2025; expiry date: 11 March 2027.","arriveRef":"9a","prev":{"components":[{"code":"CHI-19","label":"Product specification","N":385,"yes":16,"no":349,"na":20,"unclear":0,"applicable":365,"rate":4.4},{"code":"CHI-20","label":"Production date / expiry date","N":385,"yes":1,"no":364,"na":20,"unclear":0,"applicable":365,"rate":0.3}],"note":null,"merged":true}},{"id":"Q08","title":"Authentication and retained samples","req":"When Chinese herbal materials or prepared slices are used (including slices processed by the researchers themselves), report at least one of the following: the authenticator, the authenticating institution, the authentication method, or the identification items of the standard relied upon; and report how the voucher specimen or retained sample is kept (holding institution and accession number). When the researchers themselves produce a final product that can be stored, report whether a sample of the product was retained.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":8,"why":"Counterfeit and substituted materials are common in the herb trade; if identity is not confirmed, the intervention is uncertain. Reporting only that a sample was “retained”, without the holding institution and number, still does not allow traceability. Processed products are treated as prepared slices and do not require a new botanical authentication.","example":"The herbs were authenticated as genuine by Professor XXX, School of Pharmacy, XX University, on the basis of macroscopic and microscopic identification, using the identification items under the respective monograph of the Chinese Pharmacopoeia (2020 edition). The voucher specimens are deposited in the Herbarium of XX University, accession no. LZU-TCM-2025-0138.","arriveRef":"9a","prev":{"components":[{"code":"CHI-22","label":"Method of authenticating the raw material","N":385,"yes":93,"no":149,"na":143,"unclear":0,"applicable":242,"rate":38.4},{"code":"CHI-23","label":"Voucher specimen / retained sample","N":385,"yes":33,"no":215,"na":137,"unclear":0,"applicable":248,"rate":13.3}],"note":null,"merged":true}},{"id":"Q09","title":"Processing (paozhi)","req":"If a processing step was carried out by the researchers themselves, report the processing method (e.g., stir-frying, roasting with adjuvants, calcining, steaming, charring) and the processing standard relied upon (e.g., the general processing rules of the Chinese Pharmacopoeia, or local processing specifications); where adjuvants were used, report the type of adjuvant and its proportion; and state the degree of processing (e.g., stir-fried to yellow, to scorch, or to charcoal) or the specific heating temperature and duration.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":9,"why":"Processing changes composition and properties (for example, raw and prepared rehmannia, or raw and ginger-processed pinellia, differ in effect). If any of method, basis, adjuvant, or degree is missing, the process cannot be reproduced. The requirement is limited to processing “carried out by the researchers themselves”; purchased processed products are covered by Items 6 and 8.","example":"Shudihuang (prepared rehmannia root) was processed by the researchers: raw rehmannia root was mixed evenly with yellow rice wine (30 kg wine per 100 kg raw root), sealed, and stewed over water until the liquid was absorbed and the material was black and glossy inside and out (about 24 h); it was then taken out, sun-dried until the surface mucilage was slightly dry, cut into thick slices, and dried. The processing method followed the wine-stewing method under the Shudihuang monograph of the Chinese Pharmacopoeia (2020 edition).","arriveRef":"9a","prev":{"components":[{"code":"CHI-45","label":"Name of the processing method","N":385,"yes":10,"no":0,"na":375,"unclear":0,"applicable":10,"rate":100.0},{"code":"CHI-46","label":"Adjuvants and their proportions","N":385,"yes":2,"no":3,"na":380,"unclear":0,"applicable":5,"rate":40.0},{"code":"CHI-47","label":"Degree of processing / heat control","N":385,"yes":4,"no":6,"na":375,"unclear":0,"applicable":10,"rate":40.0},{"code":"CHI-48","label":"Basis / standard for processing","N":385,"yes":3,"no":7,"na":375,"unclear":0,"applicable":10,"rate":30.0}],"note":null,"merged":true}},{"id":"Q10","title":"Extraction","req":"If the extraction step was carried out by the researchers themselves, report the type and concentration of the extraction solvent, the herb-to-solvent ratio (with units), the extraction mode (e.g., reflux, ultrasonic, decoction) and temperature, and the number and duration of extractions.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":10,"why":"Solvent, herb-to-solvent ratio, number of extractions, duration, and temperature jointly determine the chemical profile of the extract; reporting only one or two of them is not enough to reproduce the same extract.","example":"One kilogram of Sijunzi Decoction prepared slices was soaked in ten volumes of distilled water (herb-to-solvent ratio 1:10, kg/L) for 30 min and extracted by decoction at 100 °C twice for 1 h each; the two filtrates were combined.","arriveRef":"9a","prev":{"components":[{"code":"CHI-37","label":"Type and concentration of extraction solvent","N":385,"yes":177,"no":32,"na":176,"unclear":0,"applicable":209,"rate":84.7},{"code":"CHI-38","label":"Herb-to-solvent ratio","N":385,"yes":129,"no":80,"na":176,"unclear":0,"applicable":209,"rate":61.7},{"code":"CHI-39","label":"Number of extractions","N":385,"yes":142,"no":67,"na":176,"unclear":0,"applicable":209,"rate":67.9},{"code":"CHI-40","label":"Duration of each extraction","N":385,"yes":140,"no":69,"na":176,"unclear":0,"applicable":209,"rate":67.0},{"code":"CHI-41","label":"Extraction temperature / mode","N":385,"yes":173,"no":36,"na":176,"unclear":0,"applicable":209,"rate":82.8}],"note":null,"merged":true}},{"id":"Q11","title":"Concentration and drying","req":"If concentration or drying was carried out by the researchers themselves, report the specific method (e.g., vacuum concentration, atmospheric concentration, spray drying, freeze drying) and the end-point criterion (e.g., crude-herb equivalent, dry-extract yield, final volume).","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":11,"why":"The concentration and drying method affects the retention of heat-labile constituents; the end-point criterion (crude-herb equivalent, yield, etc.) is the basis for converting the amount of extract back to the amount of original herb.","example":"The combined filtrate was concentrated under reduced pressure on a rotary evaporator (50 °C, −0.09 MPa) to 2 g of crude herb per mL and then freeze-dried for 48 h to give a lyophilised powder; the dry-extract yield was 12.4% (dry extract weight / crude herb weight).","arriveRef":"9a","prev":{"components":[{"code":"CHI-42","label":"Mode of concentration","N":385,"yes":130,"no":68,"na":187,"unclear":0,"applicable":198,"rate":65.7},{"code":"CHI-43","label":"Endpoint of concentration","N":385,"yes":118,"no":80,"na":187,"unclear":0,"applicable":198,"rate":59.6}],"note":null,"merged":true}},{"id":"Q12","title":"Preparation of the final dosing formulation","req":"If the final dosing formulation was prepared by the researchers themselves, report for liquid formulations such as solutions and suspensions the type of vehicle and the final dosing concentration; for solid formulations such as granules and tablets, report the specific preparation process.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":12,"why":null,"example":"Before dosing, the lyophilised powder was dissolved in distilled water to a solution containing 0.35 g crude herb/mL, prepared freshly before each use and given by gavage at 10 mL/kg.","arriveRef":"9a","prev":{"components":[{"code":"CHI-44","label":"Reconstitution / suspension preparation","N":385,"yes":191,"no":175,"na":19,"unclear":0,"applicable":366,"rate":52.2}],"note":null,"merged":false}},{"id":"Q13","title":"Content of marker or active constituents","req":"When a standardized product is used, report the content of marker or active constituents, with units; when a single compound is used, report its purity.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":13,"why":null,"example":"The astragaloside IV content of the Astragalus extract used was 0.62 mg/g by HPLC; the single compound baicalin (XX Company) had a purity ≥ 98% (HPLC, area normalization).","arriveRef":"9a","prev":{"components":[{"code":"CHI-26","label":"Content of marker/active constituents","N":385,"yes":118,"no":105,"na":162,"unclear":0,"applicable":223,"rate":52.9}],"note":null,"merged":false}},{"id":"Q14","title":"Chemical characterisation methods and source of reference standards","req":"When chemical characterisation or quantitative analysis is carried out, report the analytical method and instruments used; when chemical reference standards, reference herbs, or reference extracts are used, report their source.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":14,"why":"Whether a content value or chromatographic profile can be trusted depends on the method, instrument, and the source of reference standards; without this information the data can neither be evaluated nor reproduced.","example":"Determination was by HPLC-DAD (Agilent 1260; C18 column, 250 mm × 4.6 mm, 5 μm; mobile phase: acetonitrile–0.1% phosphoric acid in water, gradient elution; detection wavelength 254 nm). The reference standard baicalin was purchased from the National Institutes for Food and Drug Control, China (batch no. XX).","arriveRef":"9a","prev":{"components":[{"code":"CHI-27","label":"Method of chemical characterisation","N":385,"yes":199,"no":7,"na":179,"unclear":0,"applicable":206,"rate":96.6},{"code":"CHI-28","label":"Source of chemical reference standards","N":385,"yes":64,"no":142,"na":179,"unclear":0,"applicable":206,"rate":31.1}],"note":null,"merged":true}},{"id":"Q15","title":"Quality-control testing items","req":"If quality-control testing is reported, state the specific testing items other than constituent content or single-compound purity, such as heavy metals and harmful elements, pesticide residues, microbial limits, residual solvents, or related substances, and state the test methods used.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":15,"why":"This item asks which tests were done and by what method (limited to items other than content and purity); its scope differs from Item 16, so the two are listed separately.","example":"The herbs were additionally tested for heavy metals and harmful elements (lead, cadmium, arsenic, mercury; ICP-MS), pesticide residues (GC-MS/MS), and microbial limits (plate counting); the test methods followed the relevant general chapters of the Chinese Pharmacopoeia (2020 edition).","arriveRef":"9a","prev":{"components":[{"code":"CHI-29","label":"Type of quality-control testing","N":385,"yes":12,"no":41,"na":332,"unclear":0,"applicable":53,"rate":22.6}],"note":null,"merged":false}},{"id":"Q16","title":"Judgement of quality-control results","req":"If quality-control testing is reported, state the acceptance criteria for each test result and whether it passed; when non-conforming material was found, report how it was handled.","table":2,"set":"E10","arrive":"9a","section":"I. Chinese herbal intervention: materials and preparation chain","n":16,"why":"Having tested does not mean having passed; without acceptance criteria and a conclusion, test data cannot be interpreted.","example":"All results met the limits specified for the herb in the Chinese Pharmacopoeia (2020 edition) and were judged acceptable; one batch (batch no. XX) failed the microbial limit test, was discarded, and was replaced with a new batch.","arriveRef":"9a","prev":{"components":[{"code":"CHI-30","label":"Judgement of quality-control results","N":385,"yes":19,"no":34,"na":332,"unclear":0,"applicable":53,"rate":35.8}],"note":null,"merged":false}},{"id":"Q17","title":"Name of the TCM syndrome","req":"If the study involves a TCM syndrome or a disease–syndrome combined model, report the specific name of the TCM syndrome studied.","table":2,"set":"E10","arrive":"9a","section":"II. Animal model","n":17,"why":"The syndrome name is part of the animal model built in this study; it differs from the background information “before the animals entered this study” referred to in ARRIVE 8b, so it belongs under 9a.","example":"This study established a rat model of Spleen-qi deficiency syndrome; TCM syndrome name: Spleen-qi deficiency syndrome.","arriveRef":"9a","prev":{"components":[{"code":"CHI-05","label":"Specific name of the TCM syndrome","N":385,"yes":13,"no":0,"na":372,"unclear":0,"applicable":13,"rate":100.0}],"note":null,"merged":false}},{"id":"Q18","title":"Model-induction method","req":"If disease, syndrome, or disease–syndrome combined induction was carried out by the researchers, report the specific induction method, including the induction means, the procedure, and the key operational steps.","table":2,"set":"E10","arrive":"9a","section":"II. Animal model","n":18,"why":"There is no generally accepted standard procedure for preparing syndrome models, and one syndrome can be induced in several ways; without the specific procedure, the model cannot be reproduced.","example":"The Spleen-qi deficiency model was induced by a combined “overwork + irregular diet” method: rats swam daily to exhaustion (water temperature 25 ± 1 °C, tail load 5% of body weight) and were fasted on alternate days and fed freely on the following day, for 14 consecutive days. The blank control group was left untreated and housed normally.","arriveRef":"9a","prev":{"components":[{"code":"CHI-06","label":"Model-induction method","N":385,"yes":343,"no":6,"na":36,"unclear":0,"applicable":349,"rate":98.3}],"note":null,"merged":false}},{"id":"Q19","title":"Model validation","req":"If a disease, syndrome, or disease–syndrome combined animal model is used, report the indicators or methods used to validate the model.","table":2,"set":"E10","arrive":"9a","section":"II. Animal model","n":19,"why":"The threshold for judging successful induction belongs under 3a (Item 1), whereas the indicators or methods used to validate the model belong under 9a (animal model); they cut across the topic in different ways.","example":"On day 15 of induction, the model was validated by a composite score of food intake, body weight, stool consistency, activity, and fur condition, together with the serum D-xylose excretion rate; the model group differed significantly from the blank group (P < 0.05).","arriveRef":"9a","prev":{"components":[{"code":"CHI-08","label":"Criteria for successful modelling","N":385,"yes":256,"no":93,"na":36,"unclear":0,"applicable":349,"rate":73.4}],"note":"The original item was a combined statement (“judging successful model induction or validating the model”); it has since been split and narrowed, so the data are for reference only.","merged":false}},{"id":"Q20","title":"Composition and dose of control substances","req":"If a control group involving a drug or other substance is included, report the name, composition, and dose of the control substance; for a placebo, report the name and amount of each excipient; for a positive-control or other drug comparator, report the specific drug name, manufacturer (or supplier), batch number, and dose.","table":2,"set":"E10","arrive":"9a","section":"III. Intervention delivery","n":20,"why":"The composition of the control substance is the frame of reference for the effect; positive-control drugs are mostly marketed products whose manufacturer and batch also affect comparability.","example":"The model control group received distilled water by gavage in the same volume as the test drug; the placebo group received a suspension containing 3% starch, 1% dextrin, and 0.1% caramel colour (w/v); the positive-control group received XX Granules (XX Pharmaceutical Co., Ltd., batch no. XX, specification: 10 g per sachet) at 3.5 g/kg (calculated as crude herb).","arriveRef":"9a","prev":{"components":[{"code":"CHI-31","label":"Composition of the control substance","N":385,"yes":228,"no":12,"na":145,"unclear":0,"applicable":240,"rate":95.0}],"note":null,"merged":false}},{"id":"Q21","title":"Placebo matching","req":"If a placebo is used, describe how well it matches the test drug in appearance, smell, taste, dosage form, route of administration, and other characteristics.","table":2,"set":"E10","arrive":"9a","section":"III. Intervention delivery","n":21,"why":"In animal experiments, a mismatched placebo mainly affects food intake and stress (differences in smell and taste directly change intake), not only blinding.","example":"The placebo was prepared from starch, dextrin, caramel colour, and a small amount of herbal flavouring; its colour (brown), turbidity, and smell matched the test drug, and the dosage form (suspension) and route (gavage) were the same. Taste was not matched, which is stated in the limitations.","arriveRef":"9a","prev":{"components":[{"code":"CHI-32","label":"Physical matching of the placebo","N":385,"yes":0,"no":2,"na":383,"unclear":0,"applicable":2,"rate":0.0}],"note":null,"merged":false}},{"id":"Q22","title":"Rationale for the choice of model-induction method","req":"If disease, syndrome, or disease–syndrome combined induction was carried out by the researchers, state the rationale for choosing the induction method (including any modification), such as cited literature, previous methods, or mechanistic explanations.","table":1,"set":"E10","arrive":"9d","n":22,"why":"TCM models are often modified from existing methods; without a stated rationale, readers cannot judge whether the model is valid. The parenthetical covers both adopting an existing method unchanged and modifying it.","example":"The Spleen-qi deficiency model followed the rhubarb gavage plus exhaustive swimming method reported in the literature [15]. Compared with the original method, this study reduced the gavage dose of rhubarb decoction from 10 g/kg to 7 g/kg, because mortality in the original-dose group was high in a pilot experiment (3/10).","arriveRef":"9d","prev":{"components":[{"code":"CHI-07","label":"Rationale for model induction","N":385,"yes":201,"no":148,"na":36,"unclear":0,"applicable":349,"rate":57.6}],"note":null,"merged":false}},{"id":"Q23","title":"Source of the intervention protocol and basis for modifications","req":"Report the theoretical, literature, or inherited source of the Chinese herbal intervention; if the formula is self-devised, state this explicitly; when an individualized modified formula or syndrome-based modification is used, report the basis or criteria for adding, removing, or adjusting the amount of herbs.","table":1,"set":"E10","arrive":"9d","n":23,"why":"The basis of the protocol comes from the classics, the literature, or teacher–disciple lineage, and syndrome-based modification makes the actual composition of a formula of the same name differ; both answer the question “on what grounds was this formula prescribed?”, hence they are merged. The word “dose” is kept for Item 24; this item uses “adjustment of herb amounts”.","example":"Sijunzi Decoction is from Taiping Huimin Heji Ju Fang and was composed of the original herbs. In response to loose stools and dampness predominance in the model animals, the amount of Fuling was adjusted from 9 g to 12 g, on the principle that “for dampness predominance with loose stools, use more Fuling to strengthen the spleen and drain dampness” (literature [9]).","arriveRef":"9d","prev":{"components":[{"code":"CHI-15","label":"Provenance / source of the intervention","N":385,"yes":317,"no":68,"na":0,"unclear":0,"applicable":385,"rate":82.3},{"code":"CHI-16","label":"Basis for modification of a base formula","N":385,"yes":5,"no":21,"na":359,"unclear":0,"applicable":26,"rate":19.2}],"note":null,"merged":true}},{"id":"Q24","title":"Basis for dose and treatment duration","req":"Report the basis for determining the dose and treatment duration, such as human-equivalent dose conversion, previous literature, pilot results, or empirical setting.","table":1,"set":"E10","arrive":"9d","n":24,"why":null,"example":"The rat dose was converted from the human-equivalent dose: adult clinical daily dose 33 g crude herb per 60 kg; with a body-surface-area conversion factor of 6.3, this gives about 3.47 g crude herb/(kg·d), rounded to 3.5 g/kg. The treatment duration of 14 d was determined from pilot results and the literature [12].","arriveRef":"9d","prev":{"components":[{"code":"CHI-25","label":"Basis for dose and treatment duration","N":385,"yes":208,"no":177,"na":0,"unclear":0,"applicable":385,"rate":54.0}],"note":null,"merged":false}},{"id":"Q25","title":"TCM theoretical rationale in the background","req":"For interventions such as single herbs, compound formulas, and proprietary Chinese medicines, state in the background/introduction the TCM-theory rationale for choosing the intervention, such as syndrome, therapeutic principle, effect, nature and flavour, meridian tropism, or formula composition principles.","table":1,"set":"REC","arrive":"12a","n":25,"why":"Together with Item 28, this forms a chain of “theoretical rationale – intervention – interpretation of results”.","example":"Sijunzi Decoction is a basic formula that tonifies qi and strengthens the spleen, indicated for Spleen-qi deficiency syndrome. In the formula, Renshen strongly tonifies the original qi, Baizhu strengthens the spleen and dries dampness, Fuling drains dampness and strengthens the spleen, and Gancao harmonizes the other herbs; together they boost qi and strengthen the spleen. This study aimed to observe its effect on the gut microbiota of rats with Spleen-qi deficiency syndrome.","arriveRef":"12a","prev":{"components":[{"code":"CHI-04","label":"TCM-theory rationale","N":385,"yes":280,"no":105,"na":0,"unclear":0,"applicable":385,"rate":72.7}],"note":null,"merged":false}},{"id":"Q26","title":"Housing environment or diet related to model induction","req":"If induction of a disease, syndrome, or disease–syndrome combined animal model depends on a specific housing environment or diet (e.g., cold, high-fat diet), report the key parameters of the environment or diet of each group, such as temperature, humidity, light cycle, housing density, and duration.","table":1,"set":"REC","arrive":"15","n":26,"why":"Induction of some syndrome models depends on a specific housing environment or diet; these parameters are both induction conditions and potential confounders. Reversed day–night cycles and single-housed isolation are common induction methods, so the examples include light cycle and housing density.","example":"Rats in the cold-syndrome model were placed in an artificial climate chamber at 4 ± 1 °C for 2 h per day and were otherwise housed with the control group in a room at 22 ± 2 °C and 50 ± 10% relative humidity. All groups had a 12 h/12 h light cycle (lights on at 07:00) and three rats per cage, for 14 d.","arriveRef":"15","prev":null},{"id":"Q27","title":"Syndrome score used as a humane endpoint","req":"If a TCM syndrome score (or one of its sign items) is used as a humane endpoint, state the composition of the score, the pre-specified termination threshold, and its basis.","table":1,"set":"REC","arrive":"16c","n":27,"why":"If a syndrome score is used as an endpoint without a pre-specified threshold, the actual observation period will vary with the observer, affecting both welfare judgements and the comparability of outcomes.","example":"The rat Spleen-qi deficiency score (food intake, body weight, stool consistency, activity, and fur condition; 0–3 points each; maximum 15) was monitored daily. The pre-specified termination threshold was a score ≥ 12 or body weight more than 20% below baseline; animals reaching the threshold were euthanised. The threshold was set on the basis of the literature [20] and the institutional animal welfare guidelines.","arriveRef":"16c","prev":null},{"id":"Q28","title":"TCM theory in the discussion","req":"For interventions such as single herbs, compound formulas, and proprietary Chinese medicines, use TCM theory in the discussion — such as the effects of the herbs, improvement of the syndrome, nature and flavour, and meridian tropism — to interpret the results; this may be supplemented by active constituents and modern pharmacological mechanisms.","table":1,"set":"REC","arrive":"17a","n":28,"why":"If results are not related back to TCM theory, Chinese medicine research is left with pharmacological narrative only. Adding modern pharmacology is optional; reporting modern mechanisms is not required.","example":"Sijunzi Decoction restored food intake and body weight in rats with Spleen-qi deficiency syndrome, consistent with its effect of “boosting qi and strengthening the spleen”: Renshen and Baizhu tonify qi and strengthen the spleen, and Fuling drains dampness and strengthens the spleen, jointly improving the poor appetite and loose stools caused by failure of the spleen to transport and transform. This effect may also be related to modulation of the gut microbiota by constituents such as ginsenoside Rb1.","arriveRef":"17a","prev":{"components":[{"code":"CHI-34","label":"Interpretation of results using TCM theory","N":385,"yes":75,"no":310,"na":0,"unclear":0,"applicable":385,"rate":19.5}],"note":null,"merged":false}},{"id":"Q29","title":"Mechanistic explanation of adverse reactions","req":"If adverse reactions or toxic side effects in animals are reported, provide an explanation at the mechanistic level.","table":1,"set":"REC","arrive":"17a","n":29,"why":null,"example":"Mild swelling of the toes occurred in 3/10 rats in the high-dose group. In TCM theory, licorice is sweet in flavour, and a large amount tends to cause stagnation and promote dampness; modern pharmacological studies suggest that this may be related to inhibition of 11β-hydroxysteroid dehydrogenase by glycyrrhetinic acid, leading to sodium and water retention.","arriveRef":"17a","prev":{"components":[{"code":"CHI-35","label":"Interpretation of the mechanism of adverse reactions","N":385,"yes":10,"no":14,"na":361,"unclear":0,"applicable":24,"rate":41.7}],"note":null,"merged":false}},{"id":"Q30","title":"Limitations specific to Chinese herbal medicine research","req":"State in the discussion the limitations related to the characteristics of Chinese herbal medicine research, such as limited translatability of syndrome animal models to human syndromes, incompletely elucidated multi-component mechanisms of compound formulas, quality control of the herbal materials, and batch variation.","table":1,"set":"REC","arrive":"17b","n":30,"why":null,"example":"Limitations of this study include: (1) the rat model of Spleen-qi deficiency syndrome differs from the syndrome characteristics of clinical patients, so translation of the results to humans should be cautious; (2) Sijunzi Decoction contains many constituents, and the material basis and mechanism of its action are not fully elucidated; (3) the herbs came from a single batch, and the effect of batch-to-batch variation on the results was not evaluated.","arriveRef":"17b","prev":{"components":[{"code":"CHI-36","label":"Limitations specific to CHM research","N":385,"yes":111,"no":274,"na":0,"unclear":0,"applicable":385,"rate":28.8}],"note":null,"merged":false}},{"id":"Q31","title":"Disease and syndrome in the title","req":"State in the title the disease and/or the specific TCM syndrome that the study concerns; for a disease–syndrome combined model, report both the disease name and the specific syndrome name, avoiding confusing the two.","table":1,"set":"EXT","arrive":"title","n":31,"why":null,"example":"Example titles: “Effects of Sijunzi Decoction on the gut microbiota of rats with Spleen-qi deficiency syndrome” (syndrome); “Effects of Shenling Baizhu San on rats with ulcerative colitis of the spleen deficiency with dampness predominance syndrome” (disease + syndrome; a disease–syndrome combined model, with the disease name and the syndrome name written separately).","arriveRef":null,"prev":{"components":[{"code":"CHI-01","label":"Type of study object","N":385,"yes":345,"no":14,"na":26,"unclear":0,"applicable":359,"rate":96.1}],"note":null,"merged":false}},{"id":"Q32","title":"Name of the intervention in the title","req":"Report the specific name of the Chinese herbal intervention in the title; avoid generic terms alone, such as “Chinese medicine”, “Chinese herbs”, or “botanical drug”.","table":1,"set":"EXT","arrive":"title","n":32,"why":null,"example":"Better: “Effects of Sijunzi Decoction on … in rats with Spleen-qi deficiency syndrome” (the specific formula name is given). Not specific enough: “Effects of a Chinese herbal compound on …”; “Effects of Chinese herbs on …”.","arriveRef":null,"prev":{"components":[{"code":"CHI-02","label":"CHM name in the title","N":385,"yes":381,"no":4,"na":0,"unclear":0,"applicable":385,"rate":99.0}],"note":null,"merged":false}}],"prevN":385}</script>
+<script>
+(function(){
+'use strict';
+var D = JSON.parse(document.getElementById('app-data').textContent);
+var S = {
+lang: 'en',
+qLabel: function(n){ return 'Item '+n; },
+range: function(a, b){ return 'Items '+a+'–'+b; },
+secRange: function(a, b, c){ return 'Items '+a+'–'+b+' · '+c+(c === 1 ? ' item' : ' items'); },
+setFull: {E10:'Essential 10 (ARRIVE items 1–10)', REC:'Recommended Set (ARRIVE items 11–21)', EXT:'Outside the ARRIVE framework (original candidates kept for review)'},
+resetLabel: 'Clear my answers and suggestions',
+resetConfirm: 'Click again to confirm (cannot be undone)',
+optional: '(optional)',
+cancel: 'Cancel', del: 'Delete', confirmDel: 'Click again to confirm deletion',
+saveNoStoreLong: 'Automatic saving is not available here; please download your response file when you finish',
+saveHint: 'Your answers are saved automatically in this device’s browser',
+saveAtLong: function(t){ return 'Saved automatically at '+t+' (on this device only)'; },
+saveNoStoreShort: 'Automatic saving is not available here; please download your response file',
+saveAtShort: function(t){ return 'Saved automatically at '+t; },
+saving: 'Saving…',
+anchorOutside: 'Outside the ARRIVE framework',
+anchorTitle: 'Title (ARRIVE has no separate title item)',
+optOutside: 'Outside the ARRIVE framework (a new item)',
+optGroups: [['E10','Essential 10'],['REC','Recommended Set']],
+optRow: function(r){ return r.id+'  '+r.name+(r.ext?' (extended)':' (not extended)'); },
+optOther: 'Other',
+cardTitle: function(isNew){ return isNew ? 'Suggested new item (outside the ARRIVE framework)' : 'Suggested extension'; },
+cardHint: 'Optional — leaving this blank does not affect submission. If you have no suggestion or clicked by mistake, click “Cancel” at the top right to close it.',
+cardLabel: function(isNew){ return 'Suggested '+(isNew ? 'new' : 'extended')+' reporting requirement'; },
+cardPh: function(isNew){ return isNew ? 'Write the new reporting requirement you suggest, preferably phrased as “Papers should report …”.' : 'Write the extended reporting requirement you suggest, preferably phrased as “Papers should report …”.'; },
+reasonLabel: 'Rationale or evidence',
+reasonPh: 'Why this requirement is needed; please also cite any literature, guidance or practice that supports it.',
+whereLabel: 'Placed under', whereNote: '(change it here if it is misplaced)',
+zoneBtn: function(out, has, plain){ return out ? (has ? '+ Suggest another new item' : '+ Suggest a new item') : has ? '+ Suggest another extension' : (plain ? '+ Suggest an extension' : '+ Suggest an extension under this item'); },
+cj: 'Cannot judge', todo: 'Unrated', hasNote: 'Has suggestion', noExt: 'Not extended',
+groups: [['中药领域','Chinese herbal medicine (CHM)'],['动物实验领域','Animal experimentation'],['研究方法学与报告指南领域','Research methodology & reporting guidelines'],['期刊编辑领域','Journal editing']],
+fam: [['非常熟悉','Very familiar'],['比较熟悉','Fairly familiar'],['一般熟悉','Moderately familiar'],['不太熟悉','Not very familiar'],['很不熟悉','Not at all familiar']],
+basis: [['practice','Practical experience'],['theory','Theoretical and professional knowledge'],['literature','Literature, guidelines or peer knowledge'],['intuition','Intuition']],
+levels: [['大','High'],['中','Medium'],['小','Low']],
+pfNote: 'Your name and email are used only by the research team to identify your response and to contact you later; they will not be disclosed to other experts.',
+pfName: 'Name', pfEmail: 'Email', pfTitle: 'Title / position', pfYears: 'Years of experience', pfOrg: 'Institution / country',
+pfGroup: 'Primary expertise group (choose one)', pfSecondary: 'Secondary expertise (choose any)', pfFam: 'Familiarity with this topic (choose one)',
+pfBasis: 'How much each source influenced your judgements (one answer per row; used only for a descriptive expertise-coefficient analysis, not to weight items)',
+pfSummary: 'Expert information', pfDone: 'Completed', pfTodo: 'To complete',
+t2Callout: function(n, range){ return 'This item has '+n+' CHM extensions ('+range+') in Table 2 below. To suggest another extension under 9a, go to the end of Table 2.'; },
+gotoT2: 'Go to Table 2',
+wxwarn: 'You are opening this page in WeChat’s built-in browser, where the download and share functions needed to submit your responses may not work. Tap “…” at the top right and choose “Open in browser” (or copy the link into your phone’s or computer’s own browser) before filling it in.',
+eyebrow: function(v){ return 'Round 1 Delphi expert survey · item draft '+v; },
+h1: 'ARRIVE-CHM: a Chinese herbal medicine extension of the ARRIVE guidelines for animal experiments',
+lede: function(N){ return 'Please rate the importance of each of the '+N+' candidate reporting requirements for Chinese herbal medicine (CHM). This survey asks what information should be reported in animal experiments on CHM, in order to improve transparency, reproducibility and interpretability; it does not assess the quality, results or efficacy of any particular experiment. If you think something is missing, you may suggest an extension under any ARRIVE item (including items that have no CHM extension yet); if something outside the ARRIVE framework needs to be reported, you may suggest a new item. Estimated time: 30–45 minutes; you can complete it in several sittings.'; },
+progressTop: function(d, N){ return 'Rated <b>'+d+'</b> / '+N; },
+notesSummary: 'Instructions',
+notesBody: function(N){ return '<ul class="notes">'
+  + '<li><b>What is rated</b><span>Items 1 to '+N+' are all candidate CHM extension reporting requirements, and each is rated independently. The original ARRIVE 2.0 requirements and category headings are not candidate items and are not rated.</span></li>'
+  + '<li><b>Numbering</b><span>Items are numbered consecutively from 1 to '+N+' in the order they appear in the tables, which follows the order of the ARRIVE items.</span></li>'
+  + '<li><b>Extensions and new items</b><span>If you think an ARRIVE item (including those marked “Not extended”) needs a CHM extension, click “Suggest an extension” under that item in Table 1. If a CHM reporting requirement does not belong under any ARRIVE item, suggest a new item under “Outside the ARRIVE framework” further down the page. These suggestions are not rated in this round: the research team will collate and de-duplicate them and check their basis, and suitable ones will enter the next round as new items.</span></li>'
+  + '<li><b>Suggested revisions</b><span>If you think an item needs adjusting, write your final suggestion directly in its “Suggested revision” box: which ARRIVE item or topic it should move to, the wording you propose, and any specific plan to merge it, split it, or move it to the explanatory document.</span></li>'
+  + '<li><b>Saving and submitting</b><span>Your answers are saved automatically in this device’s browser; close the page and reopen it in the same browser to continue. When you have finished, click “Submit responses” at the bottom of the page and follow the prompt to email the response file to the research team. To continue on another phone, computer or browser, first submit from the original device (or download the response file under “Trouble submitting?”), then on the new device expand “Switched phone, computer or browser?” at the top of the page and import that file.</span></li></ul>'
+  + '<div class="scoreguide"><div><b>1–3</b>Not important</div><div><b>4–6</b>Important but not critical, or uncertain</div><div><b>7–9</b>Critical; should be included</div></div>'
+  + '<p class="q" style="margin:6px 0 0;font-size:13px;color:var(--muted)">Importance is rated on an integer scale of 1–9; if you cannot judge an item, choose “Cannot judge”.</p>'; },
+t1Head: 'Table 1. All ARRIVE 2.0 items and their CHM extensions',
+t1Intro: function(n){ return 'All '+n+' ARRIVE items are listed in ARRIVE order. Items that have an extension list their candidate items; items marked “Not extended” have no candidate item, and you may suggest an extension under them.'; },
+t1Range: 'Table 1 display',
+viewAll: function(n){ return 'All '+n+' ARRIVE items'; },
+viewExt: function(n){ return 'Extended items only ('+n+')'; },
+showEnLabel: '',
+t2Head: function(range, n){ return 'Table 2. ARRIVE 9a Procedures: detailed CHM extensions ('+range+'; '+n+' items)'; },
+t2Intro: 'Organised in three stages that follow the practical workflow. The stage headings are only an index; the specific reporting requirement of each item is what counts.',
+t2Orig: 'Original 9a requirement: ',
+t2Add: 'If you think CHM extension items are missing under ARRIVE 9a (Procedures: what was done, how, and with what), please suggest an extension here:',
+outHead: 'Suggestions for new items outside the ARRIVE framework',
+outIntro: 'If a CHM reporting requirement cannot be placed under any ARRIVE item above, suggest it here as a new item. If it can be placed under an ARRIVE item, please suggest an extension under that item in Table 1 instead.',
+outNote: 'Extension and new-item suggestions are submitted as comments only and are not rated in this round. The research team will collate and de-duplicate them and check their basis; suitable ones will enter the next round as new items.',
+exportHead: 'Submit your responses',
+exportIntro: 'When you have finished, click “Submit responses” below and follow the prompt to email the response file to the research team.',
+mailLine: 'Send responses to: ', copyMail: 'Copy email address', submitBtn: 'Submit responses',
+troubleSummary: 'Trouble submitting?',
+troubleBody: 'After you click “Submit responses”: on a phone, a share menu opens — choose an email app; on a computer, the response file is downloaded and an email draft is opened. If nothing opens, log in to your own email, write a new message to the address above, and attach the downloaded response file. If that still does not work, click “Copy response text” and paste it into the body of the email.',
+dlOnly: 'Download response file only', copyText: 'Copy response text',
+foot: 'ARRIVE source: Percie du Sert N, et al. The ARRIVE guidelines 2.0. PLOS Biology, 2020. <a href="https://doi.org/10.1371/journal.pbio.3000410" target="_blank" rel="noopener">doi:10.1371/journal.pbio.3000410</a>. ARRIVE wording on this page is taken from the official English checklist.',
+expRated: function(done, N, profOk){ return 'Rated <b>'+done+'</b> / '+N+'. '+(profOk ? '' : 'Expert information is not yet complete.'); },
+unratedAria: 'Unrated items',
+allRated: 'All items have been rated.',
+expSug: function(nExt, nNew, any){ return 'Suggested extensions: <b>'+nExt+'</b>; suggested new items (outside the framework): <b>'+nNew+'</b>'+(any ? ' (suggestions only; not rated)' : ' (all optional)')+'.'; },
+sugPosAria: 'Where the suggestion sits', posOutside: 'Outside framework', posTitle: 'Title',
+crumb2: function(sec){ return 'Table 2 · ARRIVE 9a Procedures · '+sec; },
+crumbTitle: 'Table 1 · Outside the ARRIVE framework (candidates kept for review) · Title candidates',
+crumb1: function(arrive, name){ return 'Table 1 · ARRIVE '+arrive+' '+name; },
+prevHead: 'Prior reporting quality',
+prevSub: function(n){ return n+' articles on CHM animal experiments'; },
+prevMerged: function(n){ return 'This item merges '+n+' original items; the earlier extraction results for each original item are listed below.'; },
+prevMeta: function(c){ return 'NA '+c.na+(c.unclear ? ' · unclear '+c.unclear : ''); },
+prevCount: function(c){ return c.yes+' / '+c.applicable+' articles'; },
+prevFoot: 'Proportion = articles that reported the item ÷ applicable articles (NA and unclear excluded). Articles were assessed against the wording of the original items, which may differ somewhat from the current wording; the figures are for reference only and are not a basis for keeping or dropping items.',
+arriveHead: 'Mapped ARRIVE 2.0 item',
+noArrive: 'ARRIVE 2.0 has no separate title item; ARRIVE item 11 concerns the abstract, and this item does not belong directly under item 11.',
+arriveItem: 'ARRIVE item',
+arriveName: function(a){ return a.nameEn; },
+arriveQuoteZh: function(a, esc){ return ''; },
+scoreAria: function(i){ return 'Score '+i; },
+sideAria: 'Rating and suggestions',
+scoreHead: 'Importance rating', required: 'required',
+scoreQ: 'How important is this reporting requirement for the transparent reporting, reproducibility and interpretability of animal experiments on CHM?',
+scaleAria: 'Importance rating, 1 to 9',
+band1: 'Not important', band2: 'Important but not critical, or uncertain', band3: 'Critical; should be included',
+noteLabel: 'Suggested revision',
+noteHint: 'If you think it needs adjusting, please write your final suggestion directly: which ARRIVE item or topic it should move to, the wording you propose, or a plan to merge it, split it, or move it to the explanatory document.',
+notePh: 'E.g., suggest changing “…” to “…”',
+prev: '‹ Previous', next: 'Next ›', overview: 'Overview', finishBack: 'Done — back to overview', finish: 'Done',
+backHome: '‹ Overview',
+where: function(n, N){ return 'Item '+n+'<small>of '+N+'</small>'; },
+ratedShort: 'Rated',
+reqHead: 'Proposed CHM extension reporting requirement',
+whyLabel: 'Rationale for this item',
+exHead: 'Reporting example', exSub: 'How this is typically reported in a paper',
+exNote: 'Examples were drafted by the research team solely to illustrate how to report; they are not quoted from any specific publication, and all herb names, values and units in them are fictitious.',
+dockAria: 'Item navigation',
+dockState: function(a){ return a.cj ? 'Cannot judge' : (a.score != null ? a.score+' / 9' : 'Unrated'); },
+importCancelled: 'Import cancelled.',
+resumeSummary: 'Switched phone, computer or browser? Continue your earlier progress',
+resumeBtn: 'Import the response file you downloaded earlier and continue',
+resumeConfirm: 'Confirm import and replace',
+rErrRead: 'This file could not be read; please try again.',
+rErrJson: 'This file could not be read; please choose the .json response file you downloaded earlier.',
+rErrNotOurs: 'This is not a response file from this survey.',
+rHave: function(a, s){ return 'This device already holds '+a+' rating'+(a === 1 ? '' : 's')+' and '+s+' suggestion'+(s === 1 ? '' : 's')+'; importing will replace them with the contents of the file.'; },
+rDone: function(done, N, s){ return 'Responses imported: rated '+done+' / '+N+', '+s+' suggestion'+(s === 1 ? '' : 's')+'. You can continue filling in.'; },
+rVer: function(v1, v2){ return 'Note: the item-draft version of this file ('+v1+') differs from this page ('+v2+'); only items with matching IDs were imported.'; },
+tx: {
+  head: function(v){ return 'ARRIVE-CHM Round 1 Delphi response (item draft '+v+')'; },
+  who: function(n, e){ return 'Name: '+(n||'(not provided)')+'   Email: '+(e||'(not provided)'); },
+  grp: function(g, f, t, y, o){ return 'Primary expertise group: '+(g||'(not provided)')+'   Familiarity: '+(f||'(not provided)')+'   Title: '+(t||'')+'   Years of experience: '+(y||'')+'   Institution / country: '+(o||''); },
+  sec: function(list, basis){ return 'Secondary expertise: '+(list.join(', ')||'none')+'   Basis of judgement: '+basis.map(function(b){ return b[0]+' = '+(b[1]||'—'); }).join('; '); },
+  rated: function(r, t, at){ return 'Rated '+r+' / '+t+'   Exported at: '+at; },
+  ans: function(label, a){ return label+' | '+(a.cannotJudge ? 'Cannot judge' : (a.importance != null ? 'Score '+a.importance : 'Not rated'))+(a.note ? ' | Suggested revision: '+a.note.replace(/\s*\n\s*/g, ' ') : ''); },
+  sections: [['extend','Suggested extensions (suggestions only; not rated in this round)','Suggested extended reporting requirement'],['new','Suggested new items (outside the ARRIVE framework; suggestions only; not rated in this round)','Suggested new reporting requirement']],
+  count: function(title, n){ return title+': '+n+' in total'; },
+  anchor: function(i, label){ return '['+i+'] Placed under: '+label; },
+  req: function(label, r){ return '    '+label+': '+(r||'(not provided)').replace(/\s*\n\s*/g, ' '); },
+  reason: function(r){ return '    Rationale or evidence: '+r.replace(/\s*\n\s*/g, ' '); }
+},
+needProfile: 'Please first fill in your name and a valid email address under “Expert information” at the top of the page; the research team uses them to identify your response.',
+copiedMail: function(a){ return 'Copied email address '+a+'.'; },
+copyMailFail: 'Could not copy automatically; please select the email address above manually.',
+noteTail: function(unrated, sug){ return (unrated > 0 ? ' ('+unrated+' item'+(unrated === 1 ? '' : 's')+' still unrated)' : '')+(sug ? ' (includes '+sug+' suggestion'+(sug === 1 ? '' : 's')+')' : ''); },
+dataNote: '(The data block above lets the research team import your response; please do not edit or delete it.)',
+copiedText: function(note){ return 'Response text copied (it ends with a data block for the research team to import — please do not edit or delete it). You can paste it into the body of an email to the research team.'+note; },
+copyFail: function(note){ return 'Could not copy automatically; please select all the text in the box below and copy it.'+note; },
+shareTitle: function(n){ return 'ARRIVE-CHM Round 1 Delphi response ('+n+')'; },
+shareText: function(n){ return 'Dear research team,\nPlease find my response file attached.\n'+n; },
+shareOpened: function(addr, copied, note){ return 'The share sheet is open. Choose an email app and enter '+addr+' as the recipient '+(copied ? '(the address has been copied; you can paste it)' : '(or tap “Copy email address” above)')+'. Confirm that the response file is attached, then send. Your submission counts only once the email has been sent.'+note; },
+shareCancelSubmit: 'Cancelled. Click “Submit responses” again when you are ready.',
+share2Title: 'ARRIVE-CHM Round 1 Delphi response',
+share2Text: function(n){ return 'Response file ('+n+')'; },
+share2Opened: function(note){ return 'The share sheet is open; choose email (or another app) to send the file to the research team.'+note; },
+share2Cancel: 'Sharing cancelled.',
+share2Fail: 'This device cannot share directly; please use “Download response file only” instead.',
+saveDeclined: 'Save cancelled.',
+saveFailed: 'The response file could not be downloaded automatically. Expand “Trouble submitting?” below, click “Copy response text”, and paste it into the body of an email.',
+mailSubject: function(n){ return 'ARRIVE-CHM Round 1 Delphi response ('+n+')'; },
+mailBody: function(base, n){ return 'Dear research team,\n\nPlease find my response file attached ('+base+'.json, downloaded to my device; please add it to this email as an attachment).\n\n'+n; },
+mailStatus: function(base, addr, note){ return 'The response file '+base+'.json has been downloaded, and we tried to open an email draft addressed to '+addr+'. Please attach the file you just downloaded and send it. If no mail app opened (for example, because you use webmail), log in to your email, write a new message to that address and attach this file. Your submission counts only once the email has been sent.'+note; },
+fileMade: function(base, addr, note){ return 'The file '+base+'.json has been created; please email it to '+addr+'.'+note+' If nothing happens, use “Copy response text” instead.'; },
+noDownload: 'Direct download is not supported in this environment; please use “Copy response text” instead.'
+};
+
+var ITEMS = D.items, N = ITEMS.length;
+var T2 = ITEMS.filter(function(i){ return i.table === 2; }), T2_RANGE = T2.length ? S.range(T2[0].n, T2[T2.length-1].n) : '';
+var BY = {}; ITEMS.forEach(function(i){ BY[i.id] = i; });
+var SET_FULL = S.setFull;
+/* Display switches: set to false to hide a block without touching anything else. */
+var SHOW_PREVALENCE = true, SHOW_EXAMPLES = true;
+
+var KEY = 'arrive-chm-delphi-r1-' + D.version;
+var store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+var canStore = true;
+var ROWS = D.arriveRows, ROW_BY = {};
+ROWS.forEach(function(r){ ROW_BY[r.id] = r; });
+var REAL_ROWS = ROWS.filter(function(r){ return r.id !== 'title'; });
+var EXT_N = REAL_ROWS.filter(function(r){ return r.ext; }).length, PLAIN_N = REAL_ROWS.length - EXT_N;
+var viewExt = false, showEn = false;      /* table-1 display options (kept while the page is open) */
+var RESET_LABEL = S.resetLabel;
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function paras(t){ return String(t||'').split('\n').filter(Boolean).map(function(p){ return '<p>'+esc(p)+'</p>'; }).join(''); }
+function pad(n){ return (n<10?'0':'')+n; }
+function qLabel(it){ return S.qLabel(it.n); }
+function lblOf(list, v){ var f = list.filter(function(x){ return x[0] === v; })[0]; return f ? f[1] : v; }
+function normId(id){ var m = /^(?:CHM-|Q)0*(\d+)$/i.exec(String(id == null ? '' : id).trim()); return m ? 'Q'+pad(Number(m[1])) : id; }
+function migrateAnswers(src){ var out = {}; Object.keys(src || {}).forEach(function(k){ out[normId(k)] = src[k]; }); return out; }
+function idToHash(id){ return 'q'+id.slice(1); }
+
+function load(){
+  try{
+    var t = '__t'; localStorage.setItem(t,'1'); localStorage.removeItem(t);
+    var raw = localStorage.getItem(KEY);
+    if(raw){ var o = JSON.parse(raw); if(o && typeof o==='object'){
+      store.profile=o.profile||{}; store.answers=migrateAnswers(o.answers||{}); store.updatedAt=o.updatedAt||null;
+      store.additions = Array.isArray(o.additions) ? o.additions.filter(function(a){ return a && a.id && isFilled(a); }) : [];
+      store.addSeq = Math.max(Number(o.addSeq)||0, store.additions.length);
+    } }
+  }catch(e){ canStore = false; }
+}
+var saveTimer = null;
+function persist(){
+  store.updatedAt = new Date().toISOString();
+  try{ localStorage.setItem(KEY, JSON.stringify(store)); canStore = true; }catch(e){ canStore = false; }
+  updateSaveNote();
+}
+function persistSoon(){ clearTimeout(saveTimer); saveTimer = setTimeout(persist, 350); }
+function ans(id){ if(!store.answers[id]) store.answers[id] = {score:null, cj:false, note:''}; return store.answers[id]; }
+function isDone(id){ var a = store.answers[id]; return !!(a && (a.score != null || a.cj)); }
+function doneCount(){ return ITEMS.filter(function(i){ return isDone(i.id); }).length; }
+function hasNote(id){ var a = store.answers[id]; return !!(a && a.note && a.note.trim()); }
+function hhmm(iso){ if(!iso) return ''; var d = new Date(iso); return pad(d.getHours())+':'+pad(d.getMinutes()); }
+function saveNoteText(){
+  if(!canStore) return {t:S.saveNoStoreLong, w:true};
+  if(!store.updatedAt) return {t:S.saveHint, w:false};
+  return {t:S.saveAtLong(hhmm(store.updatedAt)), w:false};
+}
+function updateSaveNote(){
+  var s = saveNoteText();
+  document.querySelectorAll('[data-savenote]').forEach(function(el){ el.textContent = s.t; el.classList.toggle('warn', s.w); });
+  var sv = document.getElementById('saved'); if(sv){ sv.textContent = !canStore ? S.saveNoStoreShort : (store.updatedAt ? S.saveAtShort(hhmm(store.updatedAt)) : ''); sv.classList.toggle('ok', canStore && !!store.updatedAt); }
+}
+
+/* ---------------- expert-added suggestions ----------------
+   Suggestions are not rated in this round: they are free-text proposals anchored either to an
+   ARRIVE sub-item (extended or not) or to "outside ARRIVE". They are autosaved and exported. */
+function anchorLabel(a){
+  if(a === 'outside') return S.anchorOutside;
+  if(a === 'title') return S.anchorTitle;
+  var r = ROW_BY[a]; return r ? 'ARRIVE '+r.id+' '+r.name : a;
+}
+function anchorOptions(sel){
+  var h = '<option value="outside"'+(sel==='outside'?' selected':'')+'>'+esc(S.optOutside)+'</option>';
+  S.optGroups.forEach(function(g){
+    h += '<optgroup label="'+esc(g[1])+'">'+REAL_ROWS.filter(function(r){ return r.set === g[0]; }).map(function(r){
+      return '<option value="'+r.id+'"'+(sel===r.id?' selected':'')+'>'+esc(S.optRow(r))+'</option>';
+    }).join('')+'</optgroup>';
+  });
+  h += '<optgroup label="'+esc(S.optOther)+'"><option value="title"'+(sel==='title'?' selected':'')+'>'+esc(S.anchorTitle)+'</option></optgroup>';
+  return h;
+}
+function delLabel(a){ return isFilled(a) ? S.del : S.cancel; }
+function isFilled(a){ return !!(((a.text||'')+'').trim() || ((a.reason||'')+'').trim()); }
+function addCount(){ return store.additions.filter(isFilled).length; }
+function addById(id){ return store.additions.filter(function(x){ return x.id === id; })[0]; }
+function addCardHTML(a){
+  var k = a.id, isNew = a.anchor === 'outside';
+  return '<div class="addcard" id="card-'+k+'" data-addcard="'+k+'">'
+    + '<div class="addcard-h"><b>'+S.cardTitle(isNew)+' <span class="opt-note">'+S.optional+'</span></b><button class="btn quiet small" type="button" data-add-del="'+k+'">'+delLabel(a)+'</button></div>'
+    + '<p class="addhint">'+S.cardHint+'</p>'
+    + '<label class="t" for="ad'+k+'t">'+S.cardLabel(isNew)+'</label>'
+    + '<textarea id="ad'+k+'t" data-add-f="text" data-add-id="'+k+'" placeholder="'+esc(S.cardPh(isNew))+'">'+esc(a.text||'')+'</textarea>'
+    + '<label class="t" for="ad'+k+'r">'+S.reasonLabel+' <span class="opt-note">'+S.optional+'</span></label>'
+    + '<textarea class="short" id="ad'+k+'r" data-add-f="reason" data-add-id="'+k+'" placeholder="'+esc(S.reasonPh)+'">'+esc(a.reason||'')+'</textarea>'
+    + '<label class="t" for="ad'+k+'a">'+S.whereLabel+' <span class="opt-note">'+S.whereNote+'</span></label>'
+    + '<select id="ad'+k+'a" data-add-f="anchor" data-add-id="'+k+'">'+anchorOptions(a.anchor)+'</select></div>';
+}
+function zoneHTML(anchor){
+  var list = store.additions.filter(function(a){ return a.anchor === anchor; });
+  var r = ROW_BY[anchor], plain = anchor === 'outside' || (r && !r.ext && anchor !== 'title');
+  var label = S.zoneBtn(anchor === 'outside', list.length > 0, plain);
+  return list.map(addCardHTML).join('')
+    + '<div class="adds-act"><button class="btn small'+(plain?'':' quiet')+'" type="button" data-add="'+anchor+'">'+label+'</button></div>';
+}
+function zone(anchor){ return '<div class="addzone" id="zone-'+anchor+'" data-zone="'+anchor+'">'+zoneHTML(anchor)+'</div>'; }
+function refreshAddMarks(){
+  var any = {}, filled = {};
+  store.additions.forEach(function(a){ any[a.anchor] = true; if(isFilled(a)) filled[a.anchor] = (filled[a.anchor]||0)+1; });
+  var actCard = document.activeElement && document.activeElement.closest ? document.activeElement.closest('[data-addcard]') : null;
+  var actAd = actCard ? addById(actCard.getAttribute('data-addcard')) : null, actAnchor = actAd ? actAd.anchor : null;
+  document.querySelectorAll('[data-row]').forEach(function(el){ var rk = el.getAttribute('data-row'); el.classList.toggle('has-adds', !!filled[rk] || rk === actAnchor); });
+  document.querySelectorAll('[data-chip]').forEach(function(el){ el.classList.toggle('has-add', !!filled[el.getAttribute('data-chip')]); });
+  var on = document.querySelector('[data-outside-n]'); if(on){ var n = filled.outside || 0; on.textContent = n; on.hidden = !n; }
+  updateExportSummary();
+}
+function renderZones(){
+  document.querySelectorAll('[data-zone]').forEach(function(z){ z.innerHTML = zoneHTML(z.getAttribute('data-zone')); });
+  refreshAddMarks();
+}
+function pruneEmpty(keepId){
+  var n = store.additions.length;
+  store.additions = store.additions.filter(function(a){ return isFilled(a) || a.id === keepId; });
+  if(store.additions.length !== n){ persist(); renderZones(); return true; }
+  return false;
+}
+function addSuggestion(anchor){
+  var empty = store.additions.filter(function(a){ return a.anchor === anchor && !isFilled(a); })[0];
+  if(empty){
+    pruneEmpty(empty.id);
+    var ex = document.getElementById('ad'+empty.id+'t'); if(ex){ ex.focus({preventScroll:true}); ex.scrollIntoView({block:'center', behavior:'auto'}); }
+    return;
+  }
+  pruneEmpty(null);
+  var seq = store.addSeq || 0, id;
+  do { seq++; id = 'a'+seq; } while(addById(id));
+  store.addSeq = seq;
+  store.additions.push({id:id, anchor:anchor, text:'', reason:''});
+  persist(); renderZones();
+  var ta = document.getElementById('ad'+id+'t');
+  if(ta){ ta.focus({preventScroll:true}); ta.scrollIntoView({block:'center', behavior:'auto'}); }
+}
+var delArmed = null, delTimer = null;
+function delAddition(btn, id){
+  var a = addById(id); if(!a) return;
+  if(isFilled(a) && delArmed !== id){
+    delArmed = id; btn.textContent = S.confirmDel; btn.style.color = 'var(--danger)';
+    clearTimeout(delTimer); delTimer = setTimeout(function(){ delArmed = null; btn.textContent = delLabel(a); btn.style.color = ''; }, 4000);
+    return;
+  }
+  delArmed = null; clearTimeout(delTimer);
+  store.additions = store.additions.filter(function(x){ return x.id !== id; });
+  persist(); renderZones();
+}
+function moveAddition(id, anchor){
+  var a = addById(id); if(!a || a.anchor === anchor) return;
+  a.anchor = anchor; persist(); renderZones();
+  var card = document.getElementById('card-'+id);
+  if(card){ card.scrollIntoView({block:'center', behavior:'auto'}); card.classList.remove('flash'); void card.offsetWidth; card.classList.add('flash'); }
+}
+
+function tileHTML(it){
+  var a = store.answers[it.id] || {};
+  var small = a.cj ? '?' : (a.score != null ? a.score : '·');
+  return '<a class="tile set-'+it.set+(isDone(it.id)?' done':'')+(hasNote(it.id)?' noted':'')+'" href="#'+idToHash(it.id)+'" title="'+esc(qLabel(it)+' '+it.title)+'" aria-label="'+esc(qLabel(it)+' '+it.title)+'"><b>'+pad(it.n)+'</b><small>'+small+'</small></a>';
+}
+function itemCard(it){
+  var a = store.answers[it.id] || {};
+  var st = a.cj ? '<span class="badge cj">'+S.cj+'</span>' : (a.score != null ? '<span class="badge sc">'+a.score+'</span>' : '<span class="badge none">'+S.todo+'</span>');
+  return '<a class="item" id="row-'+it.id+'" href="#'+idToHash(it.id)+'"><span class="item-id">'+qLabel(it)+'</span><span><span class="item-title">'+esc(it.title)+'</span><span class="item-req">'+esc(it.req.replace(/\n/g,' '))+'</span></span><span class="item-state">'+st+(hasNote(it.id)?'<span class="tag-note">'+S.hasNote+'</span>':'')+'</span></a>';
+}
+
+/* ---------------- profile form ---------------- */
+var GROUPS = S.groups, FAM = S.fam, BASIS = S.basis;
+function radios(name, opts, val, extra){
+  return '<div class="opts" role="radiogroup">'+opts.map(function(o){
+    var v = Array.isArray(o)?o[0]:o, l = Array.isArray(o)?o[1]:o;
+    return '<label class="opt"><input type="radio" name="'+name+'" value="'+esc(v)+'" data-pf="'+esc(extra||name)+'"'+(val===v?' checked':'')+'><span>'+esc(l)+'</span></label>';
+  }).join('')+'</div>';
+}
+function validEmail(s){ return /^[^\s@，,;；]+@[^\s@，,;；]+\.[^\s@，,;；]+$/.test(String(s||'').trim()); }
+function profileDone(){ var p = store.profile; return !!((p.name||'').trim() && validEmail(p.email) && p.group && p.familiarity); }
+function profileHTML(){
+  var p = store.profile, b = p.basis || {}, sec = p.secondary || [];
+  var h = '<div class="pf">';
+  h += '<p class="pf-note">'+S.pfNote+'</p>';
+  h += '<div class="pf-row"><div class="field"><label for="pf-name">'+S.pfName+'</label><input id="pf-name" type="text" data-pf="name" value="'+esc(p.name||'')+'" autocomplete="name"></div>';
+  h += '<div class="field"><label for="pf-email">'+S.pfEmail+'</label><input id="pf-email" type="email" inputmode="email" data-pf="email" value="'+esc(p.email||'')+'" autocomplete="email" autocapitalize="off" spellcheck="false"></div>';
+  h += '<div class="field"><label for="pf-title">'+S.pfTitle+'</label><input id="pf-title" type="text" data-pf="title" value="'+esc(p.title||'')+'" autocomplete="off"></div>';
+  h += '<div class="field"><label for="pf-years">'+S.pfYears+'</label><input id="pf-years" type="number" inputmode="numeric" min="0" max="80" data-pf="years" value="'+esc(p.years||'')+'"></div>';
+  h += '<div class="field"><label for="pf-org">'+S.pfOrg+'</label><input id="pf-org" type="text" data-pf="org" value="'+esc(p.org||'')+'" autocomplete="off"></div></div>';
+  h += '<div class="field"><span class="lbl">'+S.pfGroup+'</span>'+radios('group', GROUPS, p.group)+'</div>';
+  h += '<div class="field"><span class="lbl">'+S.pfSecondary+'</span><div class="opts">'+GROUPS.map(function(g){ return '<label class="opt"><input type="checkbox" value="'+esc(g[0])+'" data-pf="secondary"'+(sec.indexOf(g[0])>=0?' checked':'')+'><span>'+esc(g[1])+'</span></label>'; }).join('')+'</div></div>';
+  h += '<div class="field"><span class="lbl">'+S.pfFam+'</span>'+radios('familiarity', FAM, p.familiarity)+'</div>';
+  h += '<div class="field"><span class="lbl">'+S.pfBasis+'</span><div class="basis">'+BASIS.map(function(bk){
+    return '<div class="brow"><span>'+bk[1]+'</span>'+radios('basis-'+bk[0], S.levels, b[bk[0]], 'basis:'+bk[0])+'</div>';
+  }).join('')+'</div></div></div>';
+  return h;
+}
+function updateProfileState(){
+  var el = document.getElementById('pfstate'); if(!el) return;
+  var ok = profileDone(); el.textContent = ok ? S.pfDone : S.pfTodo; el.classList.toggle('ok', ok);
+}
+
+/* ---------------- overview ---------------- */
+var lastItem = null;
+function rowCount(r){ return r.id === '9a' ? ITEMS.filter(function(i){ return i.table === 2; }).length : r.itemIds.length; }
+function rowHTML(r, t2n){
+  var cls = 'arow'+(r.ext ? '' : ' noext');
+  var tag = r.ext ? '' : '<span class="noext-tag">'+S.noExt+'</span>';
+  var h = '<div class="'+cls+'" id="arow-'+r.id+'" data-row="'+r.id+'"><div><div class="arow-head"><span class="aid">'+esc(r.id==='title'?'—':r.id)+'</span><span class="aname">'+esc(r.name)+'</span>'+tag+'</div><p class="azh">'+esc(r.zh)+'</p>'
+    + (r.en ? '<p class="aen"><span class="lab">EN</span>'+esc(r.en)+'</p>' : '')+'</div>';
+  if(r.id === '9a'){
+    h += '<div class="callout"><span>'+S.t2Callout(t2n, T2_RANGE)+'</span><button class="btn small" type="button" data-scroll="table2">'+S.gotoT2+'</button></div>';
+  } else if(r.itemIds.length){
+    h += '<div class="items">'+r.itemIds.map(function(id){ return itemCard(BY[id]); }).join('')+zone(r.id)+'</div>';
+  } else {
+    h += zone(r.id);
+  }
+  return h+'</div>';
+}
+function renderOverview(){
+  var app = document.getElementById('app');
+  var done = doneCount(), pct = Math.round(done / N * 100);
+  var t1n = ITEMS.filter(function(i){ return i.table === 1; }).length, t2n = N - t1n;
+  var cnt = {E10:0, REC:0, EXT:0}; ITEMS.forEach(function(i){ cnt[i.set]++; });
+  var h = '';
+  h += '<div class="wrap">'+(isWeChat() ? '<div class="wxwarn" role="note">'+S.wxwarn+'</div>' : '')+'<div class="masthead"><p class="eyebrow">'+esc(S.eyebrow(D.version))+'</p>';
+  h += '<h1 class="title">'+S.h1+'</h1>';
+  h += '<p class="lede">'+S.lede(N)+'</p>';
+  h += '<div class="progress"><span>'+S.progressTop(done, N)+'</span><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+N+'" aria-valuenow="'+done+'"><i style="width:'+pct+'%"></i></div><span class="savenote" data-savenote></span></div>'+resumeHTML()+'</div>';
+
+  h += '<details class="fold panel" id="pfbox"'+(profileDone()?'':' open')+'><summary><span>'+S.pfSummary+' <span id="pfstate" class="pfstate"></span></span></summary><div class="fold-body">'+profileHTML()+'</div></details>';
+
+  h += '<details class="fold panel"><summary>'+S.notesSummary+'</summary><div class="fold-body">'+S.notesBody(N)+'</div></details>';
+
+
+  /* table 1 */
+  h += '<section class="tbl'+(viewExt?' view-ext':'')+(showEn?' show-en':'')+'" id="table1"><header><h2>'+S.t1Head+'</h2><p>'+S.t1Intro(REAL_ROWS.length)+'</p></header>';
+  h += '<div class="tbar"><div class="toggle" role="group" aria-label="'+esc(S.t1Range)+'"><button type="button" data-view="all" aria-pressed="'+(!viewExt)+'">'+S.viewAll(REAL_ROWS.length)+'</button><button type="button" data-view="ext" aria-pressed="'+viewExt+'">'+S.viewExt(EXT_N)+'</button></div>'
+     + (S.showEnLabel ? '<label class="chk"><input type="checkbox" data-en'+(showEn?' checked':'')+'> '+S.showEnLabel+'</label>' : '')+'</div>';
+  ['E10','REC','EXT'].forEach(function(setKey){
+    h += '<div class="grp set-'+setKey+'">'+esc(SET_FULL[setKey])+'</div>';
+    ROWS.filter(function(r){ return r.set === setKey; }).forEach(function(r){ h += rowHTML(r, t2n); });
+  });
+  h += '</section>';
+
+  /* table 2 */
+  h += '<section class="tbl" id="table2"><header><h2>'+S.t2Head(T2_RANGE, t2n)+'</h2><p>'+S.t2Intro+'</p></header>';
+  var a9 = D.arriveMap['9a'];
+  h += '<p class="t2-zh"><b>'+S.t2Orig+'</b>'+esc(a9.zh)+'</p>';
+  D.table2Sections.forEach(function(sec){
+    var list = ITEMS.filter(function(i){ return i.table === 2 && i.section === sec; });
+    h += '<div class="sec-sub">'+esc(sec)+'<small>'+S.secRange(list[0].n, list[list.length-1].n, list.length)+'</small></div><div class="t2-list">'+list.map(itemCard).join('')+'</div>';
+  });
+  h += '<div class="t2-add" data-row="9a"><p>'+S.t2Add+'</p>'+zone('9a')+'</div>';
+  h += '</section>';
+
+  /* outside ARRIVE */
+  h += '<section class="tbl" id="outside"><header><h2>'+S.outHead+'</h2><p>'+S.outIntro+'</p></header><div style="margin-top:14px">'+zone('outside')+'<p class="addnote">'+S.outNote+'</p></div></section>';
+
+  /* export */
+  h += '<section class="tbl" id="export"><header><h2>'+S.exportHead+'</h2><p>'+S.exportIntro+'</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
+    + (RETURN_EMAIL ? '<div class="mailline">'+S.mailLine+'<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">'+S.copyMail+'</button></div>' : '')
+    + '<div class="btnrow"><button class="btn primary big" type="button" data-exp="submit">'+S.submitBtn+'</button></div>'
+    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expfallback" hidden></div>'
+    + '<details class="fold subfold"><summary>'+S.troubleSummary+'</summary><div class="fold-body"><p class="q">'+S.troubleBody+'</p><div class="btnrow"><button class="btn small" type="button" data-exp="json">'+S.dlOnly+'</button><button class="btn small" type="button" data-exp="copy">'+S.copyText+'</button></div></div></details>'
+    + '<div class="btnrow"><button class="btn quiet small" type="button" id="resetbtn" data-reset>'+RESET_LABEL+'</button></div></div></section>';
+  h += '<p class="foot">'+S.foot+'</p></div>';
+
+  app.innerHTML = h;
+  updateSaveNote(); updateProfileState(); refreshAddMarks();
+}
+function updateExportSummary(){
+  var el = document.getElementById('expsum'); if(!el) return;
+  var left = ITEMS.filter(function(i){ return !isDone(i.id); });
+  var h = '<div>'+S.expRated(N-left.length, N, profileDone())+'</div>';
+  if(left.length){ h += '<div class="chips" aria-label="'+esc(S.unratedAria)+'">'+left.map(function(i){ return '<a href="#'+idToHash(i.id)+'">'+qLabel(i)+'</a>'; }).join('')+'</div>'; }
+  else { h += '<div style="color:var(--accent);font-weight:600">'+S.allRated+'</div>'; }
+  var filled = store.additions.filter(isFilled);
+  var nNew = filled.filter(function(a){ return a.anchor === 'outside'; }).length, nExt = filled.length - nNew;
+  h += '<div>'+S.expSug(nExt, nNew, filled.length > 0)+'</div>';
+  if(filled.length){
+    var seen = {}, keys = [];
+    filled.forEach(function(a){ if(!seen[a.anchor]){ seen[a.anchor] = 0; keys.push(a.anchor); } seen[a.anchor]++; });
+    h += '<div class="chips" aria-label="'+esc(S.sugPosAria)+'">'+keys.map(function(k){
+      var target = k === '9a' ? 'zone-9a' : 'zone-'+k;
+      return '<button type="button" data-scroll="'+target+'">'+esc(k === 'outside' ? S.posOutside : k === 'title' ? S.posTitle : k)+(seen[k] > 1 ? ' ×'+seen[k] : '')+'</button>';
+    }).join('')+'</div>';
+  }
+  el.innerHTML = h;
+}
+
+/* ---------------- item page ---------------- */
+function crumbOf(it){
+  if(it.table === 2) return S.crumb2(it.section);
+  if(it.arrive === 'title') return S.crumbTitle;
+  var r = D.arriveRows.filter(function(x){ return x.id === it.arrive; })[0];
+  return S.crumb1(it.arrive, (r?r.name:''));
+}
+function prevHTML(it){
+  if(!SHOW_PREVALENCE || !it.prev) return '';
+  var p = it.prev, h = '<section class="blk"><h2>'+S.prevHead+' <span class="sub">'+S.prevSub(D.prevN || 385)+'</span></h2><div class="prev">';
+  if(p.merged) h += '<p class="pnote">'+S.prevMerged(p.components.length)+'</p>';
+  if(p.note) h += '<p class="pnote">'+esc(p.note)+'</p>';
+  p.components.forEach(function(c){
+    var meta = S.prevMeta(c);
+    h += '<div class="prow"><span class="pl">'+esc(c.label)+'<small>'+esc(meta)+'</small></span><span class="pv">'+(c.applicable? c.rate.toFixed(1)+'%' : '—')+'<small>'+S.prevCount(c)+'</small></span><span class="bar2" aria-hidden="true"><i style="width:'+(c.applicable? c.rate : 0)+'%"></i></span></div>';
+  });
+  h += '<p class="pfoot">'+S.prevFoot+'</p></div></section>';
+  return h;
+}
+function arriveHTML(it){
+  var a = it.arriveRef ? D.arriveMap[it.arriveRef] : null;
+  var h = '<section class="blk"><h2>'+S.arriveHead+'</h2>';
+  if(!a){
+    h += '<p class="noarrive">'+S.noArrive+'</p></section>';
+    return h;
+  }
+  h += '<div class="arrive-tag"><b>'+S.arriveItem+' '+esc(a.id)+'</b><span>'+esc(S.arriveName(a))+'</span><span class="pill set-'+a.set+'">'+(a.set==='E10'?'Essential 10':'Recommended Set')+'</span></div>';
+  h += '<div class="quote"><div class="en"><span class="lab">EN</span>'+esc(a.en)+'</div>'+S.arriveQuoteZh(a, esc)+'</div></section>';
+  return h;
+}
+function ratingHTML(it){
+  var a = ans(it.id), i, btns = '';
+  for(i=1;i<=9;i++) btns += '<button type="button" data-score="'+i+'" aria-pressed="'+(a.score===i)+'" aria-label="'+esc(S.scoreAria(i))+'">'+i+'</button>';
+  return '<aside class="side" aria-label="'+esc(S.sideAria)+'">'
+    + '<div><h2>'+S.scoreHead+' <small>'+S.required+'</small></h2><p class="q">'+S.scoreQ+'</p>'
+    + '<div class="scale" role="group" aria-label="'+esc(S.scaleAria)+'">'+btns+'</div>'
+    + '<div class="bands"><span>1–3<br>'+S.band1+'</span><span>4–6<br>'+S.band2+'</span><span>7–9<br>'+S.band3+'</span></div>'
+    + '<button class="btn cjbtn" type="button" data-cj aria-pressed="'+(!!a.cj)+'">'+S.cj+'</button></div>'
+    + '<div><label class="t" for="note">'+S.noteLabel+' <span style="font-weight:500;color:var(--faint)">'+S.optional+'</span></label><p class="hint">'+S.noteHint+'</p>'
+    + '<textarea id="note" data-note placeholder="'+esc(S.notePh)+'">'+esc(a.note||'')+'</textarea><div class="saved" id="saved" aria-live="polite"></div></div>'
+    + navButtons(it)
+    + '</aside>';
+}
+function navButtons(it){
+  var last = it.n === N;
+  return '<div class="navrow"><button class="btn" type="button" data-nav="prev"'+(it.n===1?' disabled':'')+'>'+S.prev+'</button>'
+    + '<button class="btn" type="button" data-nav="home">'+S.overview+'</button>'
+    + '<button class="btn primary next" type="button" data-nav="next">'+(last?S.finishBack:S.next)+'</button></div>';
+}
+function renderItem(id){
+  var it = BY[id], app = document.getElementById('app');
+  lastItem = id;
+  var done = doneCount();
+  var h = '<div class="bar"><div class="wrap"><button class="btn quiet small" type="button" data-nav="home">'+S.backHome+'</button><div class="where">'+S.where(it.n, N)+'</div><span style="font-size:13px;color:var(--muted);white-space:nowrap">'+S.ratedShort+' <b id="donecnt">'+done+'</b></span></div><div class="prog"><i style="width:'+(it.n/N*100)+'%"></i></div></div>';
+  h += '<div class="wrap detail"><main class="c1">';
+  h += '<p class="crumb set-'+it.set+'"><i class="dot"></i>'+esc(crumbOf(it))+'</p>';
+  h += '<h1 class="item-h" tabindex="-1"><span class="id">'+qLabel(it)+'</span>'+esc(it.title)+'</h1>';
+  h += arriveHTML(it);
+  h += '<section class="req"><h2>'+S.reqHead+'</h2>'+paras(it.req)+'</section>';
+  if(it.why) h += '<p class="why"><b>'+S.whyLabel+'</b>'+esc(it.why)+'</p>';
+  h += '</main>'+ratingHTML(it);
+  h += '<div class="c2">'+prevHTML(it);
+  if(SHOW_EXAMPLES) h += '<section class="blk"><h2>'+S.exHead+' <span class="sub">'+S.exSub+'</span></h2><p class="example">'+esc(it.example)+'</p><p class="exnote">'+S.exNote+'</p></section>';
+  h += '</div></div>';
+  var last = it.n === N, a = ans(it.id);
+  h += '<nav class="dock" aria-label="'+esc(S.dockAria)+'"><button class="btn small" type="button" data-nav="prev"'+(it.n===1?' disabled':'')+'>'+S.prev+'</button><span class="mid" id="dockmid">'+dockText(it)+'</span><button class="btn primary small" type="button" data-nav="next">'+(last?S.finish:S.next)+'</button></nav>';
+  app.innerHTML = h;
+  updateSaveNote();
+  window.scrollTo(0,0);
+  var hh = app.querySelector('h1.item-h'); if(hh) hh.focus({preventScroll:true});
+}
+function dockText(it){ var a = store.answers[it.id] || {}; return '<b>'+qLabel(it)+'</b> · '+S.dockState(a); }
+
+/* ---------------- interactions ---------------- */
+function currentId(){ var m = /^(?:q|chm-)(\d{2})$/i.exec(location.hash.replace(/^#/,'')); return m ? 'Q'+m[1] : null; }
+function go(id){ location.hash = id ? idToHash(id) : 'overview'; }
+function applyScore(v){
+  var id = currentId(); if(!id) return; var a = ans(id);
+  if(v === 'cj'){ a.cj = !a.cj; if(a.cj) a.score = null; }
+  else { a.score = (a.score === v) ? null : v; if(a.score != null) a.cj = false; }
+  persist();
+  document.querySelectorAll('[data-score]').forEach(function(b){ b.setAttribute('aria-pressed', String(a.score === Number(b.getAttribute('data-score')))); });
+  var c = document.querySelector('[data-cj]'); if(c) c.setAttribute('aria-pressed', String(!!a.cj));
+  var d = document.getElementById('donecnt'); if(d) d.textContent = doneCount();
+  var m = document.getElementById('dockmid'); if(m) m.innerHTML = dockText(BY[id]);
+}
+function navTo(kind){
+  var id = currentId(); if(!id){ return; }
+  var it = BY[id];
+  if(kind === 'home') return go(null);
+  if(kind === 'prev' && it.n > 1) return go(ITEMS[it.n-2].id);
+  if(kind === 'next') return it.n < N ? go(ITEMS[it.n].id) : go(null);
+}
+function reduceMotion(){ try{ return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){ return false; } }
+function setView(ext){
+  pruneEmpty(null);
+  viewExt = !!ext;
+  var t1 = document.getElementById('table1'); if(t1) t1.classList.toggle('view-ext', viewExt);
+  document.querySelectorAll('[data-view]').forEach(function(b){ b.setAttribute('aria-pressed', String((b.getAttribute('data-view') === 'ext') === viewExt)); });
+}
+function scrollToEl(id){
+  var el = document.getElementById(id); if(!el) return;
+  if(viewExt && el.offsetParent === null) setView(false);      /* target row was filtered out of table 1 */
+  el.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'start'});
+  var f = el.classList.contains('arow') || el.classList.contains('addcard') ? el : null;
+  if(f){ f.classList.remove('flash'); void f.offsetWidth; f.classList.add('flash'); }
+}
+
+document.addEventListener('click', function(e){
+  var inCard = e.target.closest ? e.target.closest('[data-addcard]') : null;
+  if(!(e.target.closest && e.target.closest('[data-add]'))) pruneEmpty(inCard ? inCard.getAttribute('data-addcard') : null);
+  var t = e.target.closest('[data-score],[data-cj],[data-nav],[data-scroll],[data-exp],[data-reset],[data-add],[data-add-del],[data-view],[data-resume]');
+  if(!t) return;
+  if(t.hasAttribute('data-add')) return addSuggestion(t.getAttribute('data-add'));
+  if(t.hasAttribute('data-add-del')) return delAddition(t, t.getAttribute('data-add-del'));
+  if(t.hasAttribute('data-view')) return setView(t.getAttribute('data-view') === 'ext');
+  if(t.hasAttribute('data-score')) return applyScore(Number(t.getAttribute('data-score')));
+  if(t.hasAttribute('data-cj')) return applyScore('cj');
+  if(t.hasAttribute('data-nav')) return navTo(t.getAttribute('data-nav'));
+  if(t.hasAttribute('data-scroll')) return scrollToEl(t.getAttribute('data-scroll'));
+  if(t.hasAttribute('data-exp')) return doExport(t.getAttribute('data-exp'));
+  if(t.hasAttribute('data-reset')) return doReset(t);
+  if(t.hasAttribute('data-resume')){
+    if(t.getAttribute('data-resume') === 'yes' && resumePending) return applyResume(resumePending);
+    resumePending = null; resumeMsg = S.importCancelled; renderOverview(); return;
+  }
+});
+document.addEventListener('input', function(e){
+  var t = e.target;
+  if(t.hasAttribute('data-add-f') && t.tagName === 'TEXTAREA'){
+    var ad = addById(t.getAttribute('data-add-id'));
+    if(ad){
+      ad[t.getAttribute('data-add-f')] = t.value; persistSoon(); refreshAddMarks();
+      var dbtn = document.querySelector('[data-add-del="'+ad.id+'"]'); if(dbtn && delArmed !== ad.id){ dbtn.textContent = delLabel(ad); }
+    }
+    return;
+  }
+  if(t.hasAttribute('data-note')){ var id = currentId(); if(id){ ans(id).note = t.value; var sv = document.getElementById('saved'); if(sv){ sv.textContent = S.saving; sv.classList.remove('ok'); } persistSoon(); } return; }
+  if(t.hasAttribute('data-pf') && (t.type === 'text' || t.type === 'number' || t.type === 'email')){ store.profile[t.getAttribute('data-pf')] = t.value; persistSoon(); updateProfileState(); }
+});
+document.addEventListener('keydown', function(e){
+  if(e.key !== 'Escape') return;
+  var c = e.target.closest ? e.target.closest('[data-addcard]') : null; if(!c) return;
+  var ad = addById(c.getAttribute('data-addcard'));
+  if(ad && !isFilled(ad)){ store.additions = store.additions.filter(function(x){ return x.id !== ad.id; }); persist(); renderZones(); }
+});
+document.addEventListener('change', function(e){
+  var t = e.target;
+  if(t.id === 'resumefile'){ var rf = t.files && t.files[0]; t.value = ''; if(rf) readResume(rf); return; }
+  if(t.hasAttribute && t.hasAttribute('data-add-f') && t.tagName === 'SELECT'){ moveAddition(t.getAttribute('data-add-id'), t.value); return; }
+  if(t.hasAttribute && t.hasAttribute('data-en')){ showEn = t.checked; var t1 = document.getElementById('table1'); if(t1) t1.classList.toggle('show-en', showEn); return; }
+  var k = t.getAttribute && t.getAttribute('data-pf'); if(!k) return;
+  var p = store.profile;
+  if(k === 'secondary'){ p.secondary = p.secondary || []; var i = p.secondary.indexOf(t.value); if(t.checked && i < 0) p.secondary.push(t.value); if(!t.checked && i >= 0) p.secondary.splice(i,1); }
+  else if(k.indexOf('basis:') === 0){ p.basis = p.basis || {}; p.basis[k.slice(6)] = t.value; }
+  else if(t.type === 'radio'){ p[k] = t.value; }
+  persist(); updateProfileState();
+});
+document.addEventListener('keydown', function(e){
+  if(e.metaKey || e.ctrlKey || e.altKey) return;
+  var tag = (e.target.tagName || '').toLowerCase();
+  if(tag === 'textarea' || tag === 'input' || tag === 'select') return;
+  var id = currentId(); if(!id) return;
+  if(/^[1-9]$/.test(e.key)){ applyScore(Number(e.key)); e.preventDefault(); }
+  else if(e.key === 'ArrowRight'){ navTo('next'); }
+  else if(e.key === 'ArrowLeft'){ navTo('prev'); }
+  else if(e.key === 'Escape'){ navTo('home'); }
+});
+
+/* ---------------- resume from a downloaded answer file (other device / browser) ---------------- */
+var resumeMsg = '', resumePending = null;
+function resumeHTML(){
+  var h = '<details class="resume-fold"'+((resumePending || resumeMsg) ? ' open' : '')+'><summary>'+S.resumeSummary+'</summary><div class="resume"><label class="btn small" for="resumefile">'+S.resumeBtn+'</label><input type="file" id="resumefile" accept=".json,application/json">';
+  if(resumePending){
+    h += '<span class="resume-msg warn" id="resumemsg" role="status" aria-live="polite">'+esc(resumeMsg)+'</span><button class="btn small primary" type="button" data-resume="yes">'+S.resumeConfirm+'</button><button class="btn small" type="button" data-resume="no">'+S.cancel+'</button>';
+  } else {
+    h += '<span class="resume-msg" id="resumemsg" role="status" aria-live="polite">'+esc(resumeMsg)+'</span>';
+  }
+  return h + '</div></details>';
+}
+function resumeFail(m){ resumePending = null; resumeMsg = m; var el = document.getElementById('resumemsg'); if(el){ el.textContent = m; el.classList.add('warn'); } }
+function readResume(f){
+  var fr = new FileReader();
+  fr.onerror = function(){ resumeFail(S.rErrRead); };
+  fr.onload = function(){
+    var o; try{ o = JSON.parse(String(fr.result).replace(/^﻿/, '')); }catch(e){ return resumeFail(S.rErrJson); }
+    if(!o || o.schema !== 'arrive-chm-delphi-round1' || !Array.isArray(o.answers)) return resumeFail(S.rErrNotOurs);
+    var nAns = doneCount(), nSug = store.additions.filter(isFilled).length;
+    if(nAns + nSug > 0){
+      resumePending = o; resumeMsg = S.rHave(nAns, nSug);
+      renderOverview(); return;
+    }
+    applyResume(o);
+  };
+  fr.readAsText(f);
+}
+function applyResume(o){
+  var ns = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+  var pr = o.profile || {}; Object.keys(pr).forEach(function(k){ ns.profile[k] = pr[k]; });
+  (o.answers || []).forEach(function(a){
+    if(!a) return;
+    var aid = normId(a.id); if(!BY[aid]) return;
+    var sc = (typeof a.importance === 'number' && a.importance >= 1 && a.importance <= 9) ? Math.round(a.importance) : null;
+    var cj = !!a.cannotJudge && sc == null, note = String(a.note || '');
+    if(sc != null || cj || note) ns.answers[aid] = {score:sc, cj:cj, note:note};
+  });
+  (o.suggestions || o.additions || []).forEach(function(s){
+    if(!s) return;
+    var anchor = s.anchor; if(anchor !== 'outside' && !ROW_BY[anchor]) anchor = 'outside';
+    ns.addSeq++; ns.additions.push({id:'a'+ns.addSeq, anchor:anchor, text:String(s.requirement != null ? s.requirement : (s.text || '')), reason:String(s.reason || '')});
+  });
+  store = ns; persist();
+  resumePending = null;
+  resumeMsg = S.rDone(doneCount(), N, ns.additions.length)
+    + ((o.itemsVersion && o.itemsVersion !== D.version) ? S.rVer(o.itemsVersion, D.version) : '');
+  renderOverview(); window.scrollTo(0, 0);
+}
+
+/* ---------------- export ---------------- */
+var RETURN_EMAIL = 'wangzhe19980611@163.com';   /* research-team address for the "write email" button and the address line; leave empty to hide both */
+var DATA_BEGIN = '-----BEGIN ARRIVE-CHM DATA-----', DATA_END = '-----END ARRIVE-CHM DATA-----';
+function b64(s){ var bytes = new TextEncoder().encode(s), bin = ''; for(var i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(bin).replace(/(.{76})/g, '$1\n'); }
+function isWeChat(){ return /MicroMessenger/i.test(navigator.userAgent || ''); }
+function isMobileUA(){ var ua = navigator.userAgent || ''; return /Android|iPhone|iPad|iPod|HarmonyOS|OpenHarmony|Mobile/i.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1); }
+function canShareFiles(){ try{ return !!(navigator.share && navigator.canShare && navigator.canShare({files:[new File(['{}'],'a.json',{type:'application/json'})]})); }catch(e){ return false; } }
+function payload(){
+  var answers = ITEMS.map(function(it){ var a = store.answers[it.id] || {}; return {id:it.id, importance:(a.score!=null?a.score:null), cannotJudge:!!a.cj, note:(a.note||'').trim()}; });
+  var rated = answers.filter(function(x){ return x.importance != null || x.cannotJudge; }).length;
+  var suggestions = store.additions.filter(isFilled).map(function(a, i){
+    return {no:i+1, kind:(a.anchor === 'outside' ? 'new' : 'extend'), anchor:a.anchor, anchorLabel:anchorLabel(a.anchor), requirement:(a.text||'').trim(), reason:(a.reason||'').trim()};
+  });
+  var profile = {}; Object.keys(store.profile).forEach(function(k){ profile[k] = store.profile[k]; });
+  profile.name = (profile.name||'').trim(); profile.email = (profile.email||'').trim();
+  return {schema:'arrive-chm-delphi-round1', schemaVersion:2, lang:S.lang, itemsVersion:D.version, scale:'1-9', exportedAt:new Date().toISOString(), totalItems:N, ratedCount:rated, complete:rated===N, profile:profile, answers:answers, suggestionsCount:suggestions.length, suggestions:suggestions};
+}
+function toText(p){
+  var pr = p.profile || {}, L = [];
+  L.push(S.tx.head(p.itemsVersion));
+  L.push(S.tx.who(pr.name, pr.email));
+  L.push(S.tx.grp(lblOf(GROUPS, pr.group), lblOf(FAM, pr.familiarity), pr.title, pr.years, pr.org));
+  L.push(S.tx.sec((pr.secondary||[]).map(function(g){ return lblOf(GROUPS, g); }), BASIS.map(function(b){ var v = (pr.basis||{})[b[0]]; return [b[1], v ? lblOf(S.levels, v) : '']; })));
+  L.push(S.tx.rated(p.ratedCount, p.totalItems, p.exportedAt));
+  L.push('------');
+  p.answers.forEach(function(a){ L.push(S.tx.ans(BY[a.id] ? qLabel(BY[a.id]) : a.id, a)); });
+  S.tx.sections.forEach(function(g){
+    var list = (p.suggestions||[]).filter(function(x){ return x.kind === g[0]; });
+    L.push('------'); L.push(S.tx.count(g[1], list.length));
+    list.forEach(function(x, i){
+      L.push(S.tx.anchor(i+1, x.anchorLabel));
+      L.push(S.tx.req(g[2], x.requirement));
+      if(x.reason) L.push(S.tx.reason(x.reason));
+    });
+  });
+  return L.join('\n');
+}
+function ymd(){ var d = new Date(); return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()); }
+function setStatus(msg, err){ var s = document.getElementById('expstatus'); if(s){ s.textContent = msg; s.classList.toggle('err', !!err); } }
+function showFallback(text){
+  var f = document.getElementById('expfallback'); if(!f) return;
+  f.hidden = false; f.innerHTML = '<textarea class="fallback" id="fbta" readonly></textarea>';
+  var ta = document.getElementById('fbta'); ta.value = text; ta.focus(); ta.select();
+}
+async function saveFile(name, text, mime){
+  var framed = !!(window.claude && window.claude.use);
+  if(framed){
+    try{ var dl = await window.claude.use('downloads'); if(dl){ await dl.save({filename:name, data:text}); return 'saved'; } }
+    catch(e){ if(e && e.code === 'declined') return 'declined'; }
+    return 'unsupported';
+  }
+  try{
+    var blob = new Blob([text], {type:mime}), url = URL.createObjectURL(blob), a = document.createElement('a');
+    a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(function(){ URL.revokeObjectURL(url); }, 3000); return 'saved';
+  }catch(e){ return 'failed'; }
+}
+function needProfile(){
+  var p = store.profile;
+  if((p.name||'').trim() && validEmail(p.email)) return false;
+  setStatus(S.needProfile, true);
+  var box = document.getElementById('pfbox'); if(box){ box.open = true; scrollToEl('pfbox'); }
+  return true;
+}
+async function doExport(kind){
+  if(kind === 'copyaddr'){
+    var ok0 = false; try{ await navigator.clipboard.writeText(RETURN_EMAIL); ok0 = true; }catch(e){}
+    setStatus(ok0 ? S.copiedMail(RETURN_EMAIL) : S.copyMailFail, !ok0); return;
+  }
+  if(needProfile()) return;
+  var p = payload(), d = new Date();
+  var nm = p.profile.name.replace(/[\\\/:*?"<>|\s]+/g,'_');
+  var base = 'ARRIVE-CHM-R1_'+nm+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
+  var json = JSON.stringify(p, null, 2);
+  var note = S.noteTail(N-p.ratedCount, p.suggestionsCount);
+  if(kind === 'copy'){
+    var txt = toText(p) + '\n\n' + DATA_BEGIN + '\n' + b64(JSON.stringify(p)) + '\n' + DATA_END + '\n' + S.dataNote, ok = false;
+    try{ await navigator.clipboard.writeText(txt); ok = true; }catch(e){}
+    if(ok){ setStatus(S.copiedText(note)); document.getElementById('expfallback').hidden = true; }
+    else { setStatus(S.copyFail(note)); showFallback(txt); }
+    return;
+  }
+  if(kind === 'submit'){
+    if(!RETURN_EMAIL) kind = 'json';
+    else if(isMobileUA() && canShareFiles()){
+      var cp = Promise.resolve(false);
+      try{ cp = navigator.clipboard.writeText(RETURN_EMAIL).then(function(){ return true; }, function(){ return false; }); }catch(e){}
+      try{
+        await navigator.share({files:[new File([json], base+'.json', {type:'application/json'})], title:S.shareTitle(p.profile.name), text:S.shareText(p.profile.name)});
+        var copied = await cp;
+        setStatus(S.shareOpened(RETURN_EMAIL, copied, note));
+        return;
+      }catch(e){
+        if(e && e.name === 'AbortError'){ setStatus(S.shareCancelSubmit); return; }
+        kind = 'mail';
+      }
+    } else kind = 'mail';
+  }
+  if(kind === 'share'){
+    try{
+      await navigator.share({files:[new File([json], base+'.json', {type:'application/json'})], title:S.share2Title, text:S.share2Text(p.profile.name)});
+      setStatus(S.share2Opened(note));
+    }catch(e){
+      if(e && e.name === 'AbortError') setStatus(S.share2Cancel);
+      else setStatus(S.share2Fail, true);
+    }
+    return;
+  }
+  if(kind === 'mail'){
+    var rm = await saveFile(base+'.json', json, 'application/json');
+    if(rm !== 'saved'){ setStatus(rm === 'declined' ? S.saveDeclined : S.saveFailed, true); return; }
+    var a = document.createElement('a');
+    a.href = 'mailto:'+RETURN_EMAIL+'?subject='+encodeURIComponent(S.mailSubject(p.profile.name))+'&body='+encodeURIComponent(S.mailBody(base, p.profile.name));
+    document.body.appendChild(a); a.click(); a.remove();
+    setStatus(S.mailStatus(base, RETURN_EMAIL, note));
+    return;
+  }
+  var r = await saveFile(base+'.json', json, 'application/json');
+  if(r === 'saved') setStatus(S.fileMade(base, RETURN_EMAIL, note));
+  else if(r === 'declined') setStatus(S.saveDeclined);
+  else { setStatus(S.noDownload, true); }
+}
+var resetArmed = false, resetTimer = null;
+function doReset(btn){
+  if(!resetArmed){ resetArmed = true; btn.textContent = S.resetConfirm; btn.style.color = 'var(--danger)'; resetTimer = setTimeout(function(){ resetArmed = false; btn.textContent = RESET_LABEL; btn.style.color = ''; }, 4000); return; }
+  clearTimeout(resetTimer); resetArmed = false;
+  store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+  try{ localStorage.removeItem(KEY); }catch(e){}
+  renderOverview(); window.scrollTo(0,0);
+}
+
+/* ---------------- router ---------------- */
+function route(){
+  pruneEmpty(null);
+  var id = currentId();
+  if(id && BY[id]){ renderItem(id); return; }
+  var from = lastItem; lastItem = null;
+  renderOverview();
+  if(from){ var row = document.getElementById('row-'+from); var tile = document.querySelector('.tile[href="#'+idToHash(from)+'"]'); (row || tile) && (row || tile).scrollIntoView({block:'center'}); }
+  else window.scrollTo(0,0);
+}
+load();
+window.addEventListener('hashchange', route);
+route();
+})();
+</script>
+</body></html>
