@@ -238,6 +238,15 @@ details.resume-fold>summary{cursor:pointer;padding:4px 0}
 details.resume-fold .resume{margin-top:6px}
 .wxwarn{margin:0 0 14px;padding:10px 14px;border-radius:10px;border:1px solid var(--warn,#955A0C);color:var(--warn,#955A0C);font-size:14px;line-height:1.55}
 .status{min-height:1.5em;font-size:14px;color:var(--accent)}
+.mailcard{margin-top:12px;border:1px solid var(--line-strong);border-radius:12px;padding:14px 16px;background:var(--surface);font-size:14.5px;line-height:1.7}
+.mailcard .mc-h{display:block;font-size:15.5px;margin-bottom:2px}
+.mailcard ol{margin:6px 0 8px;padding-left:22px}
+.mailcard li{margin:4px 0}
+.mc-row{display:flex;flex-wrap:wrap;align-items:center;gap:2px 8px;margin-top:6px}
+.mc-row .k{color:var(--muted);min-width:3.2em}
+.mc-row b{word-break:break-all;user-select:all;font-weight:600}
+.mc-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
+.mc-act a.btn{text-decoration:none}
 .status.err{color:var(--danger)}
 .fallback{width:100%;min-height:140px;border:1px solid var(--line-strong);border-radius:10px;padding:10px;background:var(--surface);font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
 .foot{margin:34px 0 0;padding-block:18px 36px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
@@ -516,7 +525,15 @@ saveDeclined: '已取消保存。',
 saveFailed: '未能自动下载答卷文件。请展开下方“提交遇到问题？”，点“复制答卷文本”，粘贴到邮件正文发送。',
 mailSubject: function(n){ return 'ARRIVE-CHM 第一轮德尔菲答卷（'+n+'）'; },
 mailBody: function(base, n){ return '老师好：\n\n请见附件答卷文件（'+base+'.json，已下载到您的设备；请在邮件中添加为附件）。\n\n'+n; },
-mailStatus: function(base, addr, note){ return '答卷文件 '+base+'.json 已下载，并已尝试打开写给 '+addr+' 的邮件草稿。请把刚下载的文件添加为附件后发送；若没有弹出邮件软件（例如平时用网页邮箱），请登录自己的邮箱，新建邮件发给该地址并添加这个文件。邮件发出才算提交成功。'+note; },
+mailStatus: function(base, addr, note){ return '答卷文件 '+base+'.json 已下载。请按下方步骤，把它作为附件发到 '+addr+'。邮件发出才算提交成功。'+note; },
+mcHead: '还差一步：把答卷文件发给研究团队',
+mcLi1: function(f){ return '答卷文件 <b>'+f+'</b> 已保存到本机的“下载”文件夹。'; },
+mcLi2: '刚才若已弹出邮件草稿，添加该文件为附件后发送即可。<b>若没有弹出</b>（电脑上没有设置默认邮件软件时很常见），请打开自己的邮箱（网页邮箱或邮件软件），新建一封邮件：',
+mcTo: '收件人', mcSubj: '主题', mcBodyLbl: '正文', mcBodyHint: '可粘贴一句说明（非必须）', mcCopy: '复制', mcCopied: '已复制 ✓', mcCopyFail: '复制失败',
+mcLi3: '把答卷文件添加为附件，点发送。邮件发出才算提交成功。',
+mcRetry: '重新尝试打开邮件软件', mcRedl: '再次下载答卷文件',
+copiedPart: function(what){ return '已复制“'+what+'”。'; },
+redlOk: function(base){ return '已再次下载 '+base+'.json。'; },
 fileMade: function(base, addr, note){ return '已生成文件 '+base+'.json，请将它以邮件发到 '+addr+'。'+note+' 若没有反应，请改用“复制答卷文本”。'; },
 noDownload: '此环境不支持直接下载，请改用“复制答卷文本”。'
 };
@@ -781,7 +798,7 @@ function renderOverview(){
   h += '<section class="tbl" id="export"><header><h2>'+S.exportHead+'</h2><p>'+S.exportIntro+'</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
     + (RETURN_EMAIL ? '<div class="mailline">'+S.mailLine+'<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">'+S.copyMail+'</button></div>' : '')
     + '<div class="btnrow"><button class="btn primary big" type="button" data-exp="submit">'+S.submitBtn+'</button></div>'
-    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expfallback" hidden></div>'
+    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expcard" hidden></div><div id="expfallback" hidden></div>'
     + '<details class="fold subfold"><summary>'+S.troubleSummary+'</summary><div class="fold-body"><p class="q">'+S.troubleBody+'</p><div class="btnrow"><button class="btn small" type="button" data-exp="json">'+S.dlOnly+'</button><button class="btn small" type="button" data-exp="copy">'+S.copyText+'</button></div></div></details>'
     + '<div class="btnrow"><button class="btn quiet small" type="button" id="resetbtn" data-reset>'+RESET_LABEL+'</button></div></div></section>';
   h += '<p class="foot">'+S.foot+'</p></div>';
@@ -976,7 +993,7 @@ document.addEventListener('click', function(e){
   if(t.hasAttribute('data-cj')) return applyScore('cj');
   if(t.hasAttribute('data-nav')) return navTo(t.getAttribute('data-nav'));
   if(t.hasAttribute('data-scroll')) return scrollToEl(t.getAttribute('data-scroll'));
-  if(t.hasAttribute('data-exp')) return doExport(t.getAttribute('data-exp'));
+  if(t.hasAttribute('data-exp')) return doExport(t.getAttribute('data-exp'), t);
   if(t.hasAttribute('data-reset')) return doReset(t);
   if(t.hasAttribute('data-resume')){
     if(t.getAttribute('data-resume') === 'yes' && resumePending) return applyResume(resumePending);
@@ -1152,10 +1169,41 @@ function needProfile(){
   var box = document.getElementById('pfbox'); if(box){ box.open = true; scrollToEl('pfbox'); }
   return true;
 }
-async function doExport(kind){
+var lastMail = null, flashTimers = {};
+function flashBtn(btn, ok){
+  if(!btn) return;
+  if(btn.dataset.lbl === undefined) btn.dataset.lbl = btn.textContent;
+  btn.textContent = ok ? S.mcCopied : S.mcCopyFail;
+  clearTimeout(flashTimers[btn.dataset.exp]); flashTimers[btn.dataset.exp] = setTimeout(function(){ btn.textContent = btn.dataset.lbl; }, 2200);
+}
+function showMailCard(m){
+  var c = document.getElementById('expcard'); if(!c) return;
+  c.innerHTML = '<b class="mc-h">'+S.mcHead+'</b><ol>'
+    + '<li>'+S.mcLi1(esc(m.base)+'.json')+'</li>'
+    + '<li>'+S.mcLi2
+    +   '<div class="mc-row"><span class="k">'+S.mcTo+'</span><b>'+esc(m.addr)+'</b><button class="btn small" type="button" data-exp="copyaddr">'+S.mcCopy+'</button></div>'
+    +   '<div class="mc-row"><span class="k">'+S.mcSubj+'</span><b>'+esc(m.subject)+'</b><button class="btn small" type="button" data-exp="copysubj">'+S.mcCopy+'</button></div>'
+    +   '<div class="mc-row"><span class="k">'+S.mcBodyLbl+'</span><span>'+S.mcBodyHint+'</span><button class="btn small" type="button" data-exp="copybody">'+S.mcCopy+'</button></div></li>'
+    + '<li>'+S.mcLi3+'</li></ol>'
+    + '<div class="mc-act"><a class="btn small" href="'+esc(m.href)+'">'+S.mcRetry+'</a><button class="btn small" type="button" data-exp="redl">'+S.mcRedl+'</button></div>';
+  c.hidden = false;
+  try{ c.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'nearest'}); }catch(e){}
+}
+async function doExport(kind, btn){
   if(kind === 'copyaddr'){
     var ok0 = false; try{ await navigator.clipboard.writeText(RETURN_EMAIL); ok0 = true; }catch(e){}
+    if(btn && btn.closest && btn.closest('#expcard')) flashBtn(btn, ok0);
     setStatus(ok0 ? S.copiedMail(RETURN_EMAIL) : S.copyMailFail, !ok0); return;
+  }
+  if(kind === 'copysubj' || kind === 'copybody'){
+    if(!lastMail) return;
+    var ok1 = false; try{ await navigator.clipboard.writeText(kind === 'copysubj' ? lastMail.subject : lastMail.body); ok1 = true; }catch(e){}
+    flashBtn(btn, ok1); setStatus(ok1 ? S.copiedPart(kind === 'copysubj' ? S.mcSubj : S.mcBodyLbl) : S.copyMailFail, !ok1); return;
+  }
+  if(kind === 'redl'){
+    if(!lastMail) return;
+    var rr = await saveFile(lastMail.base+'.json', lastMail.json, 'application/json');
+    setStatus(rr === 'saved' ? S.redlOk(lastMail.base) : (rr === 'declined' ? S.saveDeclined : S.saveFailed), rr !== 'saved'); return;
   }
   if(needProfile()) return;
   var p = payload(), d = new Date();
@@ -1199,10 +1247,14 @@ async function doExport(kind){
   if(kind === 'mail'){
     var rm = await saveFile(base+'.json', json, 'application/json');
     if(rm !== 'saved'){ setStatus(rm === 'declined' ? S.saveDeclined : S.saveFailed, true); return; }
+    var subj = S.mailSubject(p.profile.name), bodyTxt = S.mailBody(base, p.profile.name);
+    var href = 'mailto:'+RETURN_EMAIL+'?subject='+encodeURIComponent(subj)+'&body='+encodeURIComponent(bodyTxt);
+    lastMail = {base:base, json:json, addr:RETURN_EMAIL, subject:subj, body:bodyTxt, href:href};
     var a = document.createElement('a');
-    a.href = 'mailto:'+RETURN_EMAIL+'?subject='+encodeURIComponent(S.mailSubject(p.profile.name))+'&body='+encodeURIComponent(S.mailBody(base, p.profile.name));
+    a.href = href;
     document.body.appendChild(a); a.click(); a.remove();
     setStatus(S.mailStatus(base, RETURN_EMAIL, note));
+    showMailCard(lastMail);
     return;
   }
   var r = await saveFile(base+'.json', json, 'application/json');
