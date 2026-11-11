@@ -57,6 +57,13 @@ a{color:var(--accent)}
 
 /* ---------- overview ---------- */
 .masthead{padding-block:28px 8px}
+.mh-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 8px}
+.mh-top .eyebrow{margin:0}
+.langsw{display:inline-flex;align-items:center;border:1px solid var(--line-strong);border-radius:99px;padding:2px;font-size:13.5px;line-height:1;background:var(--surface)}
+.langsw>*{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border-radius:99px}
+.langsw b{background:var(--accent);color:var(--on-accent);font-weight:600}
+.langsw a{color:var(--muted);text-decoration:none;font-weight:600}
+.langsw a:hover{color:var(--accent)}
 .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 8px}
 h1.title{font:700 clamp(24px,5.2vw,34px)/1.3 var(--serif);margin:0 0 10px;text-wrap:balance;letter-spacing:.01em}
 .lede{margin:0;color:var(--muted);max-width:62ch}
@@ -248,6 +255,12 @@ details.resume-fold .resume{margin-top:6px}
 .mc-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
 .mc-act a.btn{text-decoration:none}
 .status.err{color:var(--danger)}
+.privnote{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.rcpt{border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.7}
+.rcpt .rc-h{display:block;font-size:16.5px;color:var(--accent);margin-bottom:2px}
+.rcpt .rc-sub{margin-top:4px;color:var(--muted);font-size:13.5px}
+.rcpt .rc-warn{margin-top:6px;color:var(--warn,#955A0C);font-weight:600}
+.expnote{border-left:3px solid var(--warn,#955A0C);padding:4px 12px;color:var(--warn,#955A0C);font-size:14px;line-height:1.6}
 .fallback{width:100%;min-height:140px;border:1px solid var(--line-strong);border-radius:10px;padding:10px;background:var(--surface);font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
 .foot{margin:34px 0 0;padding-block:18px 36px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
 
@@ -345,7 +358,7 @@ h1.item-h .id{font:700 14px var(--sans);letter-spacing:.06em;color:var(--accent)
 .ql-hint{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
 .ql-search{width:100%;min-height:42px;border:1px solid var(--line-strong);border-radius:10px;padding:0 12px;background:var(--surface);color:var(--ink);font-size:16px}
 .ql-body{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
-.ql-foot{flex:none;padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+.ql-foot{flex:none;padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
 .ql-none{margin:8px 4px;color:var(--muted);font-size:14px}
 .ql-full{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);cursor:pointer;min-height:28px}
 .ql-full input{width:18px;height:18px;accent-color:var(--accent)}
@@ -367,6 +380,7 @@ button.item .ql-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;ga
 var D = JSON.parse(document.getElementById('app-data').textContent);
 var S = {
 lang: 'zh',
+langAria: '界面语言 / Language', langHref: 'en/',
 qLabel: function(n){ return '第'+n+'题'; },
 range: function(a, b){ return '第 '+a+' 至 '+b+' 题'; },
 secRange: function(a, b, c){ return '第 '+a+'–'+b+' 题 · '+c+' 条'; },
@@ -407,7 +421,7 @@ pfBasis: '判断依据对您的影响程度（各选一项；仅用于专家权�
 pfSummary: '专家信息', pfDone: '已填写', pfTodo: '待填写',
 t2Callout: function(n, range){ return '本分项的中药扩展共 '+n+' 条（'+range+'），见下方表2；需在 9a 下另建议扩展，请至表2末尾。'; },
 gotoT2: '前往表2',
-wxwarn: '您正在微信内置浏览器中打开本页，提交答卷所需的下载、分享功能可能无法使用。建议点右上角“…”，选择“在浏览器中打开”（或复制链接到手机自带浏览器、电脑浏览器）后再填写。',
+wxwarn: '您正在微信内置浏览器中打开本页。一般仍可直接提交答卷；若提交或下载遇到问题，建议点右上角“…”，选择“在浏览器中打开”（或复制链接到手机自带浏览器、电脑浏览器）后再填写。',
 eyebrow: function(v){ return '第一轮 Delphi 专家函询 · 条目稿 '+v; },
 h1: 'ARRIVE-CHM 中药动物实验扩展报告指南',
 lede: function(N){ return '请逐条评价 '+N+' 条候选中药扩展报告要求的重要性。本函询关注中药动物实验应当报告哪些信息，以提高透明度、可重复性和可解释性，不评价具体实验的质量、结果或疗效。如认为有遗漏，可在任一 ARRIVE 分项下（含未设扩展的分项）建议扩展条目；如有 ARRIVE 框架之外的内容需要报告，可建议新增条目。预计 30–45 分钟，可分次完成。'; },
@@ -418,7 +432,7 @@ notesBody: function(N){ return '<ul class="notes">'
   + '<li><b>题号</b><span>本版按条目在表中的呈现顺序连续编号为第 1 至 '+N+' 题，题号顺序与 ARRIVE 条目顺序一致。</span></li>'
   + '<li><b>扩展与新增</b><span>认为 ARRIVE 某个分项（含标注“未扩展”的分项）下还应有中药扩展要求时，请在表1 该分项下点“建议扩展条目”；认为某项中药报告要求不属于任何 ARRIVE 分项时，请在页面下方“ARRIVE 框架之外”处建议新增。这些建议本轮不评分；研究组将汇总、去重并核查依据，合适的将作为新条目进入下一轮评价。</span></li>'
   + '<li><b>修改建议</b><span>如认为需要调整，请在对应条目的“修改建议”栏直接填写最终建议，包括建议调整至哪个 ARRIVE 编号或主题、建议采用的文字，以及合并、拆分或移入解释文件的具体方案。</span></li>'
-  + '<li><b>保存与提交</b><span>答案自动保存在本设备的浏览器中，关闭页面后用同一浏览器再打开即可继续。全部完成后，请在页面底部点“提交答卷”，并按提示把答卷文件以邮件发到研究团队邮箱。换手机、电脑或浏览器继续填写时，请先在原设备提交（或在“提交遇到问题？”中下载答卷文件），再到新设备页面顶部展开“换了手机、电脑或浏览器”，导入该文件。</span></li></ul>'
+  + '<li><b>保存与提交</b><span>答案自动保存在本设备的浏览器中，关闭页面后用同一浏览器再打开即可继续。全部完成后，请在页面底部点“提交答卷”，答卷会直接发送给研究团队，页面显示“已收到您的答卷”即提交成功（提交后仍可修改并再次提交，以最后一次为准；如网络受限无法直接提交，页面会引导改用邮件发送）。换手机、电脑或浏览器继续填写时，请先在原设备页面底部的“提交遇到问题？”中点“仅下载答卷文件”，再到新设备页面顶部展开“换了手机、电脑或浏览器”，导入该文件。</span></li></ul>'
   + '<div class="scoreguide"><div><b>1–3 分</b>不重要</div><div><b>4–6 分</b>重要但非关键，或尚不确定</div><div><b>7–9 分</b>关键，应纳入</div></div>'
   + '<p class="q" style="margin:6px 0 0;font-size:13px;color:var(--muted)">重要性采用 1–9 分整数量表；无法判断时请选“无法判断”。</p>'; },
 t1Head: '表1　ARRIVE 2.0 全部分项与中药扩展',
@@ -436,6 +450,17 @@ outIntro: '如认为有中药报告要求无法归入上述任何 ARRIVE 分项�
 outNote: '扩展与新增建议均仅作为意见提交，本轮不评分。研究组将汇总、去重并核查依据，合适的将作为新条目进入下一轮评价。',
 exportHead: '提交答卷',
 exportIntro: '全部完成后，点下方“提交答卷”，按提示把答卷文件以邮件发到研究团队邮箱。',
+exportIntroOnline: '全部完成后，点下方“提交答卷”，答卷会直接发送给研究团队；页面显示“已收到您的答卷”即提交成功，无需再发邮件。提交后仍可修改并再次提交，以最后一次为准。',
+resubmitBtn: '再次提交答卷', sendingBtn: '正在提交……', mailBtn: '改用邮件发送（备用）',
+sending: '正在把答卷发送给研究团队，请稍候（首次可能需要几秒）……',
+privNote: '点击“提交答卷”即表示您同意把答卷和专家信息（姓名、邮箱等）发送给研究团队，用于本研究。数据经加密连接传输，保存在阿里云（中国香港）的私有存储中，仅研究团队可以读取。',
+rcHead: '✓ 已收到您的答卷',
+rcBody: function(t, code, rated, total, sug){ return '研究团队已于 '+t+' 收到（回执号 <b>'+code+'</b>）。已评分 '+rated+' / '+total+(sug ? '，含 '+sug+' 条建议' : '')+'。'+(rated < total ? '尚有 '+(total-rated)+' 条未评分，可继续填写后再次提交。' : ''); },
+rcAgain: '之后如需修改，改完再点一次“再次提交答卷”即可，研究团队以最后一次提交为准。',
+rcChanged: '您在提交之后又修改了答卷。研究团队目前收到的是上次提交的内容；如需更新，请再次点“再次提交答卷”。',
+sendFail: function(why){ return '没能直接提交到研究团队（可能是网络不稳定或当前网络受限'+(why ? '；原因：'+why : '')+'），已自动改用邮件方式。也可以稍后重新点“提交答卷”再试。'; },
+troubleBodyOnline: '正常情况下，点“提交答卷”即可直接提交，无需发邮件。若反复提示失败（例如当前网络受限），请点“改用邮件发送（备用）”：手机会弹出分享菜单，请选择邮件类应用；电脑会下载答卷文件并尝试打开邮件草稿。若没有弹出，请登录自己的邮箱，新建邮件发给下面的地址，并把下载的答卷文件作为附件。仍不行时，可点“复制答卷文本”，粘贴到邮件正文发送。“仅下载答卷文件”可用来保存进度，以便在其他设备上继续填写。',
+fileMadeOnline: function(base, addr, note){ return '已下载 '+base+'.json。它可用来在其他设备继续填写（页面顶部“换了手机、电脑或浏览器”→ 导入）；若要用邮件提交，请把它作为附件发到 '+addr+'。'+note; },
 mailLine: '答卷发送至：', copyMail: '复制邮箱', submitBtn: '提交答卷',
 troubleSummary: '提交遇到问题？',
 troubleBody: '点“提交答卷”后：手机会弹出分享菜单，请选择邮件类应用；电脑会下载答卷文件并尝试打开邮件草稿。若没有弹出，请登录自己的邮箱，新建邮件发给上面的地址，并把下载的答卷文件作为附件。仍不行时，可点“复制答卷文本”，粘贴到邮件正文发送。',
@@ -527,7 +552,8 @@ mailSubject: function(n){ return 'ARRIVE-CHM 第一轮德尔菲答卷（'+n+'）
 mailBody: function(base, n){ return '老师好：\n\n请见附件答卷文件（'+base+'.json，已下载到您的设备；请在邮件中添加为附件）。\n\n'+n; },
 mailStatus: function(base, addr, note){ return '答卷文件 '+base+'.json 已下载。请按下方步骤，把它作为附件发到 '+addr+'。邮件发出才算提交成功。'+note; },
 mcHead: '还差一步：把答卷文件发给研究团队',
-mcLi1: function(f){ return '答卷文件 <b>'+f+'</b> 已保存到本机的“下载”文件夹。'; },
+mcLi1: function(f){ return '答卷文件 <b>'+f+'</b> 已保存到本机的“下载”文件夹。手机上可在“文件”或“文件管理”的“下载”里找，或搜索“德尔菲评分”；若文件名显示异常，按时间排序，取最新的 .json 文件即可。'; },
+fileTag: '德尔菲评分', fileNoName: '专家',
 mcLi2: '刚才若已弹出邮件草稿，添加该文件为附件后发送即可。<b>若没有弹出</b>（电脑上没有设置默认邮件软件时很常见），请打开自己的邮箱（网页邮箱或邮件软件），新建一封邮件：',
 mcTo: '收件人', mcSubj: '主题', mcBodyLbl: '正文', mcBodyHint: '可粘贴一句说明（非必须）', mcCopy: '复制', mcCopied: '已复制 ✓', mcCopyFail: '复制失败',
 mcLi3: '把答卷文件添加为附件，点发送。邮件发出才算提交成功。',
@@ -546,7 +572,7 @@ var SET_FULL = S.setFull;
 var SHOW_PREVALENCE = true, SHOW_EXAMPLES = true;
 
 var KEY = 'arrive-chm-delphi-r1-' + D.version;
-var store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+var store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null, receipt:null};
 var canStore = true;
 var ROWS = D.arriveRows, ROW_BY = {};
 ROWS.forEach(function(r){ ROW_BY[r.id] = r; });
@@ -569,6 +595,7 @@ function load(){
     var raw = localStorage.getItem(KEY);
     if(raw){ var o = JSON.parse(raw); if(o && typeof o==='object'){
       store.profile=o.profile||{}; store.answers=migrateAnswers(o.answers||{}); store.updatedAt=o.updatedAt||null;
+      store.receipt = (o.receipt && o.receipt.sig) ? o.receipt : null;
       store.additions = Array.isArray(o.additions) ? o.additions.filter(function(a){ return a && a.id && isFilled(a); }) : [];
       store.addSeq = Math.max(Number(o.addSeq)||0, store.additions.length);
     } }
@@ -735,6 +762,7 @@ function profileHTML(){
 function updateProfileState(){
   var el = document.getElementById('pfstate'); if(!el) return;
   var ok = profileDone(); el.textContent = ok ? S.pfDone : S.pfTodo; el.classList.toggle('ok', ok);
+  renderReceipt();
 }
 
 /* ---------------- overview ---------------- */
@@ -754,13 +782,20 @@ function rowHTML(r, t2n){
   }
   return h+'</div>';
 }
+function langSwitchOn(){ return /^https?:$/.test(location.protocol) && !(window.claude && window.claude.use) && !!S.langHref; }
+function langSwitchHTML(){
+  if(!langSwitchOn()) return '';
+  return '<nav class="langsw" aria-label="'+esc(S.langAria)+'">'+[['zh','中文'],['en','English']].map(function(x){
+    return x[0] === S.lang ? '<b lang="'+x[0]+'" aria-current="true">'+x[1]+'</b>' : '<a href="'+esc(S.langHref)+'" lang="'+x[0]+'" hreflang="'+x[0]+'" data-lang-go>'+x[1]+'</a>';
+  }).join('')+'</nav>';
+}
 function renderOverview(){
   var app = document.getElementById('app');
   var done = doneCount(), pct = Math.round(done / N * 100);
   var t1n = ITEMS.filter(function(i){ return i.table === 1; }).length, t2n = N - t1n;
   var cnt = {E10:0, REC:0, EXT:0}; ITEMS.forEach(function(i){ cnt[i.set]++; });
   var h = '';
-  h += '<div class="wrap">'+(isWeChat() ? '<div class="wxwarn" role="note">'+S.wxwarn+'</div>' : '')+'<div class="masthead"><p class="eyebrow">'+esc(S.eyebrow(D.version))+'</p>';
+  h += '<div class="wrap">'+(isWeChat() ? '<div class="wxwarn" role="note">'+S.wxwarn+'</div>' : '')+'<div class="masthead"><div class="mh-top"><p class="eyebrow">'+esc(S.eyebrow(D.version))+'</p>'+langSwitchHTML()+'</div>';
   h += '<h1 class="title">'+S.h1+'</h1>';
   h += '<p class="lede">'+S.lede(N)+'</p>';
   h += '<div class="progress"><span>'+S.progressTop(done, N)+'</span><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+N+'" aria-valuenow="'+done+'"><i style="width:'+pct+'%"></i></div><span class="savenote" data-savenote></span></div>'+resumeHTML()+'</div>';
@@ -795,11 +830,16 @@ function renderOverview(){
   h += '<section class="tbl" id="outside"><header><h2>'+S.outHead+'</h2><p>'+S.outIntro+'</p></header><div style="margin-top:14px">'+zone('outside')+'<p class="addnote">'+S.outNote+'</p></div></section>';
 
   /* export */
-  h += '<section class="tbl" id="export"><header><h2>'+S.exportHead+'</h2><p>'+S.exportIntro+'</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
-    + (RETURN_EMAIL ? '<div class="mailline">'+S.mailLine+'<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">'+S.copyMail+'</button></div>' : '')
-    + '<div class="btnrow"><button class="btn primary big" type="button" data-exp="submit">'+S.submitBtn+'</button></div>'
-    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expcard" hidden></div><div id="expfallback" hidden></div>'
-    + '<details class="fold subfold"><summary>'+S.troubleSummary+'</summary><div class="fold-body"><p class="q">'+S.troubleBody+'</p><div class="btnrow"><button class="btn small" type="button" data-exp="json">'+S.dlOnly+'</button><button class="btn small" type="button" data-exp="copy">'+S.copyText+'</button></div></div></details>'
+  var online = onlineOn();
+  var mailLineHTML = RETURN_EMAIL ? '<div class="mailline">'+S.mailLine+'<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">'+S.copyMail+'</button></div>' : '';
+  h += '<section class="tbl" id="export"><header><h2>'+S.exportHead+'</h2><p>'+(online ? S.exportIntroOnline : S.exportIntro)+'</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
+    + (online ? '' : mailLineHTML)
+    + '<div class="btnrow"><button class="btn primary big" type="button" id="submitbtn" data-exp="submit">'+S.submitBtn+'</button></div>'
+    + (online ? '<p class="privnote">'+S.privNote+'</p>' : '')
+    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div class="rcpt" id="exprcpt" role="status" hidden></div><div class="expnote" id="expnote" role="status" hidden></div><div id="expcard" hidden></div><div id="expfallback" hidden></div>'
+    + '<details class="fold subfold"><summary>'+S.troubleSummary+'</summary><div class="fold-body"><p class="q">'+(online ? S.troubleBodyOnline : S.troubleBody)+'</p>'
+    +   (online ? mailLineHTML : '')
+    +   '<div class="btnrow">'+(online && RETURN_EMAIL ? '<button class="btn small" type="button" data-exp="submitmail">'+S.mailBtn+'</button>' : '')+'<button class="btn small" type="button" data-exp="json">'+S.dlOnly+'</button><button class="btn small" type="button" data-exp="copy">'+S.copyText+'</button></div></div></details>'
     + '<div class="btnrow"><button class="btn quiet small" type="button" id="resetbtn" data-reset>'+RESET_LABEL+'</button></div></div></section>';
   h += '<p class="foot">'+S.foot+'</p></div>';
 
@@ -824,6 +864,7 @@ function updateExportSummary(){
     }).join('')+'</div>';
   }
   el.innerHTML = h;
+  renderReceipt();
 }
 
 /* ---------------- item page ---------------- */
@@ -916,7 +957,7 @@ function openList(){
     + '<p class="ql-hint">'+S.listHint+'</p>'
     + '<input class="ql-search" id="qlsearch" type="search" autocomplete="off" enterkeyhint="search" placeholder="'+esc(S.listSearch)+'" aria-label="'+esc(S.listSearch)+'"><label class="ql-full"><input type="checkbox" id="qlfull"> '+S.listFull+'</label></div>'
     + '<div class="ql-body" id="qlbody">'+ITEMS.map(qlRow).join('')+'<p class="ql-none" hidden>'+S.listNone+'</p></div>'
-    + '<div class="ql-foot"><button class="btn" type="button" data-nav="home">'+S.listHome+'</button></div></div>';
+    + '<div class="ql-foot">'+langSwitchHTML()+'<button class="btn" type="button" data-nav="home">'+S.listHome+'</button></div></div>';
   document.body.appendChild(w); qlEl = w;
   document.documentElement.style.overflow = 'hidden';
   var body = w.querySelector('#qlbody'), cur = w.querySelector('.cur');
@@ -980,6 +1021,13 @@ function scrollToEl(id){
 }
 
 document.addEventListener('click', function(e){
+  var lg = e.target.closest ? e.target.closest('[data-lang-go]') : null;
+  if(lg && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)){
+    e.preventDefault();
+    clearTimeout(saveTimer); persist();   /* flush anything typed in the last moment, then open the other language page at the same question */
+    try{ var u = new URL(lg.getAttribute('href'), location.href); u.hash = location.hash; location.assign(u.toString()); }catch(err){ location.assign(lg.getAttribute('href')); }
+    return;
+  }
   var inCard = e.target.closest ? e.target.closest('[data-addcard]') : null;
   if(!(e.target.closest && e.target.closest('[data-add]'))) pruneEmpty(inCard ? inCard.getAttribute('data-addcard') : null);
   var t = e.target.closest('[data-score],[data-cj],[data-nav],[data-scroll],[data-exp],[data-reset],[data-add],[data-add-del],[data-view],[data-resume],[data-qgo],[data-qclose]');
@@ -1107,6 +1155,9 @@ function applyResume(o){
 
 /* ---------------- export ---------------- */
 var RETURN_EMAIL = 'wangzhe19980611@163.com';   /* research-team address for the "write email" button and the address line; leave empty to hide both */
+var API_URL = 'https://arrive-receiver-krpvvyrncf.cn-hongkong.fcapp.run';   /* online-submission endpoint (Alibaba Function Compute, Hong Kong); leave empty to use the email-only flow */
+var SUBMIT_TIMEOUT_MS = 20000;
+function onlineOn(){ return !!API_URL && !(window.claude && window.claude.use); }
 var DATA_BEGIN = '-----BEGIN ARRIVE-CHM DATA-----', DATA_END = '-----END ARRIVE-CHM DATA-----';
 function b64(s){ var bytes = new TextEncoder().encode(s), bin = ''; for(var i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(bin).replace(/(.{76})/g, '$1\n'); }
 function isWeChat(){ return /MicroMessenger/i.test(navigator.userAgent || ''); }
@@ -1142,7 +1193,40 @@ function toText(p){
   });
   return L.join('\n');
 }
+function fileSafeName(s){
+  s = String(s||''); try{ s = s.normalize('NFC'); }catch(e){}
+  s = s.replace(/[\u0000-\u001f\u007f\\\/:*?"<>|#%&\s]+/g, '_').replace(/^[_.]+|[_.]+$/g, '');
+  s = Array.from(s).slice(0, 24).join('').replace(/[_.]+$/g, '');
+  return s || S.fileNoName;
+}
 function ymd(){ var d = new Date(); return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()); }
+function sigOf(p){
+  var s = JSON.stringify({profile:p.profile, answers:p.answers, suggestions:p.suggestions}), h = 2166136261;
+  for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0).toString(16)+'-'+s.length;
+}
+function fmtLocal(iso){ var d = new Date(iso); return isNaN(d.getTime()) ? '' : d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes()); }
+function renderReceipt(){
+  var el = document.getElementById('exprcpt'), b = document.getElementById('submitbtn'); if(!el) return;
+  var r = onlineOn() ? store.receipt : null;
+  if(!r){ el.hidden = true; el.innerHTML = ''; if(b && !submitting) b.textContent = S.submitBtn; return; }
+  var changed = sigOf(payload()) !== r.sig;
+  el.innerHTML = '<b class="rc-h">'+S.rcHead+'</b><div>'+S.rcBody(fmtLocal(r.at), esc(r.code || ''), r.rated, r.total, r.sug)+'</div>'
+    + (changed ? '<div class="rc-warn">'+S.rcChanged+'</div>' : '<div class="rc-sub">'+S.rcAgain+'</div>');
+  el.hidden = false;
+  if(b && !submitting) b.textContent = S.resubmitBtn;
+}
+function setNote(msg){ var n = document.getElementById('expnote'); if(!n) return; n.textContent = msg || ''; n.hidden = !msg; }
+async function submitOnline(p){
+  var ctl = (typeof AbortController === 'function') ? new AbortController() : null, tm = setTimeout(function(){ if(ctl) ctl.abort(); }, SUBMIT_TIMEOUT_MS);
+  try{
+    var res = await fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'}, body:JSON.stringify(p), signal:ctl ? ctl.signal : undefined});
+    var j = null; try{ j = await res.json(); }catch(e){}
+    if(res.ok && j && j.ok === true) return {ok:true, id:j.id, receivedAt:j.receivedAt};
+    return {ok:false, status:res.status, err:(j && j.error) ? String(j.error) : ''};
+  }catch(e){ return {ok:false, status:0, err:'', aborted:!!(e && e.name === 'AbortError')}; }
+  finally{ clearTimeout(tm); }
+}
 function setStatus(msg, err){ var s = document.getElementById('expstatus'); if(s){ s.textContent = msg; s.classList.toggle('err', !!err); } }
 function showFallback(text){
   var f = document.getElementById('expfallback'); if(!f) return;
@@ -1169,7 +1253,7 @@ function needProfile(){
   var box = document.getElementById('pfbox'); if(box){ box.open = true; scrollToEl('pfbox'); }
   return true;
 }
-var lastMail = null, flashTimers = {};
+var lastMail = null, flashTimers = {}, submitting = false;
 function flashBtn(btn, ok){
   if(!btn) return;
   if(btn.dataset.lbl === undefined) btn.dataset.lbl = btn.textContent;
@@ -1206,9 +1290,9 @@ async function doExport(kind, btn){
     setStatus(rr === 'saved' ? S.redlOk(lastMail.base) : (rr === 'declined' ? S.saveDeclined : S.saveFailed), rr !== 'saved'); return;
   }
   if(needProfile()) return;
+  if(kind === 'submit' && submitting) return;
   var p = payload(), d = new Date();
-  var nm = p.profile.name.replace(/[\\\/:*?"<>|\s]+/g,'_');
-  var base = 'ARRIVE-CHM-R1_'+nm+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
+  var base = fileSafeName(p.profile.name)+'_'+S.fileTag+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
   var json = JSON.stringify(p, null, 2);
   var note = S.noteTail(N-p.ratedCount, p.suggestionsCount);
   if(kind === 'copy'){
@@ -1218,7 +1302,32 @@ async function doExport(kind, btn){
     else { setStatus(S.copyFail(note)); showFallback(txt); }
     return;
   }
-  if(kind === 'submit'){
+  setNote('');
+  if(kind === 'submit' && onlineOn()){
+    submitting = true;
+    var sb = document.getElementById('submitbtn');
+    if(sb){ sb.disabled = true; sb.textContent = S.sendingBtn; }
+    setStatus(S.sending);
+    var res = await submitOnline(p);
+    submitting = false;
+    if(sb) sb.disabled = false;
+    if(res.ok){
+      var mm = /([0-9a-f]{8})$/i.exec(String(res.id || ''));
+      store.receipt = {id:String(res.id || ''), code:(mm ? mm[1] : String(res.id || '').slice(-8)).toUpperCase(), at:res.receivedAt || new Date().toISOString(), sig:sigOf(p), rated:p.ratedCount, total:N, sug:p.suggestionsCount};
+      try{ localStorage.setItem(KEY, JSON.stringify(store)); canStore = true; }catch(e){ canStore = false; }
+      setStatus('');
+      var c0 = document.getElementById('expcard'), f0 = document.getElementById('expfallback');
+      if(c0){ c0.hidden = true; c0.innerHTML = ''; } if(f0){ f0.hidden = true; f0.innerHTML = ''; }
+      renderReceipt();
+      var rc = document.getElementById('exprcpt');
+      try{ if(rc) rc.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'nearest'}); }catch(e){}
+      return;
+    }
+    renderReceipt();
+    setNote(S.sendFail(res.status >= 400 && res.status < 500 ? res.err : ''));
+    kind = 'submitmail';
+  }
+  if(kind === 'submit' || kind === 'submitmail'){
     if(!RETURN_EMAIL) kind = 'json';
     else if(isMobileUA() && canShareFiles()){
       var cp = Promise.resolve(false);
@@ -1258,7 +1367,7 @@ async function doExport(kind, btn){
     return;
   }
   var r = await saveFile(base+'.json', json, 'application/json');
-  if(r === 'saved') setStatus(S.fileMade(base, RETURN_EMAIL, note));
+  if(r === 'saved') setStatus(onlineOn() ? S.fileMadeOnline(base, RETURN_EMAIL, note) : S.fileMade(base, RETURN_EMAIL, note));
   else if(r === 'declined') setStatus(S.saveDeclined);
   else { setStatus(S.noDownload, true); }
 }
@@ -1266,7 +1375,7 @@ var resetArmed = false, resetTimer = null;
 function doReset(btn){
   if(!resetArmed){ resetArmed = true; btn.textContent = S.resetConfirm; btn.style.color = 'var(--danger)'; resetTimer = setTimeout(function(){ resetArmed = false; btn.textContent = RESET_LABEL; btn.style.color = ''; }, 4000); return; }
   clearTimeout(resetTimer); resetArmed = false;
-  store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+  store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null, receipt:null};
   try{ localStorage.removeItem(KEY); }catch(e){}
   renderOverview(); window.scrollTo(0,0);
 }

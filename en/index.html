@@ -57,6 +57,13 @@ a{color:var(--accent)}
 
 /* ---------- overview ---------- */
 .masthead{padding-block:28px 8px}
+.mh-top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:6px 14px;margin:0 0 8px}
+.mh-top .eyebrow{margin:0}
+.langsw{display:inline-flex;align-items:center;border:1px solid var(--line-strong);border-radius:99px;padding:2px;font-size:13.5px;line-height:1;background:var(--surface)}
+.langsw>*{display:inline-flex;align-items:center;min-height:34px;padding:0 14px;border-radius:99px}
+.langsw b{background:var(--accent);color:var(--on-accent);font-weight:600}
+.langsw a{color:var(--muted);text-decoration:none;font-weight:600}
+.langsw a:hover{color:var(--accent)}
 .eyebrow{font-size:13px;letter-spacing:.06em;color:var(--accent);font-weight:600;margin:0 0 8px}
 h1.title{font:700 clamp(24px,5.2vw,34px)/1.3 var(--serif);margin:0 0 10px;text-wrap:balance;letter-spacing:.01em}
 .lede{margin:0;color:var(--muted);max-width:62ch}
@@ -248,6 +255,12 @@ details.resume-fold .resume{margin-top:6px}
 .mc-act{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:8px}
 .mc-act a.btn{text-decoration:none}
 .status.err{color:var(--danger)}
+.privnote{margin:0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+.rcpt{border:1px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:14px 16px;font-size:14.5px;line-height:1.7}
+.rcpt .rc-h{display:block;font-size:16.5px;color:var(--accent);margin-bottom:2px}
+.rcpt .rc-sub{margin-top:4px;color:var(--muted);font-size:13.5px}
+.rcpt .rc-warn{margin-top:6px;color:var(--warn,#955A0C);font-weight:600}
+.expnote{border-left:3px solid var(--warn,#955A0C);padding:4px 12px;color:var(--warn,#955A0C);font-size:14px;line-height:1.6}
 .fallback{width:100%;min-height:140px;border:1px solid var(--line-strong);border-radius:10px;padding:10px;background:var(--surface);font:12.5px/1.5 ui-monospace,Menlo,Consolas,monospace}
 .foot{margin:34px 0 0;padding-block:18px 36px;border-top:1px solid var(--line);color:var(--faint);font-size:12.5px}
 
@@ -345,7 +358,7 @@ h1.item-h .id{font:700 14px var(--sans);letter-spacing:.06em;color:var(--accent)
 .ql-hint{margin:0;font-size:12.5px;color:var(--muted);line-height:1.55}
 .ql-search{width:100%;min-height:42px;border:1px solid var(--line-strong);border-radius:10px;padding:0 12px;background:var(--surface);color:var(--ink);font-size:16px}
 .ql-body{position:relative;flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
-.ql-foot{flex:none;padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end}
+.ql-foot{flex:none;padding:10px 16px;border-top:1px solid var(--line);display:flex;justify-content:flex-end;align-items:center;gap:10px;flex-wrap:wrap}
 .ql-none{margin:8px 4px;color:var(--muted);font-size:14px}
 .ql-full{display:inline-flex;align-items:center;gap:8px;font-size:13.5px;color:var(--muted);cursor:pointer;min-height:28px}
 .ql-full input{width:18px;height:18px;accent-color:var(--accent)}
@@ -367,6 +380,7 @@ button.item .ql-in{display:grid;grid-template-columns:auto minmax(0,1fr) auto;ga
 var D = JSON.parse(document.getElementById('app-data').textContent);
 var S = {
 lang: 'en',
+langAria: 'Interface language / 界面语言', langHref: '../',
 qLabel: function(n){ return 'Item '+n; },
 range: function(a, b){ return 'Items '+a+'–'+b; },
 secRange: function(a, b, c){ return 'Items '+a+'–'+b+' · '+c+(c === 1 ? ' item' : ' items'); },
@@ -407,7 +421,7 @@ pfBasis: 'How much each source influenced your judgements (one answer per row; u
 pfSummary: 'Expert information', pfDone: 'Completed', pfTodo: 'To complete',
 t2Callout: function(n, range){ return 'This item has '+n+' CHM extensions ('+range+') in Table 2 below. To suggest another extension under 9a, go to the end of Table 2.'; },
 gotoT2: 'Go to Table 2',
-wxwarn: 'You are opening this page in WeChat’s built-in browser, where the download and share functions needed to submit your responses may not work. Tap “…” at the top right and choose “Open in browser” (or copy the link into your phone’s or computer’s own browser) before filling it in.',
+wxwarn: 'You are opening this page in WeChat’s built-in browser. Submitting should normally still work, but if submitting or downloading gives you trouble, tap “…” at the top right and choose “Open in browser” (or copy the link into your phone’s or computer’s own browser) before filling it in.',
 eyebrow: function(v){ return 'Round 1 Delphi expert survey · item draft '+v; },
 h1: 'ARRIVE-CHM: a Chinese herbal medicine extension of the ARRIVE guidelines for animal experiments',
 lede: function(N){ return 'Please rate the importance of each of the '+N+' candidate reporting requirements for Chinese herbal medicine (CHM). This survey asks what information should be reported in animal experiments on CHM, in order to improve transparency, reproducibility and interpretability; it does not assess the quality, results or efficacy of any particular experiment. If you think something is missing, you may suggest an extension under any ARRIVE item (including items that have no CHM extension yet); if something outside the ARRIVE framework needs to be reported, you may suggest a new item. Estimated time: 30–45 minutes; you can complete it in several sittings.'; },
@@ -418,7 +432,7 @@ notesBody: function(N){ return '<ul class="notes">'
   + '<li><b>Numbering</b><span>Items are numbered consecutively from 1 to '+N+' in the order they appear in the tables, which follows the order of the ARRIVE items.</span></li>'
   + '<li><b>Extensions and new items</b><span>If you think an ARRIVE item (including those marked “Not extended”) needs a CHM extension, click “Suggest an extension” under that item in Table 1. If a CHM reporting requirement does not belong under any ARRIVE item, suggest a new item under “Outside the ARRIVE framework” further down the page. These suggestions are not rated in this round: the research team will collate and de-duplicate them and check their basis, and suitable ones will enter the next round as new items.</span></li>'
   + '<li><b>Suggested revisions</b><span>If you think an item needs adjusting, write your final suggestion directly in its “Suggested revision” box: which ARRIVE item or topic it should move to, the wording you propose, and any specific plan to merge it, split it, or move it to the explanatory document.</span></li>'
-  + '<li><b>Saving and submitting</b><span>Your answers are saved automatically in this device’s browser; close the page and reopen it in the same browser to continue. When you have finished, click “Submit responses” at the bottom of the page and follow the prompt to email the response file to the research team. To continue on another phone, computer or browser, first submit from the original device (or download the response file under “Trouble submitting?”), then on the new device expand “Switched phone, computer or browser?” at the top of the page and import that file.</span></li></ul>'
+  + '<li><b>Saving and submitting</b><span>Your answers are saved automatically in this device’s browser; close the page and reopen it in the same browser to continue. When you have finished, click “Submit responses” at the bottom of the page. Your responses are sent directly to the research team, and the page shows “Your responses have been received” when it has worked (you can edit and submit again afterwards — the last submission counts; if your network prevents direct submission, the page will guide you to send it by email instead). To continue on another phone, computer or browser, first click “Download response file only” under “Trouble submitting?” at the bottom of the page on the original device, then on the new device expand “Switched phone, computer or browser?” at the top of the page and import that file.</span></li></ul>'
   + '<div class="scoreguide"><div><b>1–3</b>Not important</div><div><b>4–6</b>Important but not critical, or uncertain</div><div><b>7–9</b>Critical; should be included</div></div>'
   + '<p class="q" style="margin:6px 0 0;font-size:13px;color:var(--muted)">Importance is rated on an integer scale of 1–9; if you cannot judge an item, choose “Cannot judge”.</p>'; },
 t1Head: 'Table 1. All ARRIVE 2.0 items and their CHM extensions',
@@ -436,6 +450,17 @@ outIntro: 'If a CHM reporting requirement cannot be placed under any ARRIVE item
 outNote: 'Extension and new-item suggestions are submitted as comments only and are not rated in this round. The research team will collate and de-duplicate them and check their basis; suitable ones will enter the next round as new items.',
 exportHead: 'Submit your responses',
 exportIntro: 'When you have finished, click “Submit responses” below and follow the prompt to email the response file to the research team.',
+exportIntroOnline: 'When you have finished, click “Submit responses” below. Your responses are sent directly to the research team, and the page shows “Your responses have been received” when it has worked — no email is needed. You can edit and submit again afterwards; the last submission is the one that counts.',
+resubmitBtn: 'Submit again', sendingBtn: 'Submitting…', mailBtn: 'Send by email instead (backup)',
+sending: 'Sending your responses to the research team… (the first submission can take a few seconds)',
+privNote: 'By clicking “Submit responses” you agree to send your responses and expert information (name, email, etc.) to the research team for use in this study. Data are sent over an encrypted connection and held in private cloud storage (Alibaba Cloud, Hong Kong) that only the research team can access.',
+rcHead: '✓ Your responses have been received',
+rcBody: function(t, code, rated, total, sug){ return 'The research team received them on '+t+' (receipt no. <b>'+code+'</b>). Rated '+rated+' / '+total+(sug ? ', including '+sug+' suggestion'+(sug === 1 ? '' : 's') : '')+'.'+(rated < total ? ' '+(total-rated)+' item'+(total-rated === 1 ? ' is' : 's are')+' still unrated; you can continue and submit again.' : ''); },
+rcAgain: 'If you want to change anything later, edit and click “Submit again”; the research team uses your last submission.',
+rcChanged: 'You have changed your responses since submitting. The research team currently has the version from your last submission; click “Submit again” to update it.',
+sendFail: function(why){ return 'Your responses could not be sent directly to the research team (the network may be unstable or restricted'+(why ? '; reason: '+why : '')+'), so the email method was started automatically. You can also try “Submit responses” again later.'; },
+troubleBodyOnline: 'Normally, clicking “Submit responses” is all you need; no email is required. If it keeps failing (for example, on a restricted network), click “Send by email instead (backup)”: on a phone, a share menu opens — choose an email app; on a computer, the response file is downloaded and an email draft is opened. If nothing opens, log in to your own email, write a new message to the address below, and attach the downloaded response file. If that still does not work, click “Copy response text” and paste it into the body of the email. “Download response file only” saves your progress so you can continue on another device.',
+fileMadeOnline: function(base, addr, note){ return 'Downloaded '+base+'.json. You can use it to continue on another device (“Switched phone, computer or browser?” at the top of the page → import); to submit by email instead, attach it to a message to '+addr+'.'+note; },
 mailLine: 'Send responses to: ', copyMail: 'Copy email address', submitBtn: 'Submit responses',
 troubleSummary: 'Trouble submitting?',
 troubleBody: 'After you click “Submit responses”: on a phone, a share menu opens — choose an email app; on a computer, the response file is downloaded and an email draft is opened. If nothing opens, log in to your own email, write a new message to the address above, and attach the downloaded response file. If that still does not work, click “Copy response text” and paste it into the body of the email.',
@@ -527,7 +552,8 @@ mailSubject: function(n){ return 'ARRIVE-CHM Round 1 Delphi response ('+n+')'; }
 mailBody: function(base, n){ return 'Dear research team,\n\nPlease find my response file attached ('+base+'.json, downloaded to my device; please add it to this email as an attachment).\n\n'+n; },
 mailStatus: function(base, addr, note){ return 'The response file '+base+'.json has been downloaded. Please follow the steps below to email it to '+addr+' as an attachment. Your submission counts only once the email has been sent.'+note; },
 mcHead: 'One more step: send the response file to the research team',
-mcLi1: function(f){ return 'The response file <b>'+f+'</b> has been saved to your Downloads folder.'; },
+mcLi1: function(f){ return 'The response file <b>'+f+'</b> has been saved to your Downloads folder. On a phone, open Files (or File Manager) → Downloads, or search for “Delphi-ratings”; if the file name looks odd, sort by date and take the newest .json file.'; },
+fileTag: 'Delphi-ratings', fileNoName: 'Expert',
 mcLi2: 'If an email draft has just opened, attach that file and send it. <b>If nothing opened</b> (common on computers with no default mail app), open your own email (webmail or a mail app) and write a new message:',
 mcTo: 'To', mcSubj: 'Subject', mcBodyLbl: 'Message', mcBodyHint: 'a one-line note you can paste (optional)', mcCopy: 'Copy', mcCopied: 'Copied ✓', mcCopyFail: 'Copy failed',
 mcLi3: 'Attach the response file and send. Your submission counts only once the email has been sent.',
@@ -546,7 +572,7 @@ var SET_FULL = S.setFull;
 var SHOW_PREVALENCE = true, SHOW_EXAMPLES = true;
 
 var KEY = 'arrive-chm-delphi-r1-' + D.version;
-var store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+var store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null, receipt:null};
 var canStore = true;
 var ROWS = D.arriveRows, ROW_BY = {};
 ROWS.forEach(function(r){ ROW_BY[r.id] = r; });
@@ -569,6 +595,7 @@ function load(){
     var raw = localStorage.getItem(KEY);
     if(raw){ var o = JSON.parse(raw); if(o && typeof o==='object'){
       store.profile=o.profile||{}; store.answers=migrateAnswers(o.answers||{}); store.updatedAt=o.updatedAt||null;
+      store.receipt = (o.receipt && o.receipt.sig) ? o.receipt : null;
       store.additions = Array.isArray(o.additions) ? o.additions.filter(function(a){ return a && a.id && isFilled(a); }) : [];
       store.addSeq = Math.max(Number(o.addSeq)||0, store.additions.length);
     } }
@@ -735,6 +762,7 @@ function profileHTML(){
 function updateProfileState(){
   var el = document.getElementById('pfstate'); if(!el) return;
   var ok = profileDone(); el.textContent = ok ? S.pfDone : S.pfTodo; el.classList.toggle('ok', ok);
+  renderReceipt();
 }
 
 /* ---------------- overview ---------------- */
@@ -754,13 +782,20 @@ function rowHTML(r, t2n){
   }
   return h+'</div>';
 }
+function langSwitchOn(){ return /^https?:$/.test(location.protocol) && !(window.claude && window.claude.use) && !!S.langHref; }
+function langSwitchHTML(){
+  if(!langSwitchOn()) return '';
+  return '<nav class="langsw" aria-label="'+esc(S.langAria)+'">'+[['zh','中文'],['en','English']].map(function(x){
+    return x[0] === S.lang ? '<b lang="'+x[0]+'" aria-current="true">'+x[1]+'</b>' : '<a href="'+esc(S.langHref)+'" lang="'+x[0]+'" hreflang="'+x[0]+'" data-lang-go>'+x[1]+'</a>';
+  }).join('')+'</nav>';
+}
 function renderOverview(){
   var app = document.getElementById('app');
   var done = doneCount(), pct = Math.round(done / N * 100);
   var t1n = ITEMS.filter(function(i){ return i.table === 1; }).length, t2n = N - t1n;
   var cnt = {E10:0, REC:0, EXT:0}; ITEMS.forEach(function(i){ cnt[i.set]++; });
   var h = '';
-  h += '<div class="wrap">'+(isWeChat() ? '<div class="wxwarn" role="note">'+S.wxwarn+'</div>' : '')+'<div class="masthead"><p class="eyebrow">'+esc(S.eyebrow(D.version))+'</p>';
+  h += '<div class="wrap">'+(isWeChat() ? '<div class="wxwarn" role="note">'+S.wxwarn+'</div>' : '')+'<div class="masthead"><div class="mh-top"><p class="eyebrow">'+esc(S.eyebrow(D.version))+'</p>'+langSwitchHTML()+'</div>';
   h += '<h1 class="title">'+S.h1+'</h1>';
   h += '<p class="lede">'+S.lede(N)+'</p>';
   h += '<div class="progress"><span>'+S.progressTop(done, N)+'</span><div class="meter" role="progressbar" aria-valuemin="0" aria-valuemax="'+N+'" aria-valuenow="'+done+'"><i style="width:'+pct+'%"></i></div><span class="savenote" data-savenote></span></div>'+resumeHTML()+'</div>';
@@ -795,11 +830,16 @@ function renderOverview(){
   h += '<section class="tbl" id="outside"><header><h2>'+S.outHead+'</h2><p>'+S.outIntro+'</p></header><div style="margin-top:14px">'+zone('outside')+'<p class="addnote">'+S.outNote+'</p></div></section>';
 
   /* export */
-  h += '<section class="tbl" id="export"><header><h2>'+S.exportHead+'</h2><p>'+S.exportIntro+'</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
-    + (RETURN_EMAIL ? '<div class="mailline">'+S.mailLine+'<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">'+S.copyMail+'</button></div>' : '')
-    + '<div class="btnrow"><button class="btn primary big" type="button" data-exp="submit">'+S.submitBtn+'</button></div>'
-    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div id="expcard" hidden></div><div id="expfallback" hidden></div>'
-    + '<details class="fold subfold"><summary>'+S.troubleSummary+'</summary><div class="fold-body"><p class="q">'+S.troubleBody+'</p><div class="btnrow"><button class="btn small" type="button" data-exp="json">'+S.dlOnly+'</button><button class="btn small" type="button" data-exp="copy">'+S.copyText+'</button></div></div></details>'
+  var online = onlineOn();
+  var mailLineHTML = RETURN_EMAIL ? '<div class="mailline">'+S.mailLine+'<b>'+esc(RETURN_EMAIL)+'</b><button class="btn quiet small" type="button" data-exp="copyaddr">'+S.copyMail+'</button></div>' : '';
+  h += '<section class="tbl" id="export"><header><h2>'+S.exportHead+'</h2><p>'+(online ? S.exportIntroOnline : S.exportIntro)+'</p></header><div class="export-box" style="margin-top:14px"><div id="expsum"></div>'
+    + (online ? '' : mailLineHTML)
+    + '<div class="btnrow"><button class="btn primary big" type="button" id="submitbtn" data-exp="submit">'+S.submitBtn+'</button></div>'
+    + (online ? '<p class="privnote">'+S.privNote+'</p>' : '')
+    + '<div class="status" id="expstatus" role="status" aria-live="polite"></div><div class="rcpt" id="exprcpt" role="status" hidden></div><div class="expnote" id="expnote" role="status" hidden></div><div id="expcard" hidden></div><div id="expfallback" hidden></div>'
+    + '<details class="fold subfold"><summary>'+S.troubleSummary+'</summary><div class="fold-body"><p class="q">'+(online ? S.troubleBodyOnline : S.troubleBody)+'</p>'
+    +   (online ? mailLineHTML : '')
+    +   '<div class="btnrow">'+(online && RETURN_EMAIL ? '<button class="btn small" type="button" data-exp="submitmail">'+S.mailBtn+'</button>' : '')+'<button class="btn small" type="button" data-exp="json">'+S.dlOnly+'</button><button class="btn small" type="button" data-exp="copy">'+S.copyText+'</button></div></div></details>'
     + '<div class="btnrow"><button class="btn quiet small" type="button" id="resetbtn" data-reset>'+RESET_LABEL+'</button></div></div></section>';
   h += '<p class="foot">'+S.foot+'</p></div>';
 
@@ -824,6 +864,7 @@ function updateExportSummary(){
     }).join('')+'</div>';
   }
   el.innerHTML = h;
+  renderReceipt();
 }
 
 /* ---------------- item page ---------------- */
@@ -916,7 +957,7 @@ function openList(){
     + '<p class="ql-hint">'+S.listHint+'</p>'
     + '<input class="ql-search" id="qlsearch" type="search" autocomplete="off" enterkeyhint="search" placeholder="'+esc(S.listSearch)+'" aria-label="'+esc(S.listSearch)+'"><label class="ql-full"><input type="checkbox" id="qlfull"> '+S.listFull+'</label></div>'
     + '<div class="ql-body" id="qlbody">'+ITEMS.map(qlRow).join('')+'<p class="ql-none" hidden>'+S.listNone+'</p></div>'
-    + '<div class="ql-foot"><button class="btn" type="button" data-nav="home">'+S.listHome+'</button></div></div>';
+    + '<div class="ql-foot">'+langSwitchHTML()+'<button class="btn" type="button" data-nav="home">'+S.listHome+'</button></div></div>';
   document.body.appendChild(w); qlEl = w;
   document.documentElement.style.overflow = 'hidden';
   var body = w.querySelector('#qlbody'), cur = w.querySelector('.cur');
@@ -980,6 +1021,13 @@ function scrollToEl(id){
 }
 
 document.addEventListener('click', function(e){
+  var lg = e.target.closest ? e.target.closest('[data-lang-go]') : null;
+  if(lg && !(e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button)){
+    e.preventDefault();
+    clearTimeout(saveTimer); persist();   /* flush anything typed in the last moment, then open the other language page at the same question */
+    try{ var u = new URL(lg.getAttribute('href'), location.href); u.hash = location.hash; location.assign(u.toString()); }catch(err){ location.assign(lg.getAttribute('href')); }
+    return;
+  }
   var inCard = e.target.closest ? e.target.closest('[data-addcard]') : null;
   if(!(e.target.closest && e.target.closest('[data-add]'))) pruneEmpty(inCard ? inCard.getAttribute('data-addcard') : null);
   var t = e.target.closest('[data-score],[data-cj],[data-nav],[data-scroll],[data-exp],[data-reset],[data-add],[data-add-del],[data-view],[data-resume],[data-qgo],[data-qclose]');
@@ -1107,6 +1155,9 @@ function applyResume(o){
 
 /* ---------------- export ---------------- */
 var RETURN_EMAIL = 'wangzhe19980611@163.com';   /* research-team address for the "write email" button and the address line; leave empty to hide both */
+var API_URL = 'https://arrive-receiver-krpvvyrncf.cn-hongkong.fcapp.run';   /* online-submission endpoint (Alibaba Function Compute, Hong Kong); leave empty to use the email-only flow */
+var SUBMIT_TIMEOUT_MS = 20000;
+function onlineOn(){ return !!API_URL && !(window.claude && window.claude.use); }
 var DATA_BEGIN = '-----BEGIN ARRIVE-CHM DATA-----', DATA_END = '-----END ARRIVE-CHM DATA-----';
 function b64(s){ var bytes = new TextEncoder().encode(s), bin = ''; for(var i = 0; i < bytes.length; i += 8192) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 8192)); return btoa(bin).replace(/(.{76})/g, '$1\n'); }
 function isWeChat(){ return /MicroMessenger/i.test(navigator.userAgent || ''); }
@@ -1142,7 +1193,40 @@ function toText(p){
   });
   return L.join('\n');
 }
+function fileSafeName(s){
+  s = String(s||''); try{ s = s.normalize('NFC'); }catch(e){}
+  s = s.replace(/[\u0000-\u001f\u007f\\\/:*?"<>|#%&\s]+/g, '_').replace(/^[_.]+|[_.]+$/g, '');
+  s = Array.from(s).slice(0, 24).join('').replace(/[_.]+$/g, '');
+  return s || S.fileNoName;
+}
 function ymd(){ var d = new Date(); return d.getFullYear()+pad(d.getMonth()+1)+pad(d.getDate()); }
+function sigOf(p){
+  var s = JSON.stringify({profile:p.profile, answers:p.answers, suggestions:p.suggestions}), h = 2166136261;
+  for(var i = 0; i < s.length; i++){ h ^= s.charCodeAt(i); h = Math.imul(h, 16777619); }
+  return (h >>> 0).toString(16)+'-'+s.length;
+}
+function fmtLocal(iso){ var d = new Date(iso); return isNaN(d.getTime()) ? '' : d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate())+' '+pad(d.getHours())+':'+pad(d.getMinutes()); }
+function renderReceipt(){
+  var el = document.getElementById('exprcpt'), b = document.getElementById('submitbtn'); if(!el) return;
+  var r = onlineOn() ? store.receipt : null;
+  if(!r){ el.hidden = true; el.innerHTML = ''; if(b && !submitting) b.textContent = S.submitBtn; return; }
+  var changed = sigOf(payload()) !== r.sig;
+  el.innerHTML = '<b class="rc-h">'+S.rcHead+'</b><div>'+S.rcBody(fmtLocal(r.at), esc(r.code || ''), r.rated, r.total, r.sug)+'</div>'
+    + (changed ? '<div class="rc-warn">'+S.rcChanged+'</div>' : '<div class="rc-sub">'+S.rcAgain+'</div>');
+  el.hidden = false;
+  if(b && !submitting) b.textContent = S.resubmitBtn;
+}
+function setNote(msg){ var n = document.getElementById('expnote'); if(!n) return; n.textContent = msg || ''; n.hidden = !msg; }
+async function submitOnline(p){
+  var ctl = (typeof AbortController === 'function') ? new AbortController() : null, tm = setTimeout(function(){ if(ctl) ctl.abort(); }, SUBMIT_TIMEOUT_MS);
+  try{
+    var res = await fetch(API_URL, {method:'POST', headers:{'Content-Type':'text/plain;charset=UTF-8'}, body:JSON.stringify(p), signal:ctl ? ctl.signal : undefined});
+    var j = null; try{ j = await res.json(); }catch(e){}
+    if(res.ok && j && j.ok === true) return {ok:true, id:j.id, receivedAt:j.receivedAt};
+    return {ok:false, status:res.status, err:(j && j.error) ? String(j.error) : ''};
+  }catch(e){ return {ok:false, status:0, err:'', aborted:!!(e && e.name === 'AbortError')}; }
+  finally{ clearTimeout(tm); }
+}
 function setStatus(msg, err){ var s = document.getElementById('expstatus'); if(s){ s.textContent = msg; s.classList.toggle('err', !!err); } }
 function showFallback(text){
   var f = document.getElementById('expfallback'); if(!f) return;
@@ -1169,7 +1253,7 @@ function needProfile(){
   var box = document.getElementById('pfbox'); if(box){ box.open = true; scrollToEl('pfbox'); }
   return true;
 }
-var lastMail = null, flashTimers = {};
+var lastMail = null, flashTimers = {}, submitting = false;
 function flashBtn(btn, ok){
   if(!btn) return;
   if(btn.dataset.lbl === undefined) btn.dataset.lbl = btn.textContent;
@@ -1206,9 +1290,9 @@ async function doExport(kind, btn){
     setStatus(rr === 'saved' ? S.redlOk(lastMail.base) : (rr === 'declined' ? S.saveDeclined : S.saveFailed), rr !== 'saved'); return;
   }
   if(needProfile()) return;
+  if(kind === 'submit' && submitting) return;
   var p = payload(), d = new Date();
-  var nm = p.profile.name.replace(/[\\\/:*?"<>|\s]+/g,'_');
-  var base = 'ARRIVE-CHM-R1_'+nm+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
+  var base = fileSafeName(p.profile.name)+'_'+S.fileTag+'_'+ymd()+'-'+pad(d.getHours())+pad(d.getMinutes());
   var json = JSON.stringify(p, null, 2);
   var note = S.noteTail(N-p.ratedCount, p.suggestionsCount);
   if(kind === 'copy'){
@@ -1218,7 +1302,32 @@ async function doExport(kind, btn){
     else { setStatus(S.copyFail(note)); showFallback(txt); }
     return;
   }
-  if(kind === 'submit'){
+  setNote('');
+  if(kind === 'submit' && onlineOn()){
+    submitting = true;
+    var sb = document.getElementById('submitbtn');
+    if(sb){ sb.disabled = true; sb.textContent = S.sendingBtn; }
+    setStatus(S.sending);
+    var res = await submitOnline(p);
+    submitting = false;
+    if(sb) sb.disabled = false;
+    if(res.ok){
+      var mm = /([0-9a-f]{8})$/i.exec(String(res.id || ''));
+      store.receipt = {id:String(res.id || ''), code:(mm ? mm[1] : String(res.id || '').slice(-8)).toUpperCase(), at:res.receivedAt || new Date().toISOString(), sig:sigOf(p), rated:p.ratedCount, total:N, sug:p.suggestionsCount};
+      try{ localStorage.setItem(KEY, JSON.stringify(store)); canStore = true; }catch(e){ canStore = false; }
+      setStatus('');
+      var c0 = document.getElementById('expcard'), f0 = document.getElementById('expfallback');
+      if(c0){ c0.hidden = true; c0.innerHTML = ''; } if(f0){ f0.hidden = true; f0.innerHTML = ''; }
+      renderReceipt();
+      var rc = document.getElementById('exprcpt');
+      try{ if(rc) rc.scrollIntoView({behavior: reduceMotion() ? 'auto' : 'smooth', block:'nearest'}); }catch(e){}
+      return;
+    }
+    renderReceipt();
+    setNote(S.sendFail(res.status >= 400 && res.status < 500 ? res.err : ''));
+    kind = 'submitmail';
+  }
+  if(kind === 'submit' || kind === 'submitmail'){
     if(!RETURN_EMAIL) kind = 'json';
     else if(isMobileUA() && canShareFiles()){
       var cp = Promise.resolve(false);
@@ -1258,7 +1367,7 @@ async function doExport(kind, btn){
     return;
   }
   var r = await saveFile(base+'.json', json, 'application/json');
-  if(r === 'saved') setStatus(S.fileMade(base, RETURN_EMAIL, note));
+  if(r === 'saved') setStatus(onlineOn() ? S.fileMadeOnline(base, RETURN_EMAIL, note) : S.fileMade(base, RETURN_EMAIL, note));
   else if(r === 'declined') setStatus(S.saveDeclined);
   else { setStatus(S.noDownload, true); }
 }
@@ -1266,7 +1375,7 @@ var resetArmed = false, resetTimer = null;
 function doReset(btn){
   if(!resetArmed){ resetArmed = true; btn.textContent = S.resetConfirm; btn.style.color = 'var(--danger)'; resetTimer = setTimeout(function(){ resetArmed = false; btn.textContent = RESET_LABEL; btn.style.color = ''; }, 4000); return; }
   clearTimeout(resetTimer); resetArmed = false;
-  store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null};
+  store = {profile:{}, answers:{}, additions:[], addSeq:0, updatedAt:null, receipt:null};
   try{ localStorage.removeItem(KEY); }catch(e){}
   renderOverview(); window.scrollTo(0,0);
 }
